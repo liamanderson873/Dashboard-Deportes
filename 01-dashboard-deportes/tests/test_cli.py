@@ -59,12 +59,12 @@ def test_main_reports_api_errors_without_traceback(monkeypatch, capsys):
 
 
 def test_default_database_urls_use_ipv4_loopback_not_localhost():
-    from conftest import TEST_DATABASE_URL
-
+    # Read the files, not conftest.TEST_DATABASE_URL: CI overrides that variable on purpose.
     template = (PROJECT / ".env.example").read_text(encoding="utf-8")
+    conftest = (PROJECT / "tests" / "conftest.py").read_text(encoding="utf-8")
 
     assert "@127.0.0.1:5433/" in template
-    assert "@127.0.0.1:5433/" in TEST_DATABASE_URL
+    assert "@127.0.0.1:5433/" in conftest
 
 
 def test_docker_compose_publishes_postgres_on_localhost_only():
