@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "utcDate": "2024-08-15T19:00:00Z",
+    "status": "FINISHED",
+    "matchday": 1,
+    "homeTeam": {"id": 86, "name": "Real Madrid CF"},
+    "awayTeam": {"id": 81, "name": "FC Barcelona"},
+    "score": {"fullTime": {"home": 2, "away": 1}}
+  },
+  {
+    "id": 2,
+    "utcDate": "2024-08-22T19:00:00Z",
+    "status": "SCHEDULED",
+    "matchday": 2,
+    "homeTeam": {"id": 81, "name": "FC Barcelona"},
+    "awayTeam": {"id": 78, "name": "Club Atlético de Madrid"},
+    "score": {"fullTime": {"home": null, "away": null}}
+  },
+  {
+    "id": 3,
+    "utcDate": "2024-08-29T19:00:00Z",
+    "status": "SCHEDULED",
+    "matchday": 3,
+    "homeTeam": {"id": null, "name": null},
+    "awayTeam": {"id": 86, "name": "Real Madrid CF"},
+    "score": {"fullTime": {"home": null, "away": null}}
+  }
+]
