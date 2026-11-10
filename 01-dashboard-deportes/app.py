@@ -56,6 +56,10 @@ with table_tab:
         st.info("No finished matches yet for this season.")
     else:
         st.dataframe(table, hide_index=True, use_container_width=True)
+        st.caption(
+            "Ties are broken by goal difference, then goals scored. "
+            "Official head-to-head rules are not applied."
+        )
 
 with results_tab:
     matches = queries.season_matches(engine, competition, season)

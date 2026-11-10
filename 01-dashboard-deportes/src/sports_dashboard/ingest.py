@@ -1,10 +1,18 @@
 import argparse
+import sys
 
 import pandas as pd
+import requests
 from sqlalchemy import Engine, text
+from sqlalchemy.exc import OperationalError
 
-from sports_dashboard.client import FootballDataClient
-from sports_dashboard.config import load_settings
+from sports_dashboard.client import (
+    ApiAccessError,
+    ApiAuthError,
+    ApiRateLimitError,
+    FootballDataClient,
+)
+from sports_dashboard.config import ConfigError, load_settings
 from sports_dashboard.db import get_engine, init_schema
 from sports_dashboard.transform import clean_matches
 
@@ -57,21 +65,35 @@ def ingest(
     return len(matches)
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Download football-data.org matches into PostgreSQL")
     parser.add_argument("--competition", default="PD", help="competition code, e.g. PD or PL")
     parser.add_argument("--season", type=int, required=True, help="season start year, e.g. 2024")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    settings = load_settings()
-    written = ingest(
-        get_engine(settings.database_url),
-        FootballDataClient(settings.football_api_key),
-        args.competition,
-        args.season,
-    )
+    try:
+        settings = load_settings()
+        written = ingest(
+            get_engine(settings.database_url),
+            FootballDataClient(settings.football_api_key),
+            args.competition,
+            args.season,
+        )
+    except (ConfigError, ApiAuthError, ApiAccessError, ApiRateLimitError) as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 1
+    except requests.RequestException as error:
+        print(f"Error: could not reach football-data.org ({error}).", file=sys.stderr)
+        return 1
+    except OperationalError:
+        print(
+            "Error: could not connect to PostgreSQL. Is it running (docker compose up -d)?",
+            file=sys.stderr,
+        )
+        return 1
     print(f"Wrote {written} matches for {args.competition} {args.season}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

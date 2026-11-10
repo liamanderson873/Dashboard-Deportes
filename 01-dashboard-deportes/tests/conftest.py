@@ -4,7 +4,7 @@ import pytest
 from sqlalchemy import text
 
 TEST_DATABASE_URL = os.environ.get(
-    "TEST_DATABASE_URL", "postgresql+psycopg://sports:sports@localhost:5433/sports_test"
+    "TEST_DATABASE_URL", "postgresql+psycopg://sports:sports@127.0.0.1:5433/sports_test"
 )
 
 

@@ -10,8 +10,19 @@ class ApiAuthError(Exception):
     pass
 
 
+class ApiAccessError(Exception):
+    pass
+
+
 class ApiRateLimitError(Exception):
     pass
+
+
+def _api_message(response: requests.Response) -> str:
+    try:
+        return str(response.json().get("message", "")).strip()
+    except ValueError:
+        return ""
 
 
 class FootballDataClient:
@@ -48,9 +59,14 @@ class FootballDataClient:
                 params={"season": season},
                 timeout=30,
             )
-            if response.status_code in (401, 403):
+            if response.status_code == 401:
                 raise ApiAuthError(
                     "football-data.org rejected the API key. Check FOOTBALL_API_KEY in your .env file."
+                )
+            if response.status_code == 403:
+                raise ApiAccessError(
+                    f"football-data.org denied access to {competition} season {season}: "
+                    f"{_api_message(response)} It may not be included in your plan."
                 )
             if response.status_code == 429:
                 if attempt == self._max_retries:

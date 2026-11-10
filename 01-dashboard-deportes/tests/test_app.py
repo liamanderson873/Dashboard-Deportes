@@ -31,3 +31,9 @@ def test_app_shows_standings_table_with_seeded_data(seeded, run_app):
     standings = [df.value for df in at.dataframe if "points" in df.value.columns]
     assert standings, "the standings table must be on the page"
     assert list(standings[0]["team"]) == ["A", "B", "C"]
+
+
+def test_app_states_how_ties_are_broken(seeded, run_app):
+    at = run_app()
+
+    assert any("head-to-head" in caption.value for caption in at.caption)

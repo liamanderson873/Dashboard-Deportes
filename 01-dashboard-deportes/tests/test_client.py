@@ -1,7 +1,12 @@
 import pytest
 import responses
 
-from sports_dashboard.client import ApiAuthError, ApiRateLimitError, FootballDataClient
+from sports_dashboard.client import (
+    ApiAccessError,
+    ApiAuthError,
+    ApiRateLimitError,
+    FootballDataClient,
+)
 
 URL = "https://api.football-data.org/v4/competitions/PD/matches"
 
@@ -43,6 +48,24 @@ def test_401_raises_api_auth_error_mentioning_key():
         make_client(FakeTime()).get_matches("PD", 2024)
 
     assert "FOOTBALL_API_KEY" in str(exc.value)
+
+
+@responses.activate
+def test_403_is_reported_as_restricted_resource_not_as_bad_key():
+    responses.add(
+        responses.GET,
+        URL,
+        status=403,
+        json={"message": "The resource you are looking for is restricted."},
+    )
+
+    with pytest.raises(ApiAccessError) as exc:
+        make_client(FakeTime()).get_matches("PD", 2018)
+
+    message = str(exc.value)
+    assert "restricted" in message
+    assert "plan" in message
+    assert "FOOTBALL_API_KEY" not in message
 
 
 @responses.activate

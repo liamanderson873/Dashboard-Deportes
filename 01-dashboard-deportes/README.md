@@ -25,8 +25,9 @@ football-data.org  ->  client  ->  transform (pandas)  ->  ingest  ->  PostgreSQ
 | `queries.py` | SQL for the league table, team form, results and available seasons |
 | `app.py` | Streamlit dashboard |
 
-The league table is computed from finished matches with SQL (win 3 points, draw 1),
-so it is always consistent with the stored results.
+The league table is computed from finished matches with SQL (win 3 points, draw 1).
+Ties are broken by goal difference and then goals scored, not by official head-to-head
+rules, so teams level on points can appear in a different order than in an official table.
 
 ## Run it locally
 
@@ -38,6 +39,7 @@ cd 01-dashboard-deportes
 python -m venv .venv
 .venv\Scripts\activate          # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
+pip install -e .                # makes `sports_dashboard` importable
 
 cp .env.example .env            # then put your key in FOOTBALL_API_KEY
 docker compose up -d            # PostgreSQL on localhost:5433
