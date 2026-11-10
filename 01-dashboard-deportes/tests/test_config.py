@@ -1,6 +1,17 @@
 import pytest
 
-from sports_dashboard.config import ConfigError, load_settings
+from sports_dashboard.config import ConfigError, load_database_url, load_settings
+
+
+def test_load_database_url_does_not_require_api_key():
+    assert load_database_url({"DATABASE_URL": "postgresql://u:p@h/db"}) == "postgresql://u:p@h/db"
+
+
+def test_load_database_url_missing_raises_config_error():
+    with pytest.raises(ConfigError) as exc:
+        load_database_url({})
+
+    assert "DATABASE_URL" in str(exc.value)
 
 
 def test_loads_both_values():
