@@ -9,6 +9,8 @@ import { MatchdayNav } from "./MatchdayNav";
 import { MatchList } from "./MatchList";
 import { PointsBar } from "./PointsBar";
 import { SectionNav } from "./SectionNav";
+import { ScorersTable } from "./ScorersTable";
+import type { ScorerRow } from "@/lib/queries/scorers";
 import { SeasonNav } from "./SeasonNav";
 import { StandingsTable } from "./StandingsTable";
 import { TeamCrest } from "./TeamCrest";
@@ -267,5 +269,44 @@ describe("components", () => {
       <MatchdayNav slug="pd" season={2024} days={days} active={1} />,
     );
     expect(first).not.toContain("Jornada anterior");
+  });
+});
+
+function scorer(rank: number, over: Partial<ScorerRow> = {}): ScorerRow {
+  return {
+    rank,
+    playerId: rank,
+    player: `Jugador ${rank}`,
+    position: null,
+    nationality: null,
+    team: { id: 7, name: "Equipo 7", shortName: "Eq7", tla: null, crest: null },
+    goals: 10 - rank,
+    assists: 3,
+    penalties: 1,
+    playedMatches: 20,
+    ...over,
+  };
+}
+
+describe("ScorersTable", () => {
+  test("test_scorers_table_shows_dash_for_missing_values", () => {
+    const html = renderToStaticMarkup(
+      <ScorersTable
+        slug="pd"
+        season={2024}
+        rows={[scorer(1, { assists: null, penalties: null, playedMatches: null, team: null })]}
+      />,
+    );
+    expect((html.match(/—/g) ?? []).length).toBeGreaterThanOrEqual(4);
+    expect(html).toContain("<caption");
+    expect(html).toContain('scope="col"');
+  });
+
+  test("test_scorers_table_links_team", () => {
+    const html = renderToStaticMarkup(
+      <ScorersTable slug="pd" season={2024} rows={[scorer(1)]} />,
+    );
+    expect(html).toContain('href="/pd/2024/equipo/7"');
+    expect(html).toContain("Eq7");
   });
 });

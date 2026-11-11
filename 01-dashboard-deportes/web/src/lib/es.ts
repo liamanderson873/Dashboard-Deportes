@@ -65,6 +65,27 @@ export const es = {
     } as Record<string, string>,
   },
 
+  scorers: {
+    pageTitle: (league: string, season: string) =>
+      `${league} ${season} · Goleadores`,
+    subtitle: (season: string) => `Temporada ${season} · Máximos goleadores`,
+    defaultCaption: "Máximos goleadores",
+    caption: (league: string, season: string) =>
+      `Máximos goleadores de ${league}, temporada ${season}`,
+    columns: {
+      rank: "#",
+      player: "Jugador",
+      team: "Equipo",
+      played: "PJ",
+      goals: "Goles",
+      assists: "Asist.",
+      penalties: "Pen.",
+    },
+    missing: "—",
+    source: "Fuente: football-data.org. Se muestran los 50 primeros.",
+    empty: "No hay goleadores cargados para esta temporada",
+  },
+
   kpi: {
     leader: "Líder",
     bestAttack: "Mejor ataque",

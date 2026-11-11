@@ -46,3 +46,23 @@ export async function seedStandingsFixture(sql: Sql): Promise<void> {
       (3, 'PD', 2024, 3, '2024-08-29T18:00:00Z', 'FINISHED', 3, 1, 0, 3),
       (4, 'PD', 2024, 4, '2024-09-05T18:00:00Z', 'SCHEDULED', 1, 2, NULL, NULL)`;
 }
+
+/** Four players, 2024 squads and PD 2024 scorers. Requires `seedStandingsFixture` first. */
+export async function seedPlayersFixture(sql: Sql): Promise<void> {
+  await sql`
+    INSERT INTO players (id, name, position, nationality, date_of_birth) VALUES
+      (10, 'Ana Gol', 'Centre-Forward', 'Spain', '1998-03-10'),
+      (11, 'Beto Pase', 'Central Midfield', 'Brazil', '2001-11-02'),
+      (12, 'Ciro Muro', 'Goalkeeper', NULL, '1990-01-20'),
+      (13, 'Dani Nadie', NULL, NULL, NULL)`;
+  await sql`
+    INSERT INTO squad_members (season, team_id, player_id) VALUES
+      (2024, 1, 10), (2024, 1, 12), (2024, 1, 13), (2024, 2, 11)`;
+  await sql`
+    INSERT INTO scorers
+      (competition, season, player_id, team_id, goals, assists, penalties, played_matches)
+    VALUES
+      ('PD', 2024, 10, 1, 7, 2, 1, 2),
+      ('PD', 2024, 11, 2, 7, NULL, NULL, 2),
+      ('PD', 2024, 13, 1, 1, 0, 0, 1)`;
+}
