@@ -14,6 +14,12 @@ import type { ScorerRow } from "@/lib/queries/scorers";
 import { SeasonNav } from "./SeasonNav";
 import { StandingsTable } from "./StandingsTable";
 import { TeamCrest } from "./TeamCrest";
+import { TeamHeader } from "./TeamHeader";
+import { StatGrid } from "./StatGrid";
+import { SquadList } from "./SquadList";
+import { TeamMatchList } from "./TeamMatchList";
+import { toTeamMatches } from "@/lib/team";
+import type { SquadPlayer, TeamProfile } from "@/lib/queries/team";
 
 function row(position: number, over: Partial<StandingRow> = {}): StandingRow {
   return {
@@ -308,5 +314,120 @@ describe("ScorersTable", () => {
     );
     expect(html).toContain('href="/pd/2024/equipo/7"');
     expect(html).toContain("Eq7");
+  });
+});
+
+describe("team components", () => {
+  const profile: TeamProfile = {
+    id: 1,
+    name: "Equipo Uno",
+    shortName: "Eq1",
+    tla: "EQ1",
+    crest: null,
+    founded: 1902,
+    venue: "Estadio Uno",
+    clubColors: null,
+    website: null,
+    coach: "Ana Gómez",
+  };
+
+  test("test_team_header_labels_coach_as_current_and_omits_missing_fields", () => {
+    const html = renderToStaticMarkup(<TeamHeader profile={profile} />);
+    expect(html).toContain("Entrenador actual");
+    expect(html).toContain("Ana Gómez");
+    expect(html).toContain("Estadio Uno");
+    expect(html).toContain("1902");
+    expect(html).not.toContain("Colores");
+    expect(html).not.toContain("<h1");
+  });
+
+  test("test_stat_grid_renders_value_and_hint", () => {
+    const html = renderToStaticMarkup(
+      <StatGrid
+        items={[
+          { label: "xG a favor", value: "1,50", hint: "por partido" },
+          { label: "Córners", value: "No disponible" },
+        ]}
+      />,
+    );
+    expect(html).toContain("xG a favor");
+    expect(html).toContain("1,50");
+    expect(html).toContain("por partido");
+    expect(html).toContain("No disponible");
+  });
+
+  const player = (id: number, over: Partial<SquadPlayer> = {}): SquadPlayer => ({
+    id,
+    name: `Jugador ${id}`,
+    position: "Goalkeeper",
+    nationality: "España",
+    dateOfBirth: new Date("2000-06-15T00:00:00Z"),
+    ...over,
+  });
+
+  test("test_squad_list_groups_by_position_and_shows_dash_for_missing", () => {
+    const html = renderToStaticMarkup(
+      <SquadList
+        on={new Date("2025-01-01T00:00:00Z")}
+        players={[
+          player(1),
+          player(2, { position: "Centre-Back" }),
+          player(3, { position: "Central Midfield", nationality: null, dateOfBirth: null }),
+          player(4, { position: "Centre-Forward" }),
+        ]}
+      />,
+    );
+    for (const g of ["Porteros", "Defensas", "Centrocampistas", "Delanteros"]) {
+      expect(html).toContain(`>${g}</h3>`);
+    }
+    expect(html).toContain("24");
+    expect(html).toContain("España");
+    expect(html).toContain("—");
+  });
+
+  test("test_squad_list_hides_unknown_group_when_empty", () => {
+    const html = renderToStaticMarkup(
+      <SquadList on={new Date("2025-01-01T00:00:00Z")} players={[player(1)]} />,
+    );
+    expect(html).not.toContain("Sin posición");
+    const withUnknown = renderToStaticMarkup(
+      <SquadList
+        on={new Date("2025-01-01T00:00:00Z")}
+        players={[player(1, { position: null })]}
+      />,
+    );
+    expect(withUnknown).toContain("Sin posición");
+  });
+
+  test("test_team_match_list_shows_result_letter_for_played_and_status_for_pending", () => {
+    const tm = toTeamMatches(
+      [
+        matchRow(1),
+        matchRow(2, { status: "POSTPONED", homeGoals: null, awayGoals: null }),
+      ],
+      1,
+    );
+    const html = renderToStaticMarkup(
+      <TeamMatchList slug="pd" season={2024} matches={tm} />,
+    );
+    expect(html).toContain("2 - 1");
+    expect(html).toContain(">V<");
+    expect(html).toContain("victoria");
+    expect(html).toContain("Aplazado");
+    expect(html).toContain('href="/pd/2024/equipo/2"');
+    expect(html).toContain("vs");
+  });
+
+  test("test_season_nav_uses_custom_href", () => {
+    const html = renderToStaticMarkup(
+      <SeasonNav
+        slug="pd"
+        seasons={[2024, 2023]}
+        active={2024}
+        hrefFor={(s) => `/pd/${s}/equipo/9`}
+      />,
+    );
+    expect(html).toContain('href="/pd/2023/equipo/9"');
+    expect(html).not.toContain('href="/pd/2023"');
   });
 });

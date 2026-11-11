@@ -9,11 +9,14 @@ export function LeagueHeader({
   section,
   title,
   subtitle,
+  seasonNav,
 }: {
   context: LeagueContext;
   section: SectionId | null;
   title?: string;
   subtitle: string;
+  /** Overrides the season links (the team page keeps the same team). */
+  seasonNav?: { seasons: number[]; hrefFor: (season: number) => string };
 }) {
   const { competition, season, seasons, seasonsByCompetition } = context;
   const navSection = section ?? "clasificacion";
@@ -34,9 +37,10 @@ export function LeagueHeader({
         />
         <SeasonNav
           slug={competition.slug}
-          seasons={seasons}
+          seasons={seasonNav?.seasons ?? seasons}
           active={season}
           section={navSection}
+          hrefFor={seasonNav?.hrefFor}
         />
         <SectionNav slug={competition.slug} season={season} active={section} />
       </div>

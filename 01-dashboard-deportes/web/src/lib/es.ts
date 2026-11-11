@@ -86,6 +86,75 @@ export const es = {
     empty: "No hay goleadores cargados para esta temporada",
   },
 
+  team: {
+    pageTitle: (team: string, league: string, season: string) =>
+      `${team} · ${league} ${season}`,
+    subtitle: (league: string, season: string) => `${league} · Temporada ${season}`,
+    unavailable: "No disponible",
+    profile: {
+      venue: "Estadio",
+      founded: "Fundado",
+      colors: "Colores",
+      coach: "Entrenador actual",
+    },
+    summary: {
+      title: "Resumen",
+      position: "Posición en la tabla",
+      points: "Puntos",
+      record: "Balance V-E-D",
+      goalsFor: "Goles a favor",
+      goalsAgainst: "Goles en contra",
+      form: "Forma",
+      home: "En casa",
+      away: "Fuera",
+      split: (
+        played: number,
+        won: number,
+        drawn: number,
+        lost: number,
+        gf: number,
+        ga: number,
+        pts: number,
+      ) =>
+        `${played} PJ · ${won}V ${drawn}E ${lost}D · ${gf}-${ga} goles · ${pts} puntos`,
+    },
+    stats: {
+      title: "Estadísticas por partido",
+      xgFor: "xG a favor",
+      xgAgainst: "xG en contra",
+      shots: "Tiros",
+      shotsOnTarget: "Tiros a puerta",
+      corners: "Córners",
+      fouls: "Faltas",
+      yellow: "Amarillas",
+      red: "Rojas",
+      note: (matches: number, withXg: number) =>
+        `Medias de ${matches} partidos; xG disponible en ${withXg}`,
+    },
+    squad: {
+      title: "Plantilla",
+      note: (season: string) => `Plantilla de la temporada ${season}`,
+      empty: "No hay plantilla cargada para esta temporada",
+      age: (years: number) => `${years} años`,
+      missing: "—",
+      groups: {
+        goalkeepers: "Porteros",
+        defenders: "Defensas",
+        midfielders: "Centrocampistas",
+        forwards: "Delanteros",
+        unknown: "Sin posición",
+      },
+    },
+    matches: {
+      title: "Partidos",
+      played: "Jugados",
+      upcoming: "Próximos",
+      matchday: (n: number) => `J${n}`,
+      home: "vs",
+      away: "en",
+    },
+  },
+
   kpi: {
     leader: "Líder",
     bestAttack: "Mejor ataque",

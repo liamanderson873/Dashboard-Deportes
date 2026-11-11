@@ -8,11 +8,13 @@ export function SeasonNav({
   seasons,
   active,
   section = "clasificacion",
+  hrefFor,
 }: {
   slug: string;
   seasons: number[];
   active: number;
   section?: SectionId;
+  hrefFor?: (season: number) => string;
 }) {
   return (
     <nav aria-label={es.nav.seasons}>
@@ -20,7 +22,7 @@ export function SeasonNav({
         {seasons.map((s) => (
           <li key={s}>
             <Link
-              href={sectionHref(slug, s, section)}
+              href={hrefFor ? hrefFor(s) : sectionHref(slug, s, section)}
               aria-current={s === active ? "page" : undefined}
               className={`num inline-flex min-h-11 items-center rounded-card border px-3 text-sm ${
                 s === active
