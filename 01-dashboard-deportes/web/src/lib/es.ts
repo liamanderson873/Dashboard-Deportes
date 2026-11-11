@@ -8,6 +8,7 @@ export const es = {
 
   nav: {
     leagues: "Ligas",
+    leagueWithoutData: "sin datos",
     seasons: "Temporadas",
   },
 
@@ -18,7 +19,7 @@ export const es = {
     caption: (league: string, season: string) =>
       `Clasificación de ${league}, temporada ${season}`,
     subtitle: (season: string, played: number) =>
-      `Temporada ${season} · ${played} partidos jugados`,
+      `Temporada ${season} · ${played} ${played === 1 ? "partido jugado" : "partidos jugados"}`,
     columns: {
       position: "#",
       team: "Equipo",
@@ -27,8 +28,9 @@ export const es = {
       form: "Forma",
       points: "Puntos",
     },
-    legend:
-      "Franja azul: primeras 4 posiciones. Franja roja: últimas 3. Los círculos son los últimos 5 partidos (V victoria, E empate, D derrota).",
+    legendZones: "Franja azul: primeras 4 posiciones. Franja roja: últimas 3.",
+    legendForm:
+      "Los círculos son los últimos 5 partidos (V victoria, E empate, D derrota).",
   },
 
   kpi: {
@@ -39,7 +41,8 @@ export const es = {
   },
 
   form: {
-    label: "Últimos 5 partidos",
+    label: (count: number) =>
+      count === 1 ? "Último partido" : `Últimos ${count} partidos`,
     none: "Sin partidos jugados",
     results: {
       W: "victoria",

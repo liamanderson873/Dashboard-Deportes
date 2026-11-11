@@ -70,9 +70,12 @@ describe("zoneFor", () => {
 describe("formAriaLabel", () => {
   test("test_form_aria_label_in_spanish", () => {
     expect(formAriaLabel(["W", "D", "L"])).toBe(
-      "Últimos 5 partidos: victoria, empate, derrota",
+      "Últimos 3 partidos: victoria, empate, derrota",
     );
-    expect(formAriaLabel(["W"])).toBe("Últimos 5 partidos: victoria");
+    expect(formAriaLabel(["W", "D", "L", "W", "W"])).toBe(
+      "Últimos 5 partidos: victoria, empate, derrota, victoria, victoria",
+    );
+    expect(formAriaLabel(["W"])).toBe("Último partido: victoria");
     expect(formAriaLabel([])).toBe("Sin partidos jugados");
   });
 });

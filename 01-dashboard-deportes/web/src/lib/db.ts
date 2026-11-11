@@ -35,7 +35,7 @@ export function getSql(): Sql {
   const url = process.env.DATABASE_URL;
   if (!url) throw new DatabaseConfigError();
 
-  const sql = postgres(normalizeDatabaseUrl(url), { max: 5 });
+  const sql = postgres(normalizeDatabaseUrl(url), { max: 5, connect_timeout: 5 });
   holder[POOL_KEY] = sql;
   return sql;
 }

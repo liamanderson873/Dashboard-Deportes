@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { competitionBySlug } from "@/lib/competitions";
-import { formatDecimalEs, resolveRoute } from "@/lib/route-params";
+import { formatDecimalEs, resolveRoute, targetSeason } from "@/lib/route-params";
 
 describe("resolveRoute", () => {
   it("test_resolve_route_accepts_valid_pairs", () => {
@@ -25,5 +25,14 @@ describe("formatDecimalEs", () => {
     expect(formatDecimalEs(2.67)).toBe("2,67");
     expect(formatDecimalEs(3)).toBe("3,00");
     expect(formatDecimalEs(0)).toBe("0,00");
+  });
+});
+
+describe("targetSeason", () => {
+  it("test_target_season_prefers_current_then_latest_then_null", () => {
+    expect(targetSeason([2025, 2024], 2024)).toBe(2024);
+    expect(targetSeason([2023, 2022], 2024)).toBe(2023);
+    expect(targetSeason([], 2024)).toBeNull();
+    expect(targetSeason(undefined, 2024)).toBeNull();
   });
 });

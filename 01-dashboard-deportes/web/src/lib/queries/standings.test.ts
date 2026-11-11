@@ -7,6 +7,7 @@ import {
 import {
   getAvailableSeasons,
   getDefaultView,
+  getSeasonsByCompetition,
   getStandings,
 } from "@/lib/queries/standings";
 
@@ -79,6 +80,52 @@ describe("getStandings", () => {
 
   test("test_standings_of_an_unknown_season_is_empty", async () => {
     expect(await getStandings(sql, "PD", 1999)).toEqual([]);
+  });
+});
+
+describe("getStandings isolation and form", () => {
+  test("test_other_competition_matches_do_not_change_pd_standings", async () => {
+    const before = await getStandings(sql, "PD", 2024);
+    await sql`
+      INSERT INTO matches
+        (id, competition, season, matchday, utc_date, status,
+         home_team_id, away_team_id, home_goals, away_goals)
+      VALUES (20, 'PL', 2024, 1, '2024-09-30T18:00:00Z', 'FINISHED', 3, 1, 5, 0)`;
+    expect(await getStandings(sql, "PD", 2024)).toEqual(before);
+    const pl = await getStandings(sql, "PL", 2024);
+    expect(pl.map((r) => r.team)).toEqual(["C", "A"]);
+  });
+
+  test("test_awarded_match_appears_in_form", async () => {
+    await sql`
+      INSERT INTO matches
+        (id, competition, season, matchday, utc_date, status,
+         home_team_id, away_team_id, home_goals, away_goals)
+      VALUES (21, 'PD', 2024, 5, '2024-09-12T18:00:00Z', 'AWARDED', 3, 1, 0, 3)`;
+    const rows = await getStandings(sql, "PD", 2024);
+    expect(rows.find((r) => r.team === "A")?.form).toEqual(["W", "W", "W"]);
+    expect(rows.find((r) => r.team === "C")?.form.at(-1)).toBe("L");
+  });
+});
+
+describe("getSeasonsByCompetition", () => {
+  test("test_seasons_by_competition_groups_newest_first", async () => {
+    await sql`
+      INSERT INTO matches
+        (id, competition, season, matchday, utc_date, status,
+         home_team_id, away_team_id, home_goals, away_goals)
+      VALUES
+        (22, 'PD', 2025, 1, '2025-08-15T18:00:00Z', 'SCHEDULED', 1, 2, NULL, NULL),
+        (23, 'PL', 2023, 1, '2023-08-15T18:00:00Z', 'SCHEDULED', 1, 2, NULL, NULL)`;
+    expect(await getSeasonsByCompetition(sql)).toEqual({
+      PD: [2025, 2024],
+      PL: [2023],
+    });
+  });
+
+  test("test_seasons_by_competition_empty", async () => {
+    await sql`DELETE FROM matches`;
+    expect(await getSeasonsByCompetition(sql)).toEqual({});
   });
 });
 

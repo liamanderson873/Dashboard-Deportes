@@ -84,11 +84,31 @@ describe("components", () => {
 
   test("test_league_nav_marks_only_the_active_league", () => {
     const html = renderToStaticMarkup(
-      <LeagueNav activeSlug="pl" season={2024} />,
+      <LeagueNav
+        activeSlug="pl"
+        season={2024}
+        seasonsByCompetition={{ PD: [2024], PL: [2024], SA: [2024], BL1: [2024], FL1: [2024] }}
+      />,
     );
     expect(html.match(/aria-current="page"/g)).toHaveLength(1);
     expect(html).toContain('href="/pl/2024"');
     expect(html).toContain('href="/pd/2024"');
+  });
+
+  test("test_league_nav_links_to_latest_season_and_disables_leagues_without_data", () => {
+    const html = renderToStaticMarkup(
+      <LeagueNav
+        activeSlug="pd"
+        season={2024}
+        seasonsByCompetition={{ PD: [2024, 2023], PL: [2023, 2022] }}
+      />,
+    );
+    expect(html).toContain('href="/pd/2024"');
+    expect(html).toContain('href="/pl/2023"');
+    expect(html).not.toContain('href="/sa/');
+    expect(html.match(/aria-disabled="true"/g)).toHaveLength(3);
+    expect(html).toContain("sin datos");
+    expect(html.match(/aria-current="page"/g)).toHaveLength(1);
   });
 
   test("test_season_nav_labels_seasons_as_start_dash_end", () => {

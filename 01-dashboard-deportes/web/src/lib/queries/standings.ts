@@ -62,7 +62,7 @@ export async function getStandings(
     FROM sides s
     JOIN teams t ON t.id = s.team_id
     GROUP BY t.id, t.name, t.short_name, t.tla, t.crest
-    ORDER BY points DESC, goal_difference DESC, goals_for DESC, t.name ASC`;
+    ORDER BY points DESC, goal_difference DESC, goals_for DESC, t.name ASC, t.id ASC`;
 
   if (table.length === 0) return [];
 
@@ -129,6 +129,18 @@ export async function getAvailableSeasons(
     WHERE competition = ${competition}
     ORDER BY season DESC`;
   return rows.map((r) => r.season);
+}
+
+/** Seasons with matches per competition, newest first; leagues without data are absent. */
+export async function getSeasonsByCompetition(
+  sql: Sql,
+): Promise<Partial<Record<CompetitionCode, number[]>>> {
+  const rows = await sql<{ competition: CompetitionCode; season: number }[]>`
+    SELECT DISTINCT competition, season FROM matches
+    ORDER BY competition, season DESC`;
+  const out: Partial<Record<CompetitionCode, number[]>> = {};
+  for (const r of rows) (out[r.competition] ??= []).push(r.season);
+  return out;
 }
 
 /** Latest LaLiga season if any; otherwise the first league with matches. */

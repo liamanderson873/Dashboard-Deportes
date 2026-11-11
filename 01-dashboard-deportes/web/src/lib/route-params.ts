@@ -15,3 +15,12 @@ export function resolveRoute(
 export function formatDecimalEs(value: number): string {
   return value.toFixed(2).replace(".", ",");
 }
+
+/** Season a league chip links to: the current one if the league has it, else its latest, else null. */
+export function targetSeason(
+  seasons: readonly number[] | undefined,
+  current: number,
+): number | null {
+  if (!seasons || seasons.length === 0) return null;
+  return seasons.includes(current) ? current : Math.max(...seasons);
+}

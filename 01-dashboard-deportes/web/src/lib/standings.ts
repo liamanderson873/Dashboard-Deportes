@@ -1,3 +1,5 @@
+import { es } from "@/lib/es";
+
 export type Result = "W" | "D" | "L";
 
 export type StandingRow = {
@@ -57,13 +59,8 @@ export function zoneFor(position: number, total: number): Zone {
   return null;
 }
 
-const RESULT_LABEL: Record<Result, string> = {
-  W: "victoria",
-  D: "empate",
-  L: "derrota",
-};
-
 export function formAriaLabel(form: Result[]): string {
-  if (form.length === 0) return "Sin partidos jugados";
-  return `Últimos 5 partidos: ${form.map((r) => RESULT_LABEL[r]).join(", ")}`;
+  if (form.length === 0) return es.form.none;
+  const results = form.map((r) => es.form.results[r]).join(", ");
+  return `${es.form.label(form.length)}: ${results}`;
 }

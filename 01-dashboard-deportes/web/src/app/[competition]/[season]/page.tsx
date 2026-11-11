@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import { KpiCard } from "@/components/KpiCard";
 import { LeagueNav } from "@/components/LeagueNav";
@@ -9,7 +9,11 @@ import { TeamCrest } from "@/components/TeamCrest";
 import { formatSeason } from "@/lib/competitions";
 import { getSql } from "@/lib/db";
 import { es } from "@/lib/es";
-import { getAvailableSeasons, getStandings } from "@/lib/queries/standings";
+import {
+  getAvailableSeasons,
+  getSeasonsByCompetition,
+  getStandings,
+} from "@/lib/queries/standings";
 import { formatDecimalEs, resolveRoute } from "@/lib/route-params";
 import { summarize, type StandingRow } from "@/lib/standings";
 
@@ -41,11 +45,15 @@ export default async function StandingsPage({ params }: Props) {
   const { competition: slug, season: rawSeason } = await params;
   const route = resolveRoute(slug, rawSeason);
   if (!route) notFound();
+  if (slug !== route.competition.slug) {
+    redirect(`/${route.competition.slug}/${route.season}`);
+  }
 
   const sql = getSql();
-  const [rows, seasons] = await Promise.all([
+  const [rows, seasons, seasonsByCompetition] = await Promise.all([
     getStandings(sql, route.competition.code, route.season),
     getAvailableSeasons(sql, route.competition.code),
+    getSeasonsByCompetition(sql),
   ]);
   if (!seasons.includes(route.season)) notFound();
 
@@ -64,7 +72,11 @@ export default async function StandingsPage({ params }: Props) {
       </header>
 
       <div className="mb-6 flex flex-col gap-3">
-        <LeagueNav activeSlug={route.competition.slug} season={route.season} />
+        <LeagueNav
+          activeSlug={route.competition.slug}
+          season={route.season}
+          seasonsByCompetition={seasonsByCompetition}
+        />
         <SeasonNav
           slug={route.competition.slug}
           seasons={seasons}
@@ -98,7 +110,10 @@ export default async function StandingsPage({ params }: Props) {
             rows={rows}
             caption={es.standings.caption(route.competition.name, seasonLabel)}
           />
-          <p className="mt-4 text-sm text-muted">{es.standings.legend}</p>
+          <p className="mt-4 text-sm text-muted">
+            {rows.length >= 10 ? `${es.standings.legendZones} ` : ""}
+            {es.standings.legendForm}
+          </p>
         </>
       ) : (
         <EmptyState title={es.empty.noFinishedMatches} />
