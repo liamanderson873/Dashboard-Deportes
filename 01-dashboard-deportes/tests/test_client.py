@@ -101,3 +101,65 @@ def test_waits_min_interval_between_calls():
     client.get_matches("PD", 2024)
 
     assert fake.sleeps == [6.5]
+
+
+@responses.activate
+def test_get_competitions_returns_competitions_list():
+    responses.add(
+        responses.GET,
+        "https://api.football-data.org/v4/competitions",
+        json={"competitions": [{"code": "PL"}]},
+    )
+
+    competitions = make_client(FakeTime()).get_competitions()
+
+    assert competitions == [{"code": "PL"}]
+
+
+@responses.activate
+def test_get_teams_hits_teams_endpoint_with_season():
+    responses.add(
+        responses.GET,
+        "https://api.football-data.org/v4/competitions/PL/teams",
+        json={"teams": [{"id": 57}]},
+    )
+
+    teams = make_client(FakeTime()).get_teams("PL", 2026)
+
+    assert teams == [{"id": 57}]
+    url = responses.calls[0].request.url
+    assert "/competitions/PL/teams" in url
+    assert "season=2026" in url
+
+
+@responses.activate
+def test_get_scorers_sends_season_and_limit():
+    responses.add(
+        responses.GET,
+        "https://api.football-data.org/v4/competitions/PL/scorers",
+        json={"scorers": [{"goals": 20}]},
+    )
+
+    scorers = make_client(FakeTime()).get_scorers("PL", 2025, limit=50)
+
+    assert scorers == [{"goals": 20}]
+    url = responses.calls[0].request.url
+    assert "season=2025" in url
+    assert "limit=50" in url
+
+
+@responses.activate
+def test_403_on_teams_mentions_the_requested_resource():
+    responses.add(
+        responses.GET,
+        "https://api.football-data.org/v4/competitions/PL/teams",
+        status=403,
+        json={"message": "The resource you are looking for is restricted."},
+    )
+
+    with pytest.raises(ApiAccessError) as exc:
+        make_client(FakeTime()).get_teams("PL", 2026)
+
+    message = str(exc.value)
+    assert "PL season 2026" in message
+    assert "FOOTBALL_API_KEY" not in message

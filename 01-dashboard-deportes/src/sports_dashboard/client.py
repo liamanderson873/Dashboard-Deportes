@@ -49,14 +49,41 @@ class FootballDataClient:
                 self._sleep(self._min_interval - elapsed)
         self._last_request = self._clock()
 
+    def get_competitions(self) -> list[dict]:
+        return self._get("/competitions", {}, "competitions")["competitions"]
+
+    def get_teams(self, competition: str, season: int) -> list[dict]:
+        data = self._get(
+            f"/competitions/{competition}/teams",
+            {"season": season},
+            f"{competition} season {season}",
+        )
+        return data["teams"]
+
+    def get_scorers(self, competition: str, season: int, limit: int = 100) -> list[dict]:
+        data = self._get(
+            f"/competitions/{competition}/scorers",
+            {"season": season, "limit": limit},
+            f"{competition} season {season}",
+        )
+        return data["scorers"]
+
     def get_matches(self, competition: str, season: int) -> list[dict]:
-        url = f"{BASE_URL}/competitions/{competition}/matches"
+        data = self._get(
+            f"/competitions/{competition}/matches",
+            {"season": season},
+            f"{competition} season {season}",
+        )
+        return data["matches"]
+
+    def _get(self, path: str, params: dict, label: str) -> dict:
+        url = f"{BASE_URL}{path}"
         for attempt in range(self._max_retries + 1):
             self._wait_turn()
             response = self._session.get(
                 url,
                 headers={"X-Auth-Token": self._api_key},
-                params={"season": season},
+                params=params,
                 timeout=30,
             )
             if response.status_code == 401:
@@ -65,7 +92,7 @@ class FootballDataClient:
                 )
             if response.status_code == 403:
                 raise ApiAccessError(
-                    f"football-data.org denied access to {competition} season {season}: "
+                    f"football-data.org denied access to {label}: "
                     f"{_api_message(response)} It may not be included in your plan."
                 )
             if response.status_code == 429:
@@ -79,5 +106,5 @@ class FootballDataClient:
                 self._sleep(wait)
                 continue
             response.raise_for_status()
-            return response.json()["matches"]
+            return response.json()
         raise AssertionError("unreachable")
