@@ -26,7 +26,7 @@ export async function getMatchdays(
     ORDER BY matchday`;
 }
 
-type Row = {
+export type MatchSqlRow = {
   id: number;
   matchday: number | null;
   utc_date: Date;
@@ -47,13 +47,40 @@ type Row = {
   away_crest: string | null;
 };
 
+export function toMatchRow(r: MatchSqlRow): MatchRow {
+  return {
+    id: r.id,
+    matchday: r.matchday,
+    utcDate: r.utc_date,
+    status: r.status,
+    homeGoals: r.home_goals,
+    awayGoals: r.away_goals,
+    homeHtGoals: r.home_ht_goals,
+    awayHtGoals: r.away_ht_goals,
+    home: {
+      id: r.home_id,
+      name: r.home_name,
+      shortName: r.home_short,
+      tla: r.home_tla,
+      crest: r.home_crest,
+    },
+    away: {
+      id: r.away_id,
+      name: r.away_name,
+      shortName: r.away_short,
+      tla: r.away_tla,
+      crest: r.away_crest,
+    },
+  };
+}
+
 export async function getMatchesByMatchday(
   sql: Sql,
   competition: CompetitionCode,
   season: number,
   matchday: number,
 ): Promise<MatchRow[]> {
-  const rows = await sql<Row[]>`
+  const rows = await sql<MatchSqlRow[]>`
     SELECT
       m.id::int AS id,
       m.matchday::int AS matchday,
@@ -79,30 +106,7 @@ export async function getMatchesByMatchday(
     WHERE m.competition = ${competition} AND m.season = ${season}
       AND m.matchday = ${matchday}
     ORDER BY m.utc_date, m.id`;
-  return rows.map((r) => ({
-    id: r.id,
-    matchday: r.matchday,
-    utcDate: r.utc_date,
-    status: r.status,
-    homeGoals: r.home_goals,
-    awayGoals: r.away_goals,
-    homeHtGoals: r.home_ht_goals,
-    awayHtGoals: r.away_ht_goals,
-    home: {
-      id: r.home_id,
-      name: r.home_name,
-      shortName: r.home_short,
-      tla: r.home_tla,
-      crest: r.home_crest,
-    },
-    away: {
-      id: r.away_id,
-      name: r.away_name,
-      shortName: r.away_short,
-      tla: r.away_tla,
-      crest: r.away_crest,
-    },
-  }));
+  return rows.map(toMatchRow);
 }
 
 /** Latest matchday with a played match; else the first; null without matchdays. */

@@ -66,3 +66,19 @@ export async function seedPlayersFixture(sql: Sql): Promise<void> {
       ('PD', 2024, 11, 2, 7, NULL, NULL, 2),
       ('PD', 2024, 13, 1, 1, 0, 0, 1)`;
 }
+
+/** match_stats for matches 1 and 3 plus team 1 profile data. Requires `seedStandingsFixture` first. */
+export async function seedMatchStatsFixture(sql: Sql): Promise<void> {
+  await sql`
+    INSERT INTO match_stats
+      (match_id, home_xg, away_xg, home_shots, away_shots,
+       home_shots_on_target, away_shots_on_target, home_corners, away_corners,
+       home_fouls, away_fouls, home_yellow, away_yellow, home_red, away_red)
+    VALUES
+      (1, 1.80, 0.90, 14, 8, 6, 3, 7, 2, 10, 12, 1, 3, 0, 1),
+      (3, NULL, NULL, 5, 16, 1, 9, 3, 8, 14, 9, 2, 1, 0, 0)`;
+  await sql`
+    UPDATE teams SET venue = 'Estadio A', founded = 1900,
+      club_colors = 'Azul / Blanco', coach = 'Míster A', website = NULL
+    WHERE id = 1`;
+}
