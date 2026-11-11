@@ -41,6 +41,30 @@ export const es = {
       "Los círculos son los últimos 5 partidos (V victoria, E empate, D derrota).",
   },
 
+  results: {
+    pageTitle: (league: string, season: string, matchday: number) =>
+      `${league} ${season} · Resultados, jornada ${matchday}`,
+    subtitle: (season: string, matchday: number) =>
+      `Temporada ${season} · Jornada ${matchday}`,
+    subtitleNoMatchday: (season: string) => `Temporada ${season}`,
+    matchdayNav: "Jornadas",
+    matchdayLabel: (matchday: number) => `Jornada ${matchday}`,
+    previous: "Jornada anterior",
+    next: "Jornada siguiente",
+    halfTime: "Resultado al descanso",
+    empty: "Todavía no hay jornadas cargadas en esta temporada",
+    statuses: {
+      SCHEDULED: "Programado",
+      TIMED: "Programado",
+      POSTPONED: "Aplazado",
+      CANCELLED: "Cancelado",
+      SUSPENDED: "Suspendido",
+      IN_PLAY: "En juego",
+      PAUSED: "En juego",
+      AWARDED: "Resuelto en los despachos",
+    } as Record<string, string>,
+  },
+
   kpi: {
     leader: "Líder",
     bestAttack: "Mejor ataque",

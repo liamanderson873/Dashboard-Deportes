@@ -3,7 +3,10 @@ import { describe, expect, test } from "vitest";
 import type { StandingRow } from "@/lib/standings";
 import { EmptyState } from "./EmptyState";
 import { FormDots } from "./FormDots";
+import type { MatchRow } from "@/lib/matches";
 import { LeagueNav } from "./LeagueNav";
+import { MatchdayNav } from "./MatchdayNav";
+import { MatchList } from "./MatchList";
 import { PointsBar } from "./PointsBar";
 import { SectionNav } from "./SectionNav";
 import { SeasonNav } from "./SeasonNav";
@@ -27,6 +30,29 @@ function row(position: number, over: Partial<StandingRow> = {}): StandingRow {
     goalDifference: 5,
     points: 40 - position,
     form: ["W", "D", "L", "W", "W"],
+    ...over,
+  };
+}
+
+function matchRow(id: number, over: Partial<MatchRow> = {}): MatchRow {
+  const t = (n: number) => ({
+    id: n,
+    name: `Equipo ${n}`,
+    shortName: `Eq${n}`,
+    tla: null,
+    crest: null,
+  });
+  return {
+    id,
+    matchday: 1,
+    utcDate: new Date("2024-08-17T19:30:00Z"),
+    status: "FINISHED",
+    home: t(1),
+    away: t(2),
+    homeGoals: 2,
+    awayGoals: 1,
+    homeHtGoals: null,
+    awayHtGoals: null,
     ...over,
   };
 }
@@ -194,5 +220,52 @@ describe("components", () => {
   test("test_empty_state_level_one_renders_h1", () => {
     expect(renderToStaticMarkup(<EmptyState title="T" level={1} />)).toContain("<h1");
     expect(renderToStaticMarkup(<EmptyState title="T" />)).toContain("<h2");
+  });
+
+  test("test_match_list_shows_score_for_played_and_time_for_pending", () => {
+    const html = renderToStaticMarkup(
+      <MatchList
+        slug="pd"
+        season={2024}
+        matches={[
+          matchRow(1, { homeHtGoals: 1, awayHtGoals: 0 }),
+          matchRow(2, { status: "TIMED", homeGoals: null, awayGoals: null }),
+        ]}
+      />,
+    );
+    expect(html).toContain("2 - 1");
+    expect(html).toContain("(1-0)");
+    expect(html).toContain("21:30");
+    expect(html).toContain("sáb, 17 ago 2024");
+    expect(html).toContain('href="/pd/2024/equipo/1"');
+    expect(html).toContain("<h2");
+  });
+
+  test("test_match_list_shows_status_label_for_postponed", () => {
+    const html = renderToStaticMarkup(
+      <MatchList
+        slug="pd"
+        season={2024}
+        matches={[matchRow(1, { status: "POSTPONED", homeGoals: null, awayGoals: null })]}
+      />,
+    );
+    expect(html).toContain("Aplazado");
+    expect(html).not.toContain("0 - 0");
+  });
+
+  test("test_matchday_nav_marks_active_and_links_previous_and_next", () => {
+    const days = [1, 2, 3].map((matchday) => ({ matchday, total: 10, played: 10 }));
+    const html = renderToStaticMarkup(
+      <MatchdayNav slug="pd" season={2024} days={days} active={2} />,
+    );
+    expect(html).toContain('href="/pd/2024/resultados/1"');
+    expect(html).toContain('href="/pd/2024/resultados/3"');
+    expect(html).toContain("Jornada anterior");
+    expect(html).toContain("Jornada siguiente");
+    expect(html.match(/aria-current="page"/g)).toHaveLength(1);
+    const first = renderToStaticMarkup(
+      <MatchdayNav slug="pd" season={2024} days={days} active={1} />,
+    );
+    expect(first).not.toContain("Jornada anterior");
   });
 });
