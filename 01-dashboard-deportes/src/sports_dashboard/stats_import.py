@@ -95,13 +95,16 @@ def resolve_team_ids(
     names: Iterable[str], engine: Engine, aliases: dict[str, int]
 ) -> dict[str, int]:
     """Map each CSV team name to a team id; raise UnmappedTeamError listing all failures."""
-    known = dict(aliases)
+    owners: dict[str, set[int]] = {}
     with engine.connect() as conn:
         rows = conn.execute(text("SELECT id, name, short_name FROM teams")).all()
     for team_id, name, short_name in rows:
         for label in (name, short_name):
             if label:
-                known.setdefault(normalize_name(label), team_id)
+                owners.setdefault(normalize_name(label), set()).add(team_id)
+    # A label shared by several teams is ambiguous: only an alias can resolve it.
+    known = {label: ids.pop() for label, ids in owners.items() if len(ids) == 1}
+    known.update(aliases)
     resolved: dict[str, int] = {}
     missing: set[str] = set()
     for name in names:
@@ -117,17 +120,25 @@ def resolve_team_ids(
 
 def parse_stats_csv(source) -> pd.DataFrame:
     """Read the statistics columns of one CSV file (a path or a file-like object)."""
-    raw = pd.read_csv(source, skip_blank_lines=True)
+    raw = _read_csv(source)
     out = pd.DataFrame(index=raw.index)
     out["home_name"] = _text_column(raw, "HomeTeam")
     out["away_name"] = _text_column(raw, "AwayTeam")
     for column, target in FLOAT_COLUMNS.items():
         out[target] = _number_column(raw, column).astype("float64")
     for column, target in INT_COLUMNS.items():
-        out[target] = _number_column(raw, column).astype("Int64")
+        out[target] = _count_column(raw, column)
     out["referee"] = _text_column(raw, "Referee")
     out = out[out["home_name"].notna()]
     return out[PARSED_COLUMNS].reset_index(drop=True)
+
+
+def _read_csv(source) -> pd.DataFrame:
+    """UTF-8 (with or without BOM) first, latin-1 for files saved by hand in cp1252."""
+    try:
+        return pd.read_csv(source, skip_blank_lines=True, encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        return pd.read_csv(source, skip_blank_lines=True, encoding="latin-1")
 
 
 def _text_column(raw: pd.DataFrame, column: str) -> pd.Series:
@@ -140,6 +151,12 @@ def _number_column(raw: pd.DataFrame, column: str) -> pd.Series:
     if column not in raw:
         return pd.Series(float("nan"), index=raw.index)
     return pd.to_numeric(raw[column], errors="coerce")
+
+
+def _count_column(raw: pd.DataFrame, column: str) -> pd.Series:
+    """Whole numbers only: anything else (1.5, text) becomes null."""
+    numbers = _number_column(raw, column)
+    return numbers.where(numbers % 1 == 0).astype("Int64")
 
 
 def import_stats(

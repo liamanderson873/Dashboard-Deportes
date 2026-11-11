@@ -1,13 +1,17 @@
 import io
 from pathlib import Path
 
+import pandas as pd
 import pytest
 from sqlalchemy import text
 
+from conftest import TEST_DATABASE_URL
+from sports_dashboard.db import init_schema
 from sports_dashboard.stats_import import (
     UnmappedTeamError,
     import_stats,
     load_aliases,
+    main,
     normalize_name,
     parse_stats_csv,
     resolve_team_ids,
@@ -122,3 +126,61 @@ def test_import_stats_with_unmapped_team_imports_nothing(league, tmp_path):
         import_stats(league, csv, "PD", 2024, {})
     assert exc.value.names == ["Nobody"]
     assert _stats_rows(league) == []
+
+
+REFEREE_CSV = "HomeTeam,AwayTeam,Referee\nA,B,Clément Turpin\n"
+
+
+def test_parse_stats_csv_reads_utf8_with_bom(tmp_path):
+    path = tmp_path / "bom.csv"
+    path.write_bytes(REFEREE_CSV.encode("utf-8-sig"))
+    df = parse_stats_csv(path)
+    assert df.iloc[0]["home_name"] == "A"
+    assert df.iloc[0]["referee"] == "Clément Turpin"
+
+
+def test_parse_stats_csv_falls_back_to_latin1(tmp_path):
+    path = tmp_path / "latin.csv"
+    path.write_bytes(REFEREE_CSV.encode("latin-1"))
+    assert parse_stats_csv(path).iloc[0]["referee"] == "Clément Turpin"
+
+
+def test_parse_stats_csv_turns_non_integer_counts_into_nulls():
+    source = io.StringIO("HomeTeam,AwayTeam,HS,HST,HC,HxG\nA,B,1.5,4,3.0,1.25\n")
+    row = parse_stats_csv(source).iloc[0]
+    assert pd.isna(row["home_shots"])
+    assert row["home_shots_on_target"] == 4
+    assert row["home_corners"] == 3
+    assert row["home_xg"] == pytest.approx(1.25)
+
+
+def test_resolve_team_ids_reports_ambiguous_names_unless_aliased(seeded):
+    with seeded.begin() as conn:
+        conn.execute(text("UPDATE teams SET short_name = 'Twin' WHERE id IN (1, 2)"))
+        conn.execute(text("UPDATE teams SET short_name = 'C' WHERE id = 3"))
+    with pytest.raises(UnmappedTeamError) as exc:
+        resolve_team_ids(["Twin", "C"], seeded, {})
+    assert exc.value.names == ["Twin"]
+    assert resolve_team_ids(["Twin", "C"], seeded, {"twin": 2}) == {"Twin": 2, "C": 3}
+
+
+def test_main_lists_every_unmapped_name_sorted_and_imports_nothing(
+    engine, tmp_path, monkeypatch, capsys
+):
+    init_schema(engine)
+    with engine.begin() as conn:
+        conn.execute(text("INSERT INTO teams (id, name) VALUES (1, 'A')"))
+    season = tmp_path / "2627"
+    season.mkdir()
+    (season / "SP1.csv").write_text(
+        SAMPLE.read_text(encoding="utf-8").replace("B", "Zeta").replace("C", "Alpha"),
+        encoding="utf-8",
+    )
+    aliases = tmp_path / "aliases.csv"
+    aliases.write_text("alias,team_id\n", encoding="utf-8")
+    monkeypatch.setenv("DATABASE_URL", TEST_DATABASE_URL)
+    code = main(["--folder", str(tmp_path), "--aliases", str(aliases)])
+    names = [line for line in capsys.readouterr().err.splitlines() if line in {"Alpha", "Zeta"}]
+    assert code == 1
+    assert names == ["Alpha", "Zeta"]
+    assert _stats_rows(engine) == []
