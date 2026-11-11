@@ -143,3 +143,23 @@ def test_clean_scorers_keeps_null_assists_as_null():
 
     assert pd.isna(row["assists"])
     assert row["goals"] == 25
+
+
+def test_clean_scorers_keeps_one_row_per_player_when_a_player_appears_under_two_teams():
+    player = {"id": 3020, "name": "Transfer Player", "position": "Offence"}
+    raw = [
+        {"player": player, "team": {"id": 86, "name": "Real Madrid CF"},
+         "playedMatches": 20, "goals": 12, "assists": 1, "penalties": 2},
+        {"player": player, "team": {"id": 81, "name": "FC Barcelona"},
+         "playedMatches": 10, "goals": 4, "assists": 0, "penalties": 0},
+    ]
+
+    teams, players, scorers = clean_scorers(raw, "PD", 2024)
+
+    assert len(scorers) == 1
+    kept = scorers.iloc[0]
+    assert kept["team_id"] == 86
+    assert kept["goals"] == 12
+    assert len(players) == 1
+    assert players.iloc[0]["team_id"] == kept["team_id"]
+    assert sorted(teams["id"]) == [81, 86]

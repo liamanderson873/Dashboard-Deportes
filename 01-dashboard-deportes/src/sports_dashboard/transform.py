@@ -159,8 +159,10 @@ def clean_scorers(
 
     teams_df = pd.DataFrame(sorted(teams.items()), columns=["id", "name"])
     players = pd.DataFrame(player_rows, columns=PLAYER_COLUMNS).drop_duplicates("id")
+    # Both frames keep the first row per player (the API lists top scorers first),
+    # so a transferred player has one scorer row and a matching players.team_id.
     scorers = pd.DataFrame(scorer_rows, columns=SCORER_COLUMNS).drop_duplicates(
-        ["player_id", "team_id"]
+        "player_id"
     )
     for column in ("goals", "assists", "penalties", "played_matches"):
         scorers[column] = scorers[column].astype("Int64")
