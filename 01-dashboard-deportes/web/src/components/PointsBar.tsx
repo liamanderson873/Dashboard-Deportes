@@ -8,10 +8,13 @@ export function PointsBar({ points, max }: { points: number; max: number }) {
       >
         <span
           className="block h-full rounded-full bg-accent-soft"
-          style={{ width: `${Math.round(pct * 100) / 100}%` }}
+          style={{
+            width: `${Math.round(pct * 100) / 100}%`,
+            minWidth: points > 0 ? 6 : 0,
+          }}
         />
       </span>
-      <span className="num font-medium">{points}</span>
+      <span className="num w-9 text-right font-medium">{points}</span>
     </span>
   );
 }

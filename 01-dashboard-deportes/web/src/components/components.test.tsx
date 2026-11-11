@@ -39,7 +39,7 @@ describe("components", () => {
     expect(html).toContain("victoria");
     expect(html).toMatch(/>V</);
     expect(html).toMatch(/>E</);
-    expect(html).toMatch(/>D</);
+    expect(html.match(/>D</g)).toHaveLength(1);
   });
 
   test("test_team_crest_without_url_shows_the_abbreviation", () => {
@@ -104,6 +104,19 @@ describe("components", () => {
     const html = renderToStaticMarkup(<PointsBar points={50} max={100} />);
     expect(html).toContain("width:50%");
     expect(html).toContain(">50<");
+  });
+
+  test("points_bar_with_zero_max_has_no_nan_and_zero_width", () => {
+    const html = renderToStaticMarkup(<PointsBar points={0} max={0} />);
+    expect(html).not.toContain("NaN");
+    expect(html).toContain("width:0%");
+  });
+
+  test("season_nav_marks_only_the_active_season", () => {
+    const html = renderToStaticMarkup(
+      <SeasonNav slug="pd" seasons={[2024, 2023]} active={2023} />,
+    );
+    expect(html.match(/aria-current="page"/g)).toHaveLength(1);
   });
 
   test("empty_state_renders_title", () => {

@@ -5,8 +5,8 @@ import { PointsBar } from "./PointsBar";
 import { TeamCrest } from "./TeamCrest";
 
 const STRIPE = {
-  top: "shadow-[inset_4px_0_0_var(--accent)]",
-  bottom: "shadow-[inset_4px_0_0_var(--zone-bottom)]",
+  top: "border-l-accent",
+  bottom: "border-l-zone-bottom",
 } as const;
 
 const TH = "px-3 py-3 text-left text-sm font-medium text-muted";
@@ -41,7 +41,7 @@ export function StandingsTable({
             <th scope="col" className={`${TH} hidden text-right md:table-cell`}>
               {es.standings.columns.goalDifference}
             </th>
-            <th scope="col" className={`${TH} hidden md:table-cell`}>
+            <th scope="col" className={`${TH} hidden text-center md:table-cell`}>
               {es.standings.columns.form}
             </th>
             <th scope="col" className={`${TH} text-right`}>
@@ -56,20 +56,26 @@ export function StandingsTable({
               <tr
                 key={r.teamId}
                 data-zone={zone ?? undefined}
-                className={`border-t border-border ${zone ? STRIPE[zone] : ""}`}
+                className="border-t border-border"
               >
-                <td className="num px-3 py-2.5 text-muted">{r.position}</td>
-                <td className="px-3 py-2.5">
-                  <span className="flex items-center gap-2.5">
+                <td
+                  className={`num border-l-4 px-3 py-2.5 text-muted ${zone ? STRIPE[zone] : "border-l-transparent"}`}
+                >
+                  {r.position}
+                </td>
+                <td className="w-full max-w-0 px-3 py-2.5">
+                  <span className="flex min-w-0 items-center gap-2.5">
                     <TeamCrest crest={r.crest} tla={r.tla} size={28} />
-                    <span className="font-medium">{r.shortName || r.team}</span>
+                    <span className="min-w-0 truncate font-medium">
+                      {r.shortName || r.team}
+                    </span>
                   </span>
                 </td>
                 <td className="num px-3 py-2.5 text-right">{r.played}</td>
                 <td className="num hidden px-3 py-2.5 text-right md:table-cell">
                   {signed(r.goalDifference)}
                 </td>
-                <td className="hidden px-3 py-2.5 md:table-cell">
+                <td className="hidden px-3 py-2.5 text-center md:table-cell">
                   <FormDots form={r.form} />
                 </td>
                 <td className="px-3 py-2.5">
