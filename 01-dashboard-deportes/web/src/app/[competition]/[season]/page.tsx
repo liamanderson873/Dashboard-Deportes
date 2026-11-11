@@ -45,8 +45,11 @@ export default async function StandingsPage({ params }: Props) {
     redirect(`/${route.competition.slug}/${route.season}`);
   }
 
-  const context = await loadLeagueContext(getSql(), slug, rawSeason);
-  const rows = await getStandings(getSql(), context.competition.code, context.season);
+  const sql = getSql();
+  const [context, rows] = await Promise.all([
+    loadLeagueContext(sql, slug, rawSeason),
+    getStandings(sql, route.competition.code, route.season),
+  ]);
 
   const seasonLabel = formatSeason(context.season);
   const summary = summarize(rows);
