@@ -9,11 +9,58 @@ import streamlit as st  # noqa: E402
 from sports_dashboard import queries  # noqa: E402
 from sports_dashboard.config import ConfigError, load_database_url  # noqa: E402
 from sports_dashboard.db import get_engine, init_schema  # noqa: E402
+from sports_dashboard.summary import season_summary  # noqa: E402
 
 COMPETITION_NAMES = {"PD": "LaLiga", "PL": "Premier League"}
 
+# Colours follow the dashboard design system (blue primary, light tints for table zones).
+TOP_ZONE_ROWS = 4
+BOTTOM_ZONE_ROWS = 3
+MIN_TEAMS_FOR_ZONES = 10
+TOP_ZONE_COLOR = "#DBEAFE"
+BOTTOM_ZONE_COLOR = "#FEE2E2"
+PRIMARY_COLOR = "#1E40AF"
+
+PAGE_STYLE = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&display=swap');
+html, body, .stApp, .stApp button, .stApp input { font-family: 'Fira Sans', sans-serif; }
+h1 { font-weight: 700; letter-spacing: -0.02em; }
+div[data-testid="stMetric"] {
+    background: #FFFFFF;
+    border: 1px solid #DBEAFE;
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+div[data-testid="stMetricValue"] {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+div[data-testid="stMetricValue"] > div,
+div[data-testid="stMetricLabel"],
+div[data-testid="stMetricLabel"] * {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+</style>
+"""
+
 st.set_page_config(page_title="Football dashboard", layout="wide")
+st.markdown(PAGE_STYLE, unsafe_allow_html=True)
 st.title("Football dashboard")
+
+
+def zone_style(row: pd.Series, teams: int) -> list[str]:
+    """Tint the top and bottom of the table; the legend below explains the colours."""
+    if teams < MIN_TEAMS_FOR_ZONES:
+        return [""] * len(row)
+    if row["#"] <= TOP_ZONE_ROWS:
+        return [f"background-color: {TOP_ZONE_COLOR}"] * len(row)
+    if row["#"] > teams - BOTTOM_ZONE_ROWS:
+        return [f"background-color: {BOTTOM_ZONE_COLOR}"] * len(row)
+    return [""] * len(row)
 
 
 @st.cache_resource
@@ -55,7 +102,29 @@ with table_tab:
     if table.empty:
         st.info("No finished matches yet for this season.")
     else:
-        st.dataframe(table, hide_index=True, use_container_width=True)
+        summary = season_summary(table)
+        cards = st.columns(4)
+        cards[0].metric(f"Leader ({summary['leader_points']} pts)", summary["leader"])
+        cards[1].metric(
+            f"Best attack ({summary['best_attack_goals']} goals)", summary["best_attack"]
+        )
+        cards[2].metric(
+            f"Best defense ({summary['best_defense_goals']} conceded)",
+            summary["best_defense"],
+        )
+        cards[3].metric(
+            f"Goals per match ({summary['matches_played']} played)",
+            f"{summary['goals_per_match']:.2f}",
+        )
+
+        ranked = table.copy()
+        ranked.insert(0, "#", range(1, len(ranked) + 1))
+        st.dataframe(
+            ranked.style.apply(zone_style, axis=1, teams=len(ranked)),
+            hide_index=True,
+        )
+        if len(ranked) >= MIN_TEAMS_FOR_ZONES:
+            st.caption(f"Shaded rows: top {TOP_ZONE_ROWS} and bottom {BOTTOM_ZONE_ROWS} of the table.")
         st.caption(
             "Ties are broken by goal difference, then goals scored. "
             "Official head-to-head rules are not applied."
@@ -79,7 +148,6 @@ with results_tab:
         st.dataframe(
             shown[["date", "home", "score", "away", "status"]],
             hide_index=True,
-            use_container_width=True,
         )
 
 with team_tab:
@@ -94,9 +162,8 @@ with team_tab:
             st.info("This team has no finished matches yet.")
         else:
             st.subheader("Points after each match")
-            st.line_chart(form.set_index("matchday")["cumulative_points"])
+            st.line_chart(form.set_index("matchday")["cumulative_points"], color=PRIMARY_COLOR)
             st.dataframe(
                 form[["matchday", "opponent", "home", "goals_for", "goals_against", "result"]],
                 hide_index=True,
-                use_container_width=True,
             )
