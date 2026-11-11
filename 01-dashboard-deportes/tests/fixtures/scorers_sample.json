@@ -1,0 +1,30 @@
+[
+  {
+    "player": {
+      "id": 3010,
+      "name": "Kylian Mbappé",
+      "position": "Offence",
+      "nationality": "France",
+      "dateOfBirth": "1998-12-20"
+    },
+    "team": {"id": 86, "name": "Real Madrid CF"},
+    "playedMatches": 30,
+    "goals": 27,
+    "assists": 3,
+    "penalties": 5
+  },
+  {
+    "player": {
+      "id": 3011,
+      "name": "Robert Lewandowski",
+      "position": "Offence",
+      "nationality": "Poland",
+      "dateOfBirth": "1988-08-21"
+    },
+    "team": {"id": 81, "name": "FC Barcelona"},
+    "playedMatches": 28,
+    "goals": 25,
+    "assists": null,
+    "penalties": 4
+  }
+]

@@ -1,0 +1,43 @@
+[
+  {
+    "id": 86,
+    "name": "Real Madrid CF",
+    "shortName": "Real Madrid",
+    "tla": "RMA",
+    "crest": "https://crests.football-data.org/86.png",
+    "founded": 1902,
+    "venue": "Estadio Santiago Bernabéu",
+    "clubColors": "White / Purple",
+    "website": "https://www.realmadrid.com",
+    "coach": {"name": "Carlo Ancelotti"},
+    "squad": [
+      {
+        "id": 3001,
+        "name": "Thibaut Courtois",
+        "position": "Goalkeeper",
+        "nationality": "Belgium",
+        "dateOfBirth": "1992-05-11"
+      },
+      {
+        "id": 3002,
+        "name": "Jude Bellingham",
+        "position": "Midfield",
+        "nationality": "England",
+        "dateOfBirth": "2003-06-29"
+      }
+    ]
+  },
+  {
+    "id": 81,
+    "name": "FC Barcelona",
+    "shortName": "Barça",
+    "tla": "FCB",
+    "crest": null,
+    "founded": 1899,
+    "venue": "Camp Nou",
+    "clubColors": "Red / Blue",
+    "website": "https://www.fcbarcelona.com",
+    "coach": null,
+    "squad": []
+  }
+]
