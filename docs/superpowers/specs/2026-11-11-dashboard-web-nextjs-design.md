@@ -41,6 +41,12 @@ Datos en directo, cuentas de usuario, apuestas (las cuotas de los CSV no se usan
 - **Datos de football-data.co.uk:** el usuario descarga los CSV a mano a una carpeta local ignorada por git (son pocos archivos), y un script de Python los importa. Una tabla de equivalencias une los nombres de equipo de esta fuente con los de football-data.org.
 - **Streamlit:** `app.py` se conserva hasta que la web tenga las mismas secciones; después se elimina en un commit propio.
 
+## Dirección visual (decidida por el usuario el 2026-11-11)
+- Se elige la **maqueta A, clara y limpia** (`docs/design/maquetas/clasificacion.html`, pestaña A), con datos reales de la Premier League 2026-27. **Solo modo claro por ahora**; el modo oscuro (maqueta B) queda fuera y se puede añadir al final.
+- Rasgos: cabecera grande con la liga y la temporada, cuatro tarjetas de resumen con escudos, tabla con escudo en cada fila, forma de los últimos 5 partidos en círculos con letra (V victoria, E empate, D derrota) y barra de puntos, franja azul a la izquierda en las primeras posiciones.
+- Tokens: fondo `#F8FAFC`, tarjetas `#FFFFFF`, borde `#E2E8F0`, texto `#0F172A`, texto secundario `#475569`, acento `#1E40AF`, barra `#BFDBFE`, victoria `#16A34A`, empate `#64748B`, derrota `#DC2626`; radios de 14 a 16 px; Fira Sans para el texto y Fira Code con números tabulados para las cifras. Un solo color de acento, sin degradados ni brillos.
+- Navegación por enlaces (ligas y temporadas como botones-enlace), sin menús desplegables: más sencillo y accesible. Toda la interfaz en español y adaptada al móvil.
+
 ## Ingesta de API-Football con cuota (Fase B)
 - Tablas: presupuesto diario (`día`, `usadas`), cola de tareas (`endpoint`, `parámetros`, `prioridad`, `estado`, `intentos`) y respuestas guardadas.
 - El ejecutor consume como máximo `restantes − reserva` (reserva: 10 peticiones), espera al menos 6,5 s entre llamadas (límite de 10 por minuto), lee `x-ratelimit-requests-remaining` en cada respuesta y se detiene al llegar al margen, a un 429 o a un error de plan. Cada tarea se marca hecha y no se repite; la ejecución es reanudable al día siguiente.
