@@ -63,6 +63,22 @@ streamlit run app.py
 PostgreSQL is published on host port **5433** so it does not clash with a local
 PostgreSQL installation using the default 5432.
 
+## Web app (Next.js)
+
+`web/` holds a Spanish-language Next.js app (light design) that reads the same PostgreSQL
+database directly with server components. Phase A2 ships the league table page for every
+league and season in the database: summary cards, form of the last 5 matches, points bar,
+Champions/relegation zones, and error and empty states.
+
+```bash
+cd web
+cp .env.example .env.local      # DATABASE_URL only; never committed
+npm install
+npm run dev                     # http://localhost:3000
+```
+
+See `web/README.md` for scripts and tests. The web app never calls the API.
+
 ## Loading data
 
 ### Matches, teams, squads and scorers (football-data.org)
