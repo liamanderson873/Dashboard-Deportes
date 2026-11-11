@@ -81,7 +81,7 @@ seasons = queries.available_seasons(engine)
 if seasons.empty:
     st.info(
         "No data yet. Load a season first with: "
-        "`python -m sports_dashboard.ingest --competition PD --season 2024`"
+        "`python -m sports_dashboard.ingest --competitions PD --seasons 2024`"
     )
     st.stop()
 

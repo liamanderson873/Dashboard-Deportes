@@ -6,3 +6,4 @@ __pycache__/
 .superpowers/
 pgdata/
 *.egg-info/
+01-dashboard-deportes/data/external/
