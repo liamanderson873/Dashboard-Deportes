@@ -160,6 +160,53 @@ def test_ingest_scorers_twice_does_not_duplicate_rows(engine):
     assert count(engine, "players") == 2
 
 
+def scorer(player_id, name, team_id, team_name, position=None):
+    return {
+        "player": {
+            "id": player_id,
+            "name": name,
+            "position": position,
+            "nationality": None,
+            "dateOfBirth": None,
+        },
+        "team": {"id": team_id, "name": team_name},
+        "playedMatches": 10,
+        "goals": 7,
+        "assists": 1,
+        "penalties": 0,
+    }
+
+
+def test_ingest_scorers_after_teams_keeps_squad_position_team_and_birth_date(engine):
+    ingest_teams(engine, FakeClient(), "PD", 2024)
+    scorers = [scorer(3001, "Thibaut Courtois", 81, "FC Barcelona")]
+
+    ingest_scorers(engine, FakeClient(scorers=scorers), "PD", 2024)
+
+    with engine.connect() as conn:
+        player = conn.execute(
+            text("SELECT position, team_id, date_of_birth, nationality FROM players WHERE id = 3001")
+        ).one()
+        scorer_team = conn.execute(
+            text("SELECT team_id FROM scorers WHERE player_id = 3001")
+        ).scalar_one()
+    assert player.position == "Goalkeeper"
+    assert player.team_id == 86
+    assert str(player.date_of_birth) == "1992-05-11"
+    assert player.nationality == "Belgium"
+    assert scorer_team == 81
+
+
+def test_ingest_scorers_for_a_new_player_stores_the_scorer_team(engine):
+    scorers = [scorer(9001, "New Striker", 81, "FC Barcelona", position="Offence")]
+
+    ingest_scorers(engine, FakeClient(scorers=scorers), "PD", 2024)
+
+    with engine.connect() as conn:
+        row = conn.execute(text("SELECT team_id, position FROM players WHERE id = 9001")).one()
+    assert tuple(row) == (81, "Offence")
+
+
 def test_ingest_competitions_upserts_only_requested_codes(engine):
     written = ingest_competitions(engine, FakeClient(), ["PD", "FL1"])
 

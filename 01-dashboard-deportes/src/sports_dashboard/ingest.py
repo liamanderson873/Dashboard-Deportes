@@ -43,6 +43,18 @@ UPSERT_PLAYER = text(
     "nationality = EXCLUDED.nationality, date_of_birth = EXCLUDED.date_of_birth"
 )
 
+# Players seen in a scorers list: the squad is the source of truth, so an existing
+# player keeps team_id and a null here never erases a stored value.
+UPSERT_SCORER_PLAYER = text(
+    "INSERT INTO players (id, team_id, name, position, nationality, date_of_birth) "
+    "VALUES (:id, :team_id, :name, :position, :nationality, :date_of_birth) "
+    "ON CONFLICT (id) DO UPDATE SET "
+    "name = COALESCE(EXCLUDED.name, players.name), "
+    "position = COALESCE(EXCLUDED.position, players.position), "
+    "nationality = COALESCE(EXCLUDED.nationality, players.nationality), "
+    "date_of_birth = COALESCE(EXCLUDED.date_of_birth, players.date_of_birth)"
+)
+
 UPSERT_SCORER = text(
     "INSERT INTO scorers (competition, season, player_id, team_id, goals, assists, "
     "penalties, played_matches) "
@@ -146,7 +158,7 @@ def ingest_scorers(
     )
     with engine.begin() as conn:
         _execute_many(conn, UPSERT_TEAM, teams)
-        _execute_many(conn, UPSERT_PLAYER, players)
+        _execute_many(conn, UPSERT_SCORER_PLAYER, players)
         _execute_many(conn, UPSERT_SCORER, scorers)
     return len(scorers)
 
