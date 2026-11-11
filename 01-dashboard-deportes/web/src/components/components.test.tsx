@@ -5,6 +5,7 @@ import { EmptyState } from "./EmptyState";
 import { FormDots } from "./FormDots";
 import { LeagueNav } from "./LeagueNav";
 import { PointsBar } from "./PointsBar";
+import { SectionNav } from "./SectionNav";
 import { SeasonNav } from "./SeasonNav";
 import { StandingsTable } from "./StandingsTable";
 import { TeamCrest } from "./TeamCrest";
@@ -51,7 +52,7 @@ describe("components", () => {
   });
 
   test("test_standings_table_has_caption_headers_and_one_row_per_team", () => {
-    const html = renderToStaticMarkup(<StandingsTable rows={rows(3)} />);
+    const html = renderToStaticMarkup(<StandingsTable slug="pd" season={2024} rows={rows(3)} />);
     expect(html).toContain("<caption");
     expect(html).toContain("sr-only");
     for (const h of ["#", "Equipo", "PJ", "DG", "Forma", "Puntos"]) {
@@ -62,7 +63,7 @@ describe("components", () => {
   });
 
   test("test_standings_table_marks_zones_in_big_tables", () => {
-    const html = renderToStaticMarkup(<StandingsTable rows={rows(20)} />);
+    const html = renderToStaticMarkup(<StandingsTable slug="pd" season={2024} rows={rows(20)} />);
     expect(html.match(/data-zone="top"/g)).toHaveLength(4);
     expect(html.match(/data-zone="bottom"/g)).toHaveLength(3);
   });
@@ -70,6 +71,8 @@ describe("components", () => {
   test("standings_table_renders_rows_with_null_names_and_crest", () => {
     const html = renderToStaticMarkup(
       <StandingsTable
+        slug="pd"
+        season={2024}
         rows={[
           row(1, {
             shortName: null as unknown as string,
@@ -143,5 +146,53 @@ describe("components", () => {
     expect(renderToStaticMarkup(<EmptyState title="Vacío" />)).toContain(
       "Vacío",
     );
+  });
+
+  test("test_section_nav_marks_only_the_active_section", () => {
+    const html = renderToStaticMarkup(
+      <SectionNav slug="pd" season={2024} active="resultados" />,
+    );
+    expect(html.match(/aria-current="page"/g)).toHaveLength(1);
+    expect(html).toContain('href="/pd/2024/resultados"');
+    expect(html).toContain('href="/pd/2024"');
+    expect(html).toContain('href="/pd/2024/goleadores"');
+    expect(html).toContain('href="/pd/2024/comparar"');
+    expect(html).toMatch(/aria-current="page"[^>]*>Resultados</);
+  });
+
+  test("test_section_nav_without_active_section_has_no_aria_current", () => {
+    const html = renderToStaticMarkup(
+      <SectionNav slug="pd" season={2024} active={null} />,
+    );
+    expect(html).not.toContain("aria-current");
+  });
+
+  test("test_league_and_season_nav_keep_the_section", () => {
+    const leagues = renderToStaticMarkup(
+      <LeagueNav
+        activeSlug="pd"
+        season={2024}
+        section="goleadores"
+        seasonsByCompetition={{ PD: [2024], PL: [2024] }}
+      />,
+    );
+    expect(leagues).toContain('href="/pl/2024/goleadores"');
+    const seasons = renderToStaticMarkup(
+      <SeasonNav slug="pd" seasons={[2024, 2023]} active={2024} section="goleadores" />,
+    );
+    expect(seasons).toContain('href="/pd/2023/goleadores"');
+  });
+
+  test("test_standings_table_links_each_team_to_its_page", () => {
+    const html = renderToStaticMarkup(
+      <StandingsTable slug="pd" season={2024} rows={rows(2)} />,
+    );
+    expect(html).toContain('href="/pd/2024/equipo/1"');
+    expect(html).toContain('href="/pd/2024/equipo/2"');
+  });
+
+  test("test_empty_state_level_one_renders_h1", () => {
+    expect(renderToStaticMarkup(<EmptyState title="T" level={1} />)).toContain("<h1");
+    expect(renderToStaticMarkup(<EmptyState title="T" />)).toContain("<h2");
   });
 });

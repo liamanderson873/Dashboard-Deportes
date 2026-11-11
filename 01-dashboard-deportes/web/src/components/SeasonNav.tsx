@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { formatSeason } from "@/lib/competitions";
 import { es } from "@/lib/es";
+import { sectionHref, type SectionId } from "@/lib/sections";
 
 export function SeasonNav({
   slug,
   seasons,
   active,
+  section = "clasificacion",
 }: {
   slug: string;
   seasons: number[];
   active: number;
+  section?: SectionId;
 }) {
   return (
     <nav aria-label={es.nav.seasons}>
@@ -17,7 +20,7 @@ export function SeasonNav({
         {seasons.map((s) => (
           <li key={s}>
             <Link
-              href={`/${slug}/${s}`}
+              href={sectionHref(slug, s, section)}
               aria-current={s === active ? "page" : undefined}
               className={`num inline-flex min-h-11 items-center rounded-card border px-3 text-sm ${
                 s === active

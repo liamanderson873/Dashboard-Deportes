@@ -2,18 +2,14 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import { KpiCard } from "@/components/KpiCard";
-import { LeagueNav } from "@/components/LeagueNav";
-import { SeasonNav } from "@/components/SeasonNav";
+import { LeagueHeader } from "@/components/LeagueHeader";
 import { StandingsTable } from "@/components/StandingsTable";
 import { TeamCrest } from "@/components/TeamCrest";
 import { formatSeason } from "@/lib/competitions";
 import { getSql } from "@/lib/db";
 import { es } from "@/lib/es";
-import {
-  getAvailableSeasons,
-  getSeasonsByCompetition,
-  getStandings,
-} from "@/lib/queries/standings";
+import { loadLeagueContext } from "@/lib/league-context";
+import { getStandings } from "@/lib/queries/standings";
 import { formatDecimalEs, resolveRoute } from "@/lib/route-params";
 import { summarize, type StandingRow } from "@/lib/standings";
 
@@ -49,40 +45,19 @@ export default async function StandingsPage({ params }: Props) {
     redirect(`/${route.competition.slug}/${route.season}`);
   }
 
-  const sql = getSql();
-  const [rows, seasons, seasonsByCompetition] = await Promise.all([
-    getStandings(sql, route.competition.code, route.season),
-    getAvailableSeasons(sql, route.competition.code),
-    getSeasonsByCompetition(sql),
-  ]);
-  if (!seasons.includes(route.season)) notFound();
+  const context = await loadLeagueContext(getSql(), slug, rawSeason);
+  const rows = await getStandings(getSql(), context.competition.code, context.season);
 
-  const seasonLabel = formatSeason(route.season);
+  const seasonLabel = formatSeason(context.season);
   const summary = summarize(rows);
 
   return (
     <>
-      <header className="mb-6">
-        <h1 className="text-[32px] font-extrabold leading-tight">
-          {route.competition.name}
-        </h1>
-        <p className="num mt-1 text-muted">
-          {es.standings.subtitle(seasonLabel, summary?.matchesPlayed ?? 0)}
-        </p>
-      </header>
-
-      <div className="mb-6 flex flex-col gap-3">
-        <LeagueNav
-          activeSlug={route.competition.slug}
-          season={route.season}
-          seasonsByCompetition={seasonsByCompetition}
-        />
-        <SeasonNav
-          slug={route.competition.slug}
-          seasons={seasons}
-          active={route.season}
-        />
-      </div>
+      <LeagueHeader
+        context={context}
+        section="clasificacion"
+        subtitle={es.standings.subtitle(seasonLabel, summary?.matchesPlayed ?? 0)}
+      />
 
       {summary ? (
         <>
@@ -107,8 +82,10 @@ export default async function StandingsPage({ params }: Props) {
             </KpiCard>
           </section>
           <StandingsTable
+            slug={context.competition.slug}
+            season={context.season}
             rows={rows}
-            caption={es.standings.caption(route.competition.name, seasonLabel)}
+            caption={es.standings.caption(context.competition.name, seasonLabel)}
           />
           <p className="mt-4 text-sm text-muted">
             {rows.length >= 10 ? `${es.standings.legendZones} ` : ""}

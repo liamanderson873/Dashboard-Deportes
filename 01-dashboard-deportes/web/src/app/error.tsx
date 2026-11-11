@@ -7,7 +7,7 @@ import { es } from "@/lib/es";
 // re-render the cached failure.
 export default function ErrorPage({ retry }: { error: unknown; retry: () => void }) {
   return (
-    <EmptyState title={es.error.title}>
+    <EmptyState level={1} title={es.error.title}>
       <p>{es.error.stepsIntro}</p>
       <ul className="mx-auto mt-2 max-w-md list-disc pl-5 text-left">
         {es.error.steps.map((step) => (

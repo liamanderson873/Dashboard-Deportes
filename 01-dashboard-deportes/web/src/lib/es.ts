@@ -10,6 +10,14 @@ export const es = {
     leagues: "Ligas",
     leagueWithoutData: "sin datos",
     seasons: "Temporadas",
+    sections: "Secciones",
+  },
+
+  sections: {
+    clasificacion: "Clasificación",
+    resultados: "Resultados",
+    goleadores: "Goleadores",
+    comparar: "Comparador",
   },
 
   standings: {

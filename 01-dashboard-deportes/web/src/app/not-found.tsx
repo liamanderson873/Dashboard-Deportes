@@ -4,7 +4,7 @@ import { es } from "@/lib/es";
 
 export default function NotFound() {
   return (
-    <EmptyState title={es.notFound.title}>
+    <EmptyState level={1} title={es.notFound.title}>
       <p>{es.notFound.message}</p>
       <p className="mt-4">
         <Link
