@@ -3,10 +3,13 @@ import { notFound, redirect } from "next/navigation";
 import { FormDots } from "@/components/FormDots";
 import { KpiCard } from "@/components/KpiCard";
 import { LeagueHeader } from "@/components/LeagueHeader";
+import { LineChart } from "@/components/LineChart";
 import { SquadList } from "@/components/SquadList";
 import { StatGrid } from "@/components/StatGrid";
 import { TeamHeader } from "@/components/TeamHeader";
 import { TeamMatchList } from "@/components/TeamMatchList";
+import { TeamSeasonsTable, type TeamSeasonRow } from "@/components/TeamSeasonsTable";
+import type { Series } from "@/lib/chart";
 import { formatSeason } from "@/lib/competitions";
 import { getSql } from "@/lib/db";
 import { es } from "@/lib/es";
@@ -22,7 +25,7 @@ import {
 import { formatDecimalEs, resolveRoute } from "@/lib/route-params";
 import { teamHref } from "@/lib/sections";
 import type { Result } from "@/lib/standings";
-import { parseTeamId, splitRecord, toTeamMatches } from "@/lib/team";
+import { parseTeamId, pointsProgression, splitRecord, toTeamMatches } from "@/lib/team";
 
 export const dynamic = "force-dynamic";
 
@@ -84,6 +87,40 @@ export default async function TeamPage({ params }: Props) {
   const position = standings.find((r) => r.teamId === teamId)?.position ?? null;
   const season = formatSeason(context.season);
   const s = es.team.stats;
+
+  const evo = es.team.evolution;
+  const perSeason = await Promise.all(
+    teamSeasons.map(async (y) => {
+      if (y === context.season) return { y, matches, standings };
+      const [raw, table] = await Promise.all([
+        getTeamMatches(sql, code, y, teamId),
+        getStandings(sql, code, y),
+      ]);
+      return { y, matches: toTeamMatches(raw, teamId), standings: table };
+    }),
+  );
+  const chartSeries: Series[] = perSeason
+    .map(({ y, matches: tm }) => ({
+      id: String(y),
+      label: formatSeason(y),
+      highlight: y === context.season,
+      points: pointsProgression(tm).map((p, i) => ({ x: i + 1, y: p.cumulative })),
+    }))
+    .filter((sr) => sr.points.length > 0);
+  const seasonRows: TeamSeasonRow[] = perSeason.map(({ y, standings: table }) => {
+    const r = table.find((t) => t.teamId === teamId);
+    return {
+      season: y,
+      label: formatSeason(y),
+      href: teamHref(context.competition.slug, y, teamId),
+      current: y === context.season,
+      position: r?.position ?? null,
+      played: r?.played ?? null,
+      points: r?.points ?? null,
+      goalsFor: r?.goalsFor ?? null,
+      goalsAgainst: r?.goalsAgainst ?? null,
+    };
+  });
 
   return (
     <>
@@ -152,6 +189,19 @@ export default async function TeamPage({ params }: Props) {
               </span>
             </KpiCard>
           </div>
+        </section>
+
+        <section className="flex flex-col gap-3">
+          <h2 className="text-xl font-bold">{evo.title}</h2>
+          <div className="rounded-panel border border-border bg-card p-4">
+            <LineChart
+              series={chartSeries}
+              ariaLabel={evo.chartLabel(profile.name)}
+              xLabel={evo.xLabel}
+              yLabel={evo.yLabel}
+            />
+          </div>
+          <TeamSeasonsTable rows={seasonRows} />
         </section>
 
         <section className="flex flex-col gap-3">

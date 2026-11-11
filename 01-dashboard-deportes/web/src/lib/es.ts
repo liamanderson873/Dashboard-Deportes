@@ -118,6 +118,23 @@ export const es = {
       ) =>
         `${played} PJ · ${won}V ${drawn}E ${lost}D · ${gf}-${ga} goles · ${pts} puntos`,
     },
+    evolution: {
+      title: "Evolución",
+      chartLabel: (team: string) =>
+        `Puntos acumulados de ${team} por partido jugado, una línea por temporada`,
+      xLabel: "Partido",
+      yLabel: "Puntos acumulados",
+      currentSeason: "temporada mostrada",
+      tableCaption: "Posición y balance del equipo en cada temporada de la liga",
+      columns: {
+        season: "Temporada",
+        position: "Pos.",
+        played: "PJ",
+        points: "Puntos",
+        goalsFor: "GF",
+        goalsAgainst: "GC",
+      },
+    },
     stats: {
       title: "Estadísticas por partido",
       xgFor: "xG a favor",

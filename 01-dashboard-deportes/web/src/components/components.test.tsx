@@ -1,4 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
+import type { Series } from "@/lib/chart";
+import { LineChart } from "./LineChart";
 import { describe, expect, test } from "vitest";
 import type { StandingRow } from "@/lib/standings";
 import { EmptyState } from "./EmptyState";
@@ -429,5 +431,49 @@ describe("team components", () => {
     );
     expect(html).toContain('href="/pd/2023/equipo/9"');
     expect(html).not.toContain('href="/pd/2023"');
+  });
+});
+
+describe("LineChart", () => {
+  const series: Series[] = [
+    {
+      id: "2024",
+      label: "2024/25",
+      highlight: true,
+      points: [
+        { x: 1, y: 3 },
+        { x: 2, y: 4 },
+      ],
+    },
+    {
+      id: "2023",
+      label: "2023/24",
+      highlight: false,
+      points: [
+        { x: 1, y: 0 },
+        { x: 2, y: 3 },
+      ],
+    },
+  ];
+  const render = () =>
+    renderToStaticMarkup(
+      <LineChart series={series} ariaLabel="Evolución" xLabel="Partido" yLabel="Puntos" />,
+    );
+
+  test("test_line_chart_has_role_img_label_and_one_path_per_series", () => {
+    const html = render();
+    expect(html).toContain('role="img"');
+    expect(html).toContain('aria-label="Evolución"');
+    expect(html.match(/data-series="/g)).toHaveLength(2);
+    expect(html).toContain("Partido");
+    expect(html).toContain("Puntos");
+  });
+
+  test("test_line_chart_legend_names_every_series", () => {
+    const html = render();
+    expect(html).toContain("2024/25");
+    expect(html).toContain("2023/24");
+    expect(html).toContain("temporada mostrada");
+    expect(html.match(/temporada mostrada/g)).toHaveLength(1);
   });
 });
