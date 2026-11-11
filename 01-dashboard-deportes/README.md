@@ -37,7 +37,7 @@ football-data.co.uk (CSV files)  ->  stats_import  ---------------------+   |
 | `queries.py` | SQL for the league table, team form, results and available seasons |
 | `app.py` | Streamlit dashboard |
 
-The league table is computed from finished matches with SQL (win 3 points, draw 1).
+The league table is computed from finished matches with SQL (win 3 points, draw 1); matches decided off the pitch count with the awarded score.
 Ties are broken by goal difference and then goals scored, not by official head-to-head
 rules, so teams level on points can appear in a different order than in an official table.
 

@@ -2,16 +2,21 @@ import numpy as np
 import pandas as pd
 from sqlalchemy import Engine, text
 
+# Matches that count as played: AWARDED ones were decided off the pitch but carry an awarded score.
+# Fixed text, never user input, so building the SQL from it is safe.
+COUNTED_STATUSES = ("FINISHED", "AWARDED")
+COUNTED = ", ".join(f"'{s}'" for s in COUNTED_STATUSES)
+
 STANDINGS_SQL = text(
-    """
+    f"""
     WITH played AS (
         SELECT home_team_id AS team_id, home_goals AS gf, away_goals AS ga
         FROM matches
-        WHERE competition = :competition AND season = :season AND status = 'FINISHED'
+        WHERE competition = :competition AND season = :season AND status IN ({COUNTED})
         UNION ALL
         SELECT away_team_id, away_goals, home_goals
         FROM matches
-        WHERE competition = :competition AND season = :season AND status = 'FINISHED'
+        WHERE competition = :competition AND season = :season AND status IN ({COUNTED})
     )
     SELECT
         t.name AS team,
@@ -32,19 +37,19 @@ STANDINGS_SQL = text(
 )
 
 TEAM_RESULTS_SQL = text(
-    """
+    f"""
     SELECT m.matchday, m.utc_date, o.name AS opponent, TRUE AS home,
            m.home_goals AS goals_for, m.away_goals AS goals_against
     FROM matches m
     JOIN teams o ON o.id = m.away_team_id
     WHERE m.competition = :competition AND m.season = :season
-      AND m.status = 'FINISHED' AND m.home_team_id = :team_id
+      AND m.status IN ({COUNTED}) AND m.home_team_id = :team_id
     UNION ALL
     SELECT m.matchday, m.utc_date, o.name, FALSE, m.away_goals, m.home_goals
     FROM matches m
     JOIN teams o ON o.id = m.home_team_id
     WHERE m.competition = :competition AND m.season = :season
-      AND m.status = 'FINISHED' AND m.away_team_id = :team_id
+      AND m.status IN ({COUNTED}) AND m.away_team_id = :team_id
     ORDER BY utc_date
     """
 )
@@ -81,12 +86,12 @@ def _read(engine: Engine, sql, **params) -> pd.DataFrame:
 
 
 def standings(engine: Engine, competition: str, season: int) -> pd.DataFrame:
-    """League table built from FINISHED matches only: win 3, draw 1, loss 0."""
+    """League table built from FINISHED and AWARDED matches only: win 3, draw 1, loss 0."""
     return _read(engine, STANDINGS_SQL, competition=competition, season=season)
 
 
 def team_results(engine: Engine, competition: str, season: int, team_id: int) -> pd.DataFrame:
-    """One row per finished match of the team, with result and cumulative points."""
+    """One row per counted (finished or awarded) match of the team, with result and cumulative points."""
     df = _read(
         engine, TEAM_RESULTS_SQL, competition=competition, season=season, team_id=team_id
     )
