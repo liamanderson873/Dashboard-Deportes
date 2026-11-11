@@ -13,6 +13,8 @@ export const es = {
 
   standings: {
     defaultCaption: "Clasificación",
+    pageTitle: (league: string, season: string) =>
+      `${league} ${season} · Clasificación`,
     caption: (league: string, season: string) =>
       `Clasificación de ${league}, temporada ${season}`,
     subtitle: (season: string, played: number) =>
