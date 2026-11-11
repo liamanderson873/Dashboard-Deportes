@@ -172,6 +172,48 @@ export const es = {
     },
   },
 
+  compare: {
+    pageTitle: (league: string, season: string) =>
+      `${league} ${season} · Comparador`,
+    subtitle: (season: string) => `Temporada ${season} · Comparador de equipos`,
+    hint: "Elige dos equipos para compararlos",
+    errors: {
+      same: "Elige dos equipos distintos",
+      unknown: "Ese equipo no juega en esta liga y temporada",
+    },
+    form: {
+      teamA: "Equipo A",
+      teamB: "Equipo B",
+      placeholder: "Elige un equipo",
+      submit: "Comparar",
+    },
+    table: {
+      caption: (a: string, b: string) => `Comparación entre ${a} y ${b}`,
+      metric: "Estadística",
+      better: "mejor",
+    },
+    rows: {
+      position: "Posición",
+      points: "Puntos",
+      played: "Partidos jugados",
+      won: "Victorias",
+      goalsFor: "Goles a favor",
+      goalsAgainst: "Goles en contra",
+      goalDifference: "Diferencia de goles",
+      xgFor: "xG a favor por partido",
+      xgAgainst: "xG en contra por partido",
+      shots: "Tiros por partido",
+      shotsOnTarget: "Tiros a puerta por partido",
+      corners: "Córners por partido",
+      fouls: "Faltas por partido",
+      yellow: "Amarillas por partido",
+    },
+    headToHead: {
+      title: "Enfrentamientos directos",
+      empty: "No hay partidos entre ellos en los datos cargados",
+    },
+  },
+
   kpi: {
     leader: "Líder",
     bestAttack: "Mejor ataque",

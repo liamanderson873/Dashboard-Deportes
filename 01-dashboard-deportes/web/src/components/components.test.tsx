@@ -20,6 +20,8 @@ import { TeamHeader } from "./TeamHeader";
 import { StatGrid } from "./StatGrid";
 import { SquadList } from "./SquadList";
 import { TeamMatchList } from "./TeamMatchList";
+import { CompareForm } from "./CompareForm";
+import { CompareTable } from "./CompareTable";
 import { toTeamMatches } from "@/lib/team";
 import type { SquadPlayer, TeamProfile } from "@/lib/queries/team";
 
@@ -475,5 +477,47 @@ describe("LineChart", () => {
     expect(html).toContain("2023/24");
     expect(html).toContain("temporada mostrada");
     expect(html.match(/temporada mostrada/g)).toHaveLength(1);
+  });
+});
+
+describe("comparator components", () => {
+  const teams = [
+    { id: 1, name: "Alfa" },
+    { id: 2, name: "Beta" },
+    { id: 3, name: "Gamma" },
+  ];
+
+  test("test_compare_form_has_labels_selects_and_preselected_values", () => {
+    const html = renderToStaticMarkup(
+      <CompareForm slug="pd" season={2024} teams={teams} a={1} b={null} />,
+    );
+    expect(html).toContain('method="get"');
+    expect(html).toContain('action="/pd/2024/comparar"');
+    expect(html).toContain('name="a"');
+    expect(html).toContain('name="b"');
+    expect(html.match(/<label/g)).toHaveLength(2);
+    expect(html).toContain("Elige un equipo");
+    expect(html).toMatch(/<option value="1" selected="">Alfa<\/option>/);
+    expect(html).toMatch(/<option value="" selected="">Elige un equipo/);
+    expect(html.match(/selected=""/g)).toHaveLength(2);
+    expect(html).toContain(">Comparar<");
+  });
+
+  test("test_compare_table_marks_better_side_for_screen_readers", () => {
+    const html = renderToStaticMarkup(
+      <CompareTable
+        a={row(1)}
+        b={row(2)}
+        rows={[
+          { label: "Puntos", a: "30", b: "20", better: "a" },
+          { label: "Faltas por partido", a: "10,00", b: "10,00", better: null },
+        ]}
+      />,
+    );
+    expect(html).toContain("<caption");
+    expect(html).toContain('scope="col"');
+    expect(html).toContain('scope="row"');
+    expect(html.match(/sr-only">mejor</g)).toHaveLength(1);
+    expect(html).toMatch(/font-bold[^>]*>30/);
   });
 });
