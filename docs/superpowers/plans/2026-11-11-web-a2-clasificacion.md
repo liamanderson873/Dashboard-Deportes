@@ -15,7 +15,7 @@
 - Proyecto en `01-dashboard-deportes/web/`; rutas relativas a esa carpeta salvo que se diga lo contrario. Windows 11, Node 24, npm.
 - **La web solo lee de PostgreSQL**: nunca llama a una API externa y **nunca ejecuta `init_schema` ni crea tablas** (el esquema lo gestiona Python).
 - Toda la interfaz en **español**; `<html lang="es">`.
-- Solo modo claro. Un solo color de acento (`#1E40AF`), sin degradados ni brillos. Tokens: fondo `#F8FAFC`, tarjetas `#FFFFFF`, borde `#E2E8F0`, texto `#0F172A`, texto secundario `#475569`, barra `#BFDBFE`, victoria `#16A34A`, empate `#64748B`, derrota `#DC2626`. Fira Sans para el texto y Fira Code con números tabulados para las cifras, con `next/font`.
+- Solo modo claro. Un solo color de acento (`#1E40AF`), sin degradados ni brillos. Tokens: fondo `#F8FAFC`, tarjetas `#FFFFFF`, borde `#E2E8F0`, texto `#0F172A`, texto secundario `#475569`, barra `#BFDBFE`, victoria `#15803D`, empate `#64748B`, derrota `#DC2626`. Fira Sans para el texto y Fira Code con números tabulados para las cifras, con `next/font`.
 - Accesibilidad: contraste mínimo 4,5:1 en el texto, foco visible, una `<caption>` en la tabla, los círculos de forma con letra y un texto accesible; sin depender solo del color.
 - Adaptada al móvil: sin desplazamiento horizontal de la página a 375 px.
 - Las cifras que salen de SQL deben llegar como **números de JavaScript**: `count`, `sum` y diferencias se convierten con `::int` en la consulta (postgres.js devuelve `bigint` y `numeric` como texto).

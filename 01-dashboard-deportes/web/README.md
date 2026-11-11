@@ -17,3 +17,15 @@ muestra las clasificaciones de fútbol en español.
 - `npm run lint`: ESLint.
 - `npm run typecheck`: TypeScript sin emitir código.
 - `npm test`: tests con Vitest.
+
+## Rutas
+
+- `/` redirige a la temporada más reciente de LaLiga (o de la primera liga con datos).
+- `/{liga}/{año}`, por ejemplo `/pl/2026`: clasificación. Ligas: `pd`, `pl`, `sa`, `bl1`, `fl1`.
+- Si la base de datos no responde se muestra una pantalla de error con los pasos para arrancarla.
+
+## Notas
+
+- Los tests de base de datos usan `sports_test` (nunca la base `sports`) y se niegan a
+  ejecutarse contra otra.
+- Usa `127.0.0.1` y no `localhost` en `DATABASE_URL` (en Windows `localhost` puede resolver a IPv6).
