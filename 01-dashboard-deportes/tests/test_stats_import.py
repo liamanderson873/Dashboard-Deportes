@@ -8,6 +8,7 @@ from sqlalchemy import text
 from conftest import TEST_DATABASE_URL
 from sports_dashboard.db import init_schema
 from sports_dashboard.stats_import import (
+    AliasFileError,
     UnmappedTeamError,
     import_stats,
     load_aliases,
@@ -184,3 +185,81 @@ def test_main_lists_every_unmapped_name_sorted_and_imports_nothing(
     assert code == 1
     assert names == ["Alpha", "Zeta"]
     assert _stats_rows(engine) == []
+
+
+def _run_main(engine, tmp_path, monkeypatch, capsys, aliases_text, csv_text=None):
+    """Run main on a one-file folder. Returns (exit code, stderr)."""
+    init_schema(engine)
+    with engine.begin() as conn:
+        conn.execute(text("INSERT INTO teams (id, name) VALUES (1, 'A'), (2, 'B')"))
+        conn.execute(
+            text(
+                "INSERT INTO matches (id, competition, season, matchday, utc_date, status, "
+                "home_team_id, away_team_id) VALUES "
+                "(1, 'PD', 2026, 1, '2026-08-15T19:00:00Z', 'FINISHED', 1, 2)"
+            )
+        )
+    season = tmp_path / "2627"
+    season.mkdir()
+    (season / "SP1.csv").write_text(
+        csv_text or "HomeTeam,AwayTeam,HS\nA,B,7\n", encoding="utf-8"
+    )
+    aliases = tmp_path / "aliases.csv"
+    if aliases_text is not None:
+        aliases.write_text(aliases_text, encoding="utf-8")
+    monkeypatch.setenv("DATABASE_URL", TEST_DATABASE_URL)
+    code = main(["--folder", str(tmp_path), "--aliases", str(aliases)])
+    return code, capsys.readouterr().err
+
+
+def test_main_prints_each_unmatched_pair_to_stderr(engine, tmp_path, monkeypatch, capsys):
+    csv = "HomeTeam,AwayTeam,HS\nA,B,7\nB,A,3\n"
+    code, err = _run_main(engine, tmp_path, monkeypatch, capsys, "alias,team_id\n", csv)
+    assert code == 0
+    assert "  B - A" in err.splitlines()
+    assert [row[0] for row in _stats_rows(engine)] == [1]
+
+
+def test_load_aliases_lists_every_bad_line_in_one_message(tmp_path):
+    path = tmp_path / "aliases.csv"
+    path.write_text("alias,team_id\nOk,1\n,2\nNoId,\nWord,abc\n", encoding="utf-8")
+    with pytest.raises(AliasFileError) as exc:
+        load_aliases(path)
+    message = str(exc.value)
+    assert isinstance(exc.value, ValueError)
+    assert "line 3:" in message and "line 4:" in message and "line 5:" in message
+    assert "line 2:" not in message
+
+
+@pytest.mark.parametrize(
+    "aliases_text, expected",
+    [
+        ("alias,team_id\n,1\n", ["line 2:"]),
+        ("alias,team_id\nFoo,\n", ["line 2:"]),
+        ("alias,team_id\nFoo,xyz\nBar,1\nBaz,\n", ["line 2:", "line 4:"]),
+        ("alias,team_id\nFoo,1\nBar,99\nBaz,98\n", ["line 3:", "line 4:", "99", "98"]),
+    ],
+)
+def test_main_reports_alias_file_problems_with_line_numbers(
+    engine, tmp_path, monkeypatch, capsys, aliases_text, expected
+):
+    code, err = _run_main(engine, tmp_path, monkeypatch, capsys, aliases_text)
+    assert code == 1
+    assert err.startswith("Error:")
+    for fragment in expected:
+        assert fragment in err
+    assert "Traceback" not in err
+    assert _stats_rows(engine) == []
+
+
+def test_main_reports_a_missing_aliases_file(engine, tmp_path, monkeypatch, capsys):
+    code, err = _run_main(engine, tmp_path, monkeypatch, capsys, None)
+    assert code == 1
+    assert "aliases.csv" in err and "Traceback" not in err
+
+
+def test_main_reports_a_malformed_csv_file(engine, tmp_path, monkeypatch, capsys):
+    csv = "HomeTeam,AwayTeam,HS\nA,B,7\nA,B,1,2,3,4\n"
+    code, err = _run_main(engine, tmp_path, monkeypatch, capsys, "alias,team_id\n", csv)
+    assert code == 1
+    assert "SP1.csv" in err and "Traceback" not in err

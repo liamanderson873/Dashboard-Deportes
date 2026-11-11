@@ -106,11 +106,19 @@ Divisions map to competitions as `SP1` -> `PD`, `E0` -> `PL`, `I1` -> `SA`,
 Run the football-data.org ingest first: the import matches CSV rows to the matches
 already in the database.
 
+The import prints one line per file (`matched`, `unmatched`). Under it, on stderr, it lists
+each unmatched pair as `  Home - Away`: a CSV row with no match in the database, or the
+sign of a wrong alias (an alias that points to the wrong team). Unmatched rows do not fail
+the run. Exit code 0 means ok; 1 means unrecognised team names or a problem with the aliases
+file.
+
 **Team name aliases.** The two sources spell some team names differently. The import
 lists every team name it does not recognise and imports nothing until
 `data/team_aliases.csv` covers them. The file has two columns, `alias,team_id`: `alias`
 is the name as written in the CSV (case, accents and punctuation are ignored) and `team_id` is the id of that team in the
 `teams` table. Add one line per unrecognised name and run the import again.
+The file is validated before anything is imported: empty cells, a `team_id` that is not a
+number or does not exist in `teams` are reported together with their line numbers.
 
 ```
 alias,team_id

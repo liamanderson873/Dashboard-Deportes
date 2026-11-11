@@ -1,6 +1,8 @@
 """Import match statistics from football-data.co.uk CSV files into match_stats."""
 
 import argparse
+import csv
+import io
 import re
 import sys
 import unicodedata
@@ -60,6 +62,10 @@ UPSERT_STATS = text(
 )
 
 
+class AliasFileError(ValueError):
+    """The aliases file has rows that cannot be used; the message lists every one."""
+
+
 class UnmappedTeamError(Exception):
     """Team names that match no team in the database and no alias."""
 
@@ -86,9 +92,58 @@ def normalize_name(name: str) -> str:
     return " ".join(re.sub(r"[^a-z0-9]+", " ", plain.lower()).split())
 
 
+def _alias_rows(path: Path) -> list[tuple[int, str, int]]:
+    """Validated alias rows as (line number, alias, team_id); raise AliasFileError if any is bad."""
+    raw = path.read_bytes()
+    try:
+        content = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        content = raw.decode("latin-1")
+    reader = csv.reader(io.StringIO(content))
+    header = next(reader, None)
+    if header is None:
+        return []
+    rows: list[tuple[int, str, int]] = []
+    problems: list[str] = []
+    if [cell.strip().lower() for cell in header] != ["alias", "team_id"]:
+        problems.append("line 1: the header must be alias,team_id")
+    for cells in reader:
+        line = reader.line_num
+        if not any(cell.strip() for cell in cells):
+            continue
+        if len(cells) != 2:
+            problems.append(f"line {line}: expected 2 columns (alias,team_id), found {len(cells)}")
+            continue
+        alias, team_id = cells[0].strip(), cells[1].strip()
+        if not alias:
+            problems.append(f"line {line}: the alias is empty")
+        elif not team_id:
+            problems.append(f"line {line}: the team_id is empty")
+        elif not team_id.isdecimal():
+            problems.append(f"line {line}: team_id '{team_id}' is not a whole number")
+        else:
+            rows.append((line, normalize_name(alias), int(team_id)))
+    if problems:
+        raise AliasFileError("; ".join(problems))
+    return rows
+
+
 def load_aliases(path: Path) -> dict[str, int]:
-    df = pd.read_csv(path, dtype={"alias": str, "team_id": "Int64"})
-    return {normalize_name(row.alias): int(row.team_id) for row in df.itertuples()}
+    return {alias: team_id for _, alias, team_id in _alias_rows(path)}
+
+
+def _check_alias_team_ids(engine: Engine, path: Path) -> None:
+    """Raise AliasFileError for alias rows whose team_id is not in the teams table."""
+    rows = _alias_rows(path)
+    with engine.connect() as conn:
+        existing = {row[0] for row in conn.execute(text("SELECT id FROM teams"))}
+    problems = [
+        f"line {line}: team_id {team_id} does not exist in the teams table"
+        for line, _, team_id in rows
+        if team_id not in existing
+    ]
+    if problems:
+        raise AliasFileError("; ".join(problems))
 
 
 def resolve_team_ids(
@@ -220,10 +275,22 @@ def main(argv: list[str] | None = None) -> int:
     try:
         engine = get_engine(load_database_url())
         init_schema(engine)
-        aliases = load_aliases(args.aliases)
+        try:
+            aliases = load_aliases(args.aliases)
+            _check_alias_team_ids(engine, args.aliases)
+        except FileNotFoundError:
+            print(f"Error: aliases file not found: {args.aliases}", file=sys.stderr)
+            return 1
+        except AliasFileError as error:
+            print(f"Error: {args.aliases}: {error}", file=sys.stderr)
+            return 1
         names: set[str] = set()
         for path, _, _ in files:
-            df = parse_stats_csv(path)
+            try:
+                df = parse_stats_csv(path)
+            except pd.errors.ParserError as error:
+                print(f"Error: cannot read {path}: {error}", file=sys.stderr)
+                return 1
             names.update(df["home_name"])
             names.update(df["away_name"])
         try:
@@ -240,6 +307,8 @@ def main(argv: list[str] | None = None) -> int:
                 f"{len(result.unmatched)} unmatched",
                 flush=True,
             )
+            for pair in result.unmatched:
+                print(f"  {pair}", file=sys.stderr, flush=True)
     except ConfigError as error:
         print(f"Error: {error}", file=sys.stderr)
         return 1
