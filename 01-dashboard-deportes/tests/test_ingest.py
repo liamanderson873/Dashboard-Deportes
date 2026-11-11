@@ -130,6 +130,65 @@ def test_ingest_teams_with_empty_squad_and_null_coach_succeeds(engine):
     assert count(engine, "players") == 0
 
 
+def squad_rows(engine):
+    with engine.connect() as conn:
+        rows = conn.execute(
+            text("SELECT season, team_id, player_id FROM squad_members ORDER BY 1, 2, 3")
+        ).all()
+    return [tuple(row) for row in rows]
+
+
+def teams_with_squad(player_ids):
+    """Copy of the teams sample where team 86 has exactly the given players."""
+    teams = copy.deepcopy(TEAMS_SAMPLE)
+    template = teams[0]["squad"][0]
+    teams[0]["squad"] = [{**template, "id": pid, "name": f"Player {pid}"} for pid in player_ids]
+    return teams
+
+
+def test_ingest_teams_writes_squad_members_per_season(engine):
+    ingest_teams(engine, FakeClient(), "PD", 2024)
+    ingest_teams(engine, FakeClient(), "PD", 2025)
+
+    assert squad_rows(engine) == [
+        (2024, 86, 3001),
+        (2024, 86, 3002),
+        (2025, 86, 3001),
+        (2025, 86, 3002),
+    ]
+
+
+def test_ingest_teams_replaces_a_teams_squad_for_the_season(engine):
+    ingest_teams(engine, FakeClient(), "PD", 2024)
+    ingest_teams(engine, FakeClient(), "PD", 2025)
+
+    ingest_teams(engine, FakeClient(teams=teams_with_squad([3001, 3003])), "PD", 2024)
+
+    assert squad_rows(engine) == [
+        (2024, 86, 3001),
+        (2024, 86, 3003),
+        (2025, 86, 3001),
+        (2025, 86, 3002),
+    ]
+
+
+def test_ingest_teams_squad_members_are_idempotent(engine):
+    ingest_teams(engine, FakeClient(), "PD", 2024)
+    first = squad_rows(engine)
+
+    ingest_teams(engine, FakeClient(), "PD", 2024)
+
+    assert squad_rows(engine) == first == [(2024, 86, 3001), (2024, 86, 3002)]
+
+
+def test_ingest_teams_empties_the_squad_when_the_team_now_has_no_players(engine):
+    ingest_teams(engine, FakeClient(), "PD", 2024)
+
+    ingest_teams(engine, FakeClient(teams=teams_with_squad([])), "PD", 2024)
+
+    assert squad_rows(engine) == []
+
+
 def test_ingesting_matches_after_teams_keeps_the_profile(engine):
     client = FakeClient()
     ingest_teams(engine, client, "PD", 2024)

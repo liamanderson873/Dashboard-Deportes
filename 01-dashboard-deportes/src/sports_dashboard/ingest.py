@@ -55,6 +55,13 @@ UPSERT_SCORER_PLAYER = text(
     "date_of_birth = COALESCE(EXCLUDED.date_of_birth, players.date_of_birth)"
 )
 
+DELETE_SQUAD = text("DELETE FROM squad_members WHERE season = :season AND team_id = :team_id")
+
+INSERT_SQUAD_MEMBER = text(
+    "INSERT INTO squad_members (season, team_id, player_id) "
+    "VALUES (:season, :team_id, :player_id)"
+)
+
 UPSERT_SCORER = text(
     "INSERT INTO scorers (competition, season, player_id, team_id, goals, assists, "
     "penalties, played_matches) "
@@ -139,12 +146,26 @@ def ingest_competitions(engine: Engine, client: FootballDataClient, codes: list[
 def ingest_teams(
     engine: Engine, client: FootballDataClient, competition: str, season: int
 ) -> int:
-    """Upsert team profiles and squads of one competition season. Returns players written."""
+    """Upsert team profiles and squads of one competition season. Returns players written.
+
+    The squad of every team in the response is replaced for that season.
+    """
     init_schema(engine)
     teams, players = clean_teams(client.get_teams(competition, season))
+    members = [
+        {"season": season, "team_id": member["team_id"], "player_id": member["id"]}
+        for member in _records(players[["id", "team_id"]])
+    ]
     with engine.begin() as conn:
         _execute_many(conn, UPSERT_TEAM_PROFILE, teams)
         _execute_many(conn, UPSERT_PLAYER, players)
+        if not teams.empty:
+            conn.execute(
+                DELETE_SQUAD,
+                [{"season": season, "team_id": int(team_id)} for team_id in teams["id"]],
+            )
+        if members:
+            conn.execute(INSERT_SQUAD_MEMBER, members)
     return len(players)
 
 

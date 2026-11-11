@@ -45,6 +45,13 @@ CREATE TABLE IF NOT EXISTS players (
     date_of_birth DATE
 );
 
+CREATE TABLE IF NOT EXISTS squad_members (
+    season INTEGER NOT NULL,
+    team_id INTEGER NOT NULL REFERENCES teams (id),
+    player_id INTEGER NOT NULL REFERENCES players (id),
+    PRIMARY KEY (season, team_id, player_id)
+);
+
 CREATE TABLE IF NOT EXISTS scorers (
     competition TEXT,
     season INTEGER,

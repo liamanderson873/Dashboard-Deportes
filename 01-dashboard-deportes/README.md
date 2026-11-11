@@ -13,7 +13,7 @@ The database holds more than the dashboard shows today:
 - Several leagues: LaLiga (PD), Premier League (PL), Serie A (SA), Bundesliga (BL1)
   and Ligue 1 (FL1).
 - Matches with half-time goals.
-- Team profiles and squads.
+- Team profiles and squads per season (`squad_members`).
 - Top scorers per season.
 - Match statistics: xG, shots, corners, fouls and cards.
 
@@ -143,10 +143,12 @@ is reported as a failure and skipped, and the rest of the run continues.
 
 ## Data caveats
 
-- Squads from football-data.org are snapshots, not per-season data. The latest squad wins
-  only when the seasons are loaded in one call (for example `--seasons 2024,2025,2026`),
-  because seasons are processed oldest first. Partial runs of older seasons can attach
-  new players to older teams.
+- Squads are per season and live in `squad_members(season, team_id, player_id)`. Loading
+  a season again replaces that team's squad for that season.
+- `players` has one row per person. Its `team_id` is the team of the latest season loaded,
+  so load the seasons in one call (for example `--seasons 2024,2025,2026`): the oldest is
+  processed first and the latest wins.
+- The coach in `teams.coach` is the current coach, whatever season was loaded.
 - The scorers list has no `position` field, so player positions come from the squads.
 
 ## Roadmap

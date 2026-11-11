@@ -14,7 +14,7 @@ def engine():
 
     eng = get_engine(TEST_DATABASE_URL)
     with eng.begin() as conn:
-        conn.execute(text("DROP TABLE IF EXISTS match_stats, scorers, players, competitions, matches, teams CASCADE"))
+        conn.execute(text("DROP TABLE IF EXISTS match_stats, scorers, squad_members, players, competitions, matches, teams CASCADE"))
     yield eng
     eng.dispose()
 

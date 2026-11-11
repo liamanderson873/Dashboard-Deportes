@@ -58,6 +58,14 @@ def test_new_tables_exist(engine):
     )
 
 
+def test_squad_members_table_has_expected_columns(engine):
+    init_schema(engine)
+
+    columns = {c["name"] for c in inspect(engine).get_columns("squad_members")}
+
+    assert columns == {"season", "team_id", "player_id"}
+
+
 def test_init_schema_upgrades_a_phase1_database_without_losing_rows(engine):
     with engine.begin() as conn:
         conn.execute(text("CREATE TABLE teams (id INTEGER PRIMARY KEY, name TEXT NOT NULL)"))
