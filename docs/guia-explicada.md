@@ -17,7 +17,7 @@ Proveedores de datos  ->  Cocinero (Python)  ->  Almacén (PostgreSQL)  ->  Esca
   y football-data.co.uk (estadísticas de partido como xG, tiros y córners, en archivos CSV).
 - El **cocinero** es un programa en Python. Pide los datos, les quita la suciedad y los guarda.
 - El **almacén** es PostgreSQL: una base de datos, es decir, archivadores con tablas muy ordenadas.
-- El **escaparate** es la parte visual. Hoy es Streamlit; la siguiente fase será Next.js (*pendiente*).
+- El **escaparate** es la parte visual. Primero fue Streamlit y ahora es una web hecha con Next.js (carpeta `web/`).
 
 Regla de oro del proyecto: **la web solo lee del almacén, nunca llama a las APIs.** Así los límites de las
 APIs gratuitas no pueden romper la web.
@@ -126,19 +126,17 @@ mezclarse con tus datos reales.
 **Por qué.** Los tests cazaron fallos que de otra forma habrían salido con datos reales: un jugador cedido que
 rompía la clave primaria, un archivo con tildes en otro formato, números con decimales en columnas de enteros...
 
-## 10. Streamlit (por ahora) y lo que viene
+## 10. Streamlit (la primera interfaz) y la web Next.js
 
 **Streamlit** convierte un script de Python en una web de datos con pocas líneas. Lo elegimos primero porque es
-rápido y deja ver los datos pronto. Su límite es el aspecto visual, por eso el siguiente paso es otra tecnología.
+rápido y deja ver los datos pronto. Su límite es el aspecto visual, así que fue la **primera interfaz** y ya se
+ha **retirado**: la sustituye la web de Next.js, que cubre las mismas secciones y más.
 
-*Pendiente de construir (aún no existe en el proyecto):*
-- **Next.js:** un marco para hacer webs completas. Permite un diseño totalmente a medida y leerá directamente
-  de PostgreSQL.
+- **Next.js:** un marco para hacer webs completas. Permite un diseño totalmente a medida y lee directamente
+  de PostgreSQL (carpeta `web/`).
 - **React y TypeScript:** React construye la interfaz con piezas reutilizables; TypeScript es JavaScript con
   "avisos" que cazan errores antes de ejecutar.
-- **Tailwind CSS y shadcn/ui:** Tailwind pone el estilo con clases cortas; shadcn/ui es un conjunto de piezas
-  (tablas, tarjetas, pestañas) listas y accesibles.
-Se explicarán a fondo cuando se construya la web.
+- **Tailwind CSS:** pone el estilo con clases cortas.
 
 ## 11. Conceptos de fútbol y de datos que conviene saber
 
@@ -169,7 +167,6 @@ Desde la carpeta `01-dashboard-deportes`:
 docker compose up -d                       # levanta PostgreSQL
 python -m sports_dashboard.ingest --competitions PD,PL,SA,BL1,FL1 --seasons 2024,2025,2026
 python -m sports_dashboard.stats_import    # importa los CSV de football-data.co.uk
-streamlit run app.py                       # abre el dashboard actual
 pytest -q                                  # ejecuta los tests
 ```
 

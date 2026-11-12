@@ -2,7 +2,7 @@
 
 A data project: it downloads real match data from a public football API, enriches it
 with match statistics from a second source, stores everything in PostgreSQL, cleans it
-with pandas and shows it in an interactive Streamlit dashboard.
+with pandas and shows it in a Next.js web dashboard (`web/`).
 
 The dashboard currently covers league tables, results by matchday and the points
 evolution of any team. It reads only from the database, never from the API, so the
@@ -23,9 +23,8 @@ The database holds more than the dashboard shows today:
 football-data.org  ->  client  ->  transform (pandas)  ->  ingest  ->  PostgreSQL
                                                                            ^   |
 football-data.co.uk (CSV files)  ->  stats_import  ---------------------+   |
-                                                         queries (SQL)  <----+
-                                                                |
-                                                         Streamlit app
+                                                                            v
+                                                              Next.js web (web/)
 ```
 
 | Module | Responsibility |
@@ -34,8 +33,7 @@ football-data.co.uk (CSV files)  ->  stats_import  ---------------------+   |
 | `transform.py` | Pure functions that clean raw API data into tables |
 | `ingest.py` | Idempotent upsert of matches, teams, squads and scorers into PostgreSQL (running it twice never duplicates rows) |
 | `stats_import.py` | Imports match statistics from football-data.co.uk CSV files |
-| `queries.py` | SQL for the league table, team form, results and available seasons |
-| `app.py` | Streamlit dashboard |
+| `queries.py` | Python SQL helpers for the league table, team form, results and available seasons (the web has its own SQL in `web/`) |
 
 The league table is computed from finished matches with SQL (win 3 points, draw 1); matches decided off the pitch count with the awarded score.
 Ties are broken by goal difference and then goals scored, not by official head-to-head
@@ -57,7 +55,6 @@ cp .env.example .env            # then put your key in FOOTBALL_API_KEY
 docker compose up -d            # PostgreSQL on localhost:5433
 
 python -m sports_dashboard.ingest --competitions PD --seasons 2024
-streamlit run app.py
 ```
 
 PostgreSQL is published on host port **5433** so it does not clash with a local

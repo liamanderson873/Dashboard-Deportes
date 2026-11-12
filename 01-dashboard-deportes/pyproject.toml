@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sports-dashboard"
 version = "0.1.0"
-description = "Football data pipeline and Streamlit dashboard"
+description = "Football data pipeline and web dashboard"
 requires-python = ">=3.12"
 
 [tool.setuptools.packages.find]
