@@ -33,6 +33,8 @@ async function settle(page) {
   await page
     .waitForFunction(() => [...document.images].every((img) => img.complete), null, { timeout: 20000 })
     .catch(() => console.warn("  some images did not finish loading:", page.url()));
+  // Web fonts (Fira Sans / Fira Code) load asynchronously; capture only once they are applied.
+  await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(500);
 }
 
