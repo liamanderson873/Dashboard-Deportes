@@ -51,8 +51,7 @@ export function LineChart({
         role="img"
         aria-label={ariaLabel}
         viewBox={`0 0 ${width} ${height}`}
-        className="block h-auto w-full max-w-full text-muted"
-        fontSize="14"
+        className="block h-auto w-full max-w-full text-[18px] text-muted md:text-[14px]"
       >
         {layout.yTicks.map((t) => {
           const y = projectY(t, top, SIZE);
