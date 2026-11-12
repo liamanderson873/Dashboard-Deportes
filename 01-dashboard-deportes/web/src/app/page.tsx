@@ -13,7 +13,7 @@ export default async function Home() {
   if (view && competition) redirect(`/${competition.slug}/${view.season}`);
 
   return (
-    <EmptyState title={es.empty.noData}>
+    <EmptyState level={1} title={es.empty.noData}>
       <p>{es.empty.noDataHint}</p>
     </EmptyState>
   );

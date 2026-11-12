@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { es } from "@/lib/es";
+import { teamHref } from "@/lib/sections";
 import { zoneFor, type StandingRow } from "@/lib/standings";
 import { FormDots } from "./FormDots";
 import { PointsBar } from "./PointsBar";
@@ -16,9 +18,13 @@ function signed(n: number): string {
 }
 
 export function StandingsTable({
+  slug,
+  season,
   rows,
   caption = es.standings.defaultCaption,
 }: {
+  slug: string;
+  season: number;
   rows: StandingRow[];
   caption?: string;
 }) {
@@ -66,9 +72,12 @@ export function StandingsTable({
                 <td className="w-full max-w-0 px-3 py-2.5">
                   <span className="flex min-w-0 items-center gap-2.5">
                     <TeamCrest crest={r.crest} tla={r.tla} size={28} />
-                    <span className="min-w-0 truncate font-medium">
+                    <Link
+                      href={teamHref(slug, season, r.teamId)}
+                      className="min-w-0 truncate font-medium text-fg hover:underline focus-visible:underline"
+                    >
                       {r.shortName || r.team}
-                    </span>
+                    </Link>
                   </span>
                 </td>
                 <td className="num px-3 py-2.5 text-right">{r.played}</td>

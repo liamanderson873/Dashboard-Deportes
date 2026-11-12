@@ -2,6 +2,7 @@ import Link from "next/link";
 import { COMPETITIONS, type CompetitionCode } from "@/lib/competitions";
 import { es } from "@/lib/es";
 import { targetSeason } from "@/lib/route-params";
+import { sectionHref, type SectionId } from "@/lib/sections";
 
 const CHIP =
   "inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium";
@@ -9,10 +10,12 @@ const CHIP =
 export function LeagueNav({
   activeSlug,
   season,
+  section = "clasificacion",
   seasonsByCompetition,
 }: {
   activeSlug: string;
   season: number;
+  section?: SectionId;
   seasonsByCompetition: Partial<Record<CompetitionCode, number[]>>;
 }) {
   return (
@@ -38,7 +41,7 @@ export function LeagueNav({
           return (
             <li key={c.code}>
               <Link
-                href={`/${c.slug}/${target}`}
+                href={sectionHref(c.slug, target, section)}
                 aria-current={active ? "page" : undefined}
                 className={`${CHIP} ${
                   active

@@ -66,9 +66,11 @@ PostgreSQL installation using the default 5432.
 ## Web app (Next.js)
 
 `web/` holds a Spanish-language Next.js app (light design) that reads the same PostgreSQL
-database directly with server components. Phase A2 ships the league table page for every
-league and season in the database: summary cards, form of the last 5 matches, points bar,
-Champions/relegation zones, and error and empty states.
+database directly with server components. For every league and season in the database it
+shows the league table (summary cards, form, points bar, zones), results by matchday, top
+scorers, a team page (club profile, home/away record, points evolution chart across seasons,
+per-match stats such as xG and shots, squad of that season, matches) and a two-team
+comparator with head-to-head results. Charts are server-rendered SVG with a table alternative.
 
 ```bash
 cd web

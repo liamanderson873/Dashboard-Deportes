@@ -22,6 +22,11 @@ muestra las clasificaciones de fútbol en español.
 
 - `/` redirige a la temporada más reciente de LaLiga (o de la primera liga con datos).
 - `/{liga}/{año}`, por ejemplo `/pl/2026`: clasificación. Ligas: `pd`, `pl`, `sa`, `bl1`, `fl1`.
+- `/{liga}/{año}/resultados/{jornada}`: resultados por jornada (sin jornada, abre la última jugada).
+- `/{liga}/{año}/goleadores`: los 50 máximos goleadores.
+- `/{liga}/{año}/equipo/{id}`: ficha del equipo (datos del club, resumen, evolución de puntos por
+  temporada, estadísticas por partido, plantilla de esa temporada y partidos).
+- `/{liga}/{año}/comparar?a={id}&b={id}`: comparador de dos equipos y enfrentamientos directos.
 - Si la base de datos no responde se muestra una pantalla de error con los pasos para arrancarla.
 
 ## Notas

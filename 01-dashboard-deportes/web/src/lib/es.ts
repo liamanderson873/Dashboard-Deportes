@@ -10,6 +10,14 @@ export const es = {
     leagues: "Ligas",
     leagueWithoutData: "sin datos",
     seasons: "Temporadas",
+    sections: "Secciones",
+  },
+
+  sections: {
+    clasificacion: "Clasificación",
+    resultados: "Resultados",
+    goleadores: "Goleadores",
+    comparar: "Comparador",
   },
 
   standings: {
@@ -31,6 +39,192 @@ export const es = {
     legendZones: "Franja azul: primeras 4 posiciones. Franja roja: últimas 3.",
     legendForm:
       "Los círculos son los últimos 5 partidos (V victoria, E empate, D derrota).",
+  },
+
+  results: {
+    pageTitle: (league: string, season: string, matchday: number) =>
+      `${league} ${season} · Resultados, jornada ${matchday}`,
+    subtitle: (season: string, matchday: number) =>
+      `Temporada ${season} · Jornada ${matchday}`,
+    subtitleNoMatchday: (season: string) => `Temporada ${season}`,
+    matchdayNav: "Jornadas",
+    matchdayLabel: (matchday: number) => `Jornada ${matchday}`,
+    previous: "Jornada anterior",
+    next: "Jornada siguiente",
+    halfTime: "Resultado al descanso",
+    timeTbd: "Hora por confirmar",
+    score: (home: string, h: number, away: string, a: number) =>
+      `${home} ${h}, ${away} ${a}`,
+    empty: "Todavía no hay jornadas cargadas en esta temporada",
+    statuses: {
+      SCHEDULED: "Programado",
+      TIMED: "Programado",
+      POSTPONED: "Aplazado",
+      CANCELLED: "Cancelado",
+      SUSPENDED: "Suspendido",
+      IN_PLAY: "En juego",
+      PAUSED: "En juego",
+      AWARDED: "Resuelto en los despachos",
+    } as Record<string, string>,
+  },
+
+  scorers: {
+    pageTitle: (league: string, season: string) =>
+      `${league} ${season} · Goleadores`,
+    subtitle: (season: string) => `Temporada ${season} · Máximos goleadores`,
+    defaultCaption: "Máximos goleadores",
+    caption: (league: string, season: string) =>
+      `Máximos goleadores de ${league}, temporada ${season}`,
+    columns: {
+      rank: "#",
+      player: "Jugador",
+      team: "Equipo",
+      played: "PJ",
+      goals: "Goles",
+      assists: "Asist.",
+      penalties: "Pen.",
+    },
+    missing: "—",
+    source: "Fuente: football-data.org. Se muestran los 50 primeros.",
+    empty: "No hay goleadores cargados para esta temporada",
+  },
+
+  team: {
+    pageTitle: (team: string, league: string, season: string) =>
+      `${team} · ${league} ${season}`,
+    subtitle: (league: string, season: string) => `${league} · Temporada ${season}`,
+    unavailable: "No disponible",
+    profile: {
+      venue: "Estadio",
+      founded: "Fundado",
+      colors: "Colores",
+      coach: "Entrenador actual",
+    },
+    summary: {
+      title: "Resumen",
+      position: "Posición en la tabla",
+      points: "Puntos",
+      record: "Balance V-E-D",
+      goalsFor: "Goles a favor",
+      goalsAgainst: "Goles en contra",
+      form: "Forma",
+      home: "En casa",
+      away: "Fuera",
+      split: (
+        played: number,
+        won: number,
+        drawn: number,
+        lost: number,
+        gf: number,
+        ga: number,
+        pts: number,
+      ) =>
+        `${played} PJ · ${won}V ${drawn}E ${lost}D · ${gf}-${ga} goles · ${pts} puntos`,
+    },
+    evolution: {
+      title: "Evolución",
+      chartLabel: (team: string) =>
+        `Puntos acumulados de ${team} por partido jugado, una línea por temporada`,
+      xLabel: "Partido",
+      yLabel: "Puntos acumulados",
+      currentSeason: "temporada mostrada",
+      currentRow: "(temporada mostrada)",
+      tableCaption: "Posición y balance del equipo en cada temporada de la liga",
+      columns: {
+        season: "Temporada",
+        position: "Pos.",
+        played: "PJ",
+        points: "Puntos",
+        goalsFor: "GF",
+        goalsAgainst: "GC",
+      },
+    },
+    stats: {
+      title: "Estadísticas por partido",
+      xgFor: "xG a favor",
+      xgAgainst: "xG en contra",
+      shots: "Tiros",
+      shotsOnTarget: "Tiros a puerta",
+      corners: "Córners",
+      fouls: "Faltas",
+      yellow: "Amarillas",
+      red: "Rojas",
+      note: (matches: number, withXg: number) =>
+        matches === 0
+          ? "Sin estadísticas avanzadas para esta temporada"
+          : `Medias de ${matches} partidos; xG disponible en ${withXg}`,
+    },
+    squad: {
+      title: "Plantilla",
+      note: (season: string) =>
+        `Plantilla de la temporada ${season}. Edad al inicio de la temporada.`,
+      empty: "No hay plantilla cargada para esta temporada",
+      age: (years: number) => `${years} años`,
+      missing: "—",
+      groupSingular: {
+        goalkeepers: "Portero",
+        defenders: "Defensa",
+        midfielders: "Centrocampista",
+        forwards: "Delantero",
+      },
+      groups: {
+        goalkeepers: "Porteros",
+        defenders: "Defensas",
+        midfielders: "Centrocampistas",
+        forwards: "Delanteros",
+        unknown: "Sin posición",
+      },
+    },
+    matches: {
+      title: "Partidos",
+      played: "Jugados",
+      upcoming: "Pendientes",
+      matchday: (n: number) => `J${n}`,
+      home: "vs",
+      away: "en",
+    },
+  },
+
+  compare: {
+    pageTitle: (league: string, season: string) =>
+      `${league} ${season} · Comparador`,
+    subtitle: (season: string) => `Temporada ${season} · Comparador de equipos`,
+    hint: "Elige dos equipos para compararlos",
+    errors: {
+      same: "Elige dos equipos distintos",
+      unknown: "Ese equipo no juega en esta liga y temporada",
+    },
+    form: {
+      teamA: "Equipo A",
+      teamB: "Equipo B",
+      placeholder: "Elige un equipo",
+      submit: "Comparar",
+    },
+    table: {
+      caption: (a: string, b: string) => `Comparación entre ${a} y ${b}`,
+      metric: "Estadística",
+      better: "mejor",
+    },
+    rows: {
+      position: "Posición",
+      points: "Puntos",
+      played: "Partidos jugados",
+      won: "Victorias",
+      goalsFor: "Goles a favor",
+      goalsAgainst: "Goles en contra",
+      goalDifference: "Diferencia de goles",
+      xgFor: "xG a favor por partido",
+      xgAgainst: "xG en contra por partido",
+      shots: "Tiros por partido",
+      shotsOnTarget: "Tiros a puerta por partido",
+      corners: "Córners por partido",
+      fouls: "Faltas por partido",
+      yellow: "Amarillas por partido",
+    },
+    headToHead: {
+      title: "Enfrentamientos directos",
+      empty: "No hay partidos entre ellos en los datos cargados",
+    },
   },
 
   kpi: {
@@ -77,7 +271,7 @@ export const es = {
 
   notFound: {
     title: "Página no encontrada",
-    message: "Esa liga o temporada no existe.",
+    message: "La página que buscas no existe.",
     back: "Volver al inicio",
   },
 } as const;
