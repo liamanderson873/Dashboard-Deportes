@@ -13,6 +13,8 @@ import {
   getTeamProfile,
   getTeamSeasons,
 } from "@/lib/queries/team";
+import { getStandings } from "@/lib/queries/standings";
+import { splitRecord, toTeamMatches } from "@/lib/team";
 
 const sql = testSql();
 
@@ -139,9 +141,36 @@ describe("getAdvancedStats", () => {
     });
   });
 
+  test("test_advanced_stats_ignore_scheduled_matches_with_a_stats_row", async () => {
+    await sql`
+      INSERT INTO match_stats (match_id, home_xg, away_xg, home_shots, away_shots)
+      VALUES (4, 5.00, 5.00, 99, 99)`;
+    const s = await getAdvancedStats(sql, "PD", 2024, 1);
+    expect(s.matchesWithStats).toBe(2);
+    expect(s.shots).toBe(15);
+    expect(s.xgFor).toBe(1.8);
+  });
+
   test("test_xg_is_a_javascript_number", async () => {
     const s = await getAdvancedStats(sql, "PD", 2024, 1);
     expect(typeof s.xgFor).toBe("number");
     expect(typeof s.shots).toBe("number");
+  });
+});
+
+describe("team record vs standings", () => {
+  test("test_split_record_matches_the_standings_row", async () => {
+    const tm = toTeamMatches(await getTeamMatches(sql, "PD", 2024, 1), 1);
+    const rec = splitRecord(tm, "all");
+    const row = (await getStandings(sql, "PD", 2024)).find((r) => r.teamId === 1)!;
+    expect(rec).toEqual({
+      played: row.played,
+      won: row.won,
+      drawn: row.drawn,
+      lost: row.lost,
+      goalsFor: row.goalsFor,
+      goalsAgainst: row.goalsAgainst,
+      points: row.points,
+    });
   });
 });

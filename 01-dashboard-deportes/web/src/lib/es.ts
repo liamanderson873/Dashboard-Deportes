@@ -52,6 +52,9 @@ export const es = {
     previous: "Jornada anterior",
     next: "Jornada siguiente",
     halfTime: "Resultado al descanso",
+    timeTbd: "Hora por confirmar",
+    score: (home: string, h: number, away: string, a: number) =>
+      `${home} ${h}, ${away} ${a}`,
     empty: "Todavía no hay jornadas cargadas en esta temporada",
     statuses: {
       SCHEDULED: "Programado",
@@ -125,6 +128,7 @@ export const es = {
       xLabel: "Partido",
       yLabel: "Puntos acumulados",
       currentSeason: "temporada mostrada",
+      currentRow: "(temporada mostrada)",
       tableCaption: "Posición y balance del equipo en cada temporada de la liga",
       columns: {
         season: "Temporada",
@@ -146,14 +150,23 @@ export const es = {
       yellow: "Amarillas",
       red: "Rojas",
       note: (matches: number, withXg: number) =>
-        `Medias de ${matches} partidos; xG disponible en ${withXg}`,
+        matches === 0
+          ? "Sin estadísticas avanzadas para esta temporada"
+          : `Medias de ${matches} partidos; xG disponible en ${withXg}`,
     },
     squad: {
       title: "Plantilla",
-      note: (season: string) => `Plantilla de la temporada ${season}`,
+      note: (season: string) =>
+        `Plantilla de la temporada ${season}. Edad al inicio de la temporada.`,
       empty: "No hay plantilla cargada para esta temporada",
       age: (years: number) => `${years} años`,
       missing: "—",
+      groupSingular: {
+        goalkeepers: "Portero",
+        defenders: "Defensa",
+        midfielders: "Centrocampista",
+        forwards: "Delantero",
+      },
       groups: {
         goalkeepers: "Porteros",
         defenders: "Defensas",
@@ -165,7 +178,7 @@ export const es = {
     matches: {
       title: "Partidos",
       played: "Jugados",
-      upcoming: "Próximos",
+      upcoming: "Pendientes",
       matchday: (n: number) => `J${n}`,
       home: "vs",
       away: "en",
@@ -258,7 +271,7 @@ export const es = {
 
   notFound: {
     title: "Página no encontrada",
-    message: "Esa liga o temporada no existe.",
+    message: "La página que buscas no existe.",
     back: "Volver al inicio",
   },
 } as const;

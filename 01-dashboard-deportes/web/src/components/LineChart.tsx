@@ -102,6 +102,20 @@ export function LineChart({
             strokeLinecap="round"
           />
         ))}
+        {ordered.map((p) => {
+          const s = series.find((x) => x.id === p.id);
+          const only = s?.points.length === 1 ? s.points[0] : undefined;
+          if (!only) return null;
+          return (
+            <circle
+              key={`dot${p.id}`}
+              cx={projectX(only.x, layout.xMax, SIZE)}
+              cy={projectY(only.y, top, SIZE)}
+              r={p.highlight ? 4 : 3}
+              fill={p.highlight ? "var(--accent)" : "var(--muted)"}
+            />
+          );
+        })}
       </svg>
       <figcaption>
         <ul className="m-0 flex list-none flex-wrap gap-x-5 gap-y-2 p-0 text-sm">

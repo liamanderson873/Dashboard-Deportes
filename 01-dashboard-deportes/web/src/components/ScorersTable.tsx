@@ -2,9 +2,10 @@ import Link from "next/link";
 import { es } from "@/lib/es";
 import type { ScorerRow } from "@/lib/queries/scorers";
 import { teamHref } from "@/lib/sections";
+import { positionLabel } from "@/lib/translate";
 import { TeamCrest } from "./TeamCrest";
 
-const TH = "px-3 py-3 text-left text-sm font-medium text-muted";
+const TH = "px-2 py-3 text-left text-sm font-medium text-muted md:px-3";
 const c = es.scorers.columns;
 
 function orDash(n: number | null): string {
@@ -25,14 +26,14 @@ export function ScorersTable({
   const max = rows.reduce((m, r) => Math.max(m, r.goals), 0);
   return (
     <div className="overflow-hidden rounded-panel border border-border bg-card">
-      <table className="w-full border-collapse">
+      <table className="w-full table-fixed border-collapse md:table-auto">
         <caption className="sr-only">{caption}</caption>
         <thead className="bg-bg">
           <tr>
-            <th scope="col" className={TH}>
+            <th scope="col" className={`${TH} w-9 md:w-auto`}>
               {c.rank}
             </th>
-            <th scope="col" className={TH}>
+            <th scope="col" className={`${TH} w-[40%] md:w-auto`}>
               {c.player}
             </th>
             <th scope="col" className={TH}>
@@ -41,7 +42,7 @@ export function ScorersTable({
             <th scope="col" className={`${TH} hidden text-right md:table-cell`}>
               {c.played}
             </th>
-            <th scope="col" className={`${TH} text-right`}>
+            <th scope="col" className={`${TH} w-16 text-right md:w-auto`}>
               {c.goals}
             </th>
             <th scope="col" className={`${TH} hidden text-right md:table-cell`}>
@@ -57,14 +58,14 @@ export function ScorersTable({
             const pct = max > 0 ? (r.goals / max) * 100 : 0;
             return (
               <tr key={r.playerId} className="border-t border-border">
-                <td className="num px-3 py-2.5 text-muted">{r.rank}</td>
-                <td className="px-3 py-2.5">
-                  <span className="block font-medium">{r.player}</span>
+                <td className="num px-2 py-2.5 text-muted md:px-3">{r.rank}</td>
+                <td className="min-w-0 px-2 py-2.5 md:px-3">
+                  <span className="block truncate font-medium">{r.player}</span>
                   {r.position ? (
-                    <span className="block text-xs text-muted">{r.position}</span>
+                    <span className="block truncate text-xs text-muted">{positionLabel(r.position)}</span>
                   ) : null}
                 </td>
-                <td className="px-3 py-2.5">
+                <td className="min-w-0 px-2 py-2.5 md:px-3">
                   {r.team ? (
                     <span className="flex min-w-0 items-center gap-2">
                       <TeamCrest crest={r.team.crest} tla={r.team.tla} size={24} />
@@ -82,7 +83,7 @@ export function ScorersTable({
                 <td className="num hidden px-3 py-2.5 text-right md:table-cell">
                   {orDash(r.playedMatches)}
                 </td>
-                <td className="px-3 py-2.5">
+                <td className="px-2 py-2.5 md:px-3">
                   <span className="flex items-center justify-end gap-3">
                     <span
                       aria-hidden="true"

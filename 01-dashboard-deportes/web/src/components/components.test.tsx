@@ -20,6 +20,7 @@ import { TeamHeader } from "./TeamHeader";
 import { StatGrid } from "./StatGrid";
 import { SquadList } from "./SquadList";
 import { TeamMatchList } from "./TeamMatchList";
+import { TeamSeasonsTable } from "./TeamSeasonsTable";
 import { CompareForm } from "./CompareForm";
 import { CompareTable } from "./CompareTable";
 import { toTeamMatches } from "@/lib/team";
@@ -248,9 +249,35 @@ describe("components", () => {
     expect(html).toContain("2 - 1");
     expect(html).toContain("(1-0)");
     expect(html).toContain("21:30");
-    expect(html).toContain("sáb, 17 ago 2024");
+    expect(html).toContain("Sáb, 17 ago 2024");
     expect(html).toContain('href="/pd/2024/equipo/1"');
     expect(html).toContain("<h2");
+  });
+
+  test("test_match_list_heading_level_and_capitalised_day_and_sr_score", () => {
+    const m = [matchRow(1)];
+    const h2 = renderToStaticMarkup(<MatchList slug="pd" season={2024} matches={m} />);
+    expect(h2).toContain("<h2");
+    expect(h2).toContain(">Sáb, 17 ago 2024<");
+    expect(h2).not.toContain("capitalize");
+    expect(h2).toContain("Eq1 2, Eq2 1");
+    const h3 = renderToStaticMarkup(
+      <MatchList slug="pd" season={2024} matches={m} headingLevel={3} />,
+    );
+    expect(h3).toContain("<h3");
+    expect(h3).not.toContain("<h2");
+  });
+
+  test("test_match_list_scheduled_shows_time_to_be_confirmed", () => {
+    const html = renderToStaticMarkup(
+      <MatchList
+        slug="pd"
+        season={2024}
+        matches={[matchRow(1, { status: "SCHEDULED", homeGoals: null, awayGoals: null })]}
+      />,
+    );
+    expect(html).toContain("Hora por confirmar");
+    expect(html).not.toContain("21:30");
   });
 
   test("test_match_list_shows_status_label_for_postponed", () => {
@@ -422,6 +449,23 @@ describe("team components", () => {
     expect(html).toContain("vs");
   });
 
+  test("test_team_match_list_pending_group_scheduled_tbd_and_awarded_label", () => {
+    const tm = toTeamMatches(
+      [
+        matchRow(1, { status: "AWARDED" }),
+        matchRow(2, { status: "SCHEDULED", homeGoals: null, awayGoals: null }),
+      ],
+      1,
+    );
+    const html = renderToStaticMarkup(
+      <TeamMatchList slug="pd" season={2024} matches={tm} />,
+    );
+    expect(html).toContain("Pendientes");
+    expect(html).not.toContain("Próximos");
+    expect(html).toContain("Hora por confirmar");
+    expect(html).toContain("Resuelto en los despachos");
+  });
+
   test("test_season_nav_uses_custom_href", () => {
     const html = renderToStaticMarkup(
       <SeasonNav
@@ -469,6 +513,18 @@ describe("LineChart", () => {
     expect(html.match(/data-series="/g)).toHaveLength(2);
     expect(html).toContain("Partido");
     expect(html).toContain("Puntos");
+  });
+
+  test("test_line_chart_single_point_series_renders_a_marker", () => {
+    const html = renderToStaticMarkup(
+      <LineChart
+        series={[{ id: "2024", label: "2024/25", highlight: true, points: [{ x: 1, y: 3 }] }]}
+        ariaLabel="Evolución"
+        xLabel="Partido"
+        yLabel="Puntos"
+      />,
+    );
+    expect(html).toContain("<circle");
   });
 
   test("test_line_chart_legend_names_every_series", () => {
@@ -519,5 +575,71 @@ describe("comparator components", () => {
     expect(html).toContain('scope="row"');
     expect(html.match(/sr-only">mejor</g)).toHaveLength(1);
     expect(html).toMatch(/font-bold[^>]*>30/);
+  });
+});
+
+describe("Spanish data and current season row", () => {
+  test("test_scorers_table_translates_position", () => {
+    const html = renderToStaticMarkup(
+      <ScorersTable slug="pd" season={2024} rows={[scorer(1, { position: "Centre-Forward" })]} />,
+    );
+    expect(html).toContain("Delantero centro");
+    expect(html).not.toContain("Centre-Forward");
+  });
+
+  test("test_squad_list_translates_nationality", () => {
+    const html = renderToStaticMarkup(
+      <SquadList
+        on={new Date("2024-09-01T00:00:00Z")}
+        players={[
+          {
+            id: 1,
+            name: "J",
+            position: "Goalkeeper",
+            nationality: "Ivory Coast",
+            dateOfBirth: null,
+          },
+        ]}
+      />,
+    );
+    expect(html).toContain("Costa de Marfil");
+  });
+
+  test("test_team_header_translates_club_colours", () => {
+    const html = renderToStaticMarkup(
+      <TeamHeader
+        profile={{
+          id: 1,
+          name: "E",
+          shortName: "E",
+          tla: null,
+          crest: null,
+          founded: null,
+          venue: null,
+          clubColors: "Red / Navy Blue",
+          website: null,
+          coach: null,
+        }}
+      />,
+    );
+    expect(html).toContain("Rojo / Azul marino");
+  });
+
+  test("test_team_seasons_table_current_row_has_sr_only_text", () => {
+    const row = (season: number, current: boolean) => ({
+      season,
+      label: `${season}/${season + 1}`,
+      href: `/pd/${season}/equipo/1`,
+      current,
+      position: 1,
+      played: 38,
+      points: 80,
+      goalsFor: 70,
+      goalsAgainst: 30,
+    });
+    const html = renderToStaticMarkup(
+      <TeamSeasonsTable rows={[row(2024, true), row(2023, false)]} />,
+    );
+    expect(html.match(/\(temporada mostrada\)/g)).toHaveLength(1);
   });
 });

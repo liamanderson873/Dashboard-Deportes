@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound, redirect } from "next/navigation";
 import { FormDots } from "@/components/FormDots";
 import { KpiCard } from "@/components/KpiCard";
@@ -29,6 +30,9 @@ import { parseTeamId, pointsProgression, splitRecord, toTeamMatches } from "@/li
 
 export const dynamic = "force-dynamic";
 
+// One profile query per request, shared by generateMetadata and the page.
+const loadProfile = cache(getTeamProfile);
+
 type Props = {
   params: Promise<{ competition: string; season: string; teamId: string }>;
 };
@@ -38,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const route = resolveRoute(competition, season);
   const id = parseTeamId(teamId);
   if (!route || id === null) return {};
-  const profile = await getTeamProfile(getSql(), id);
+  const profile = await loadProfile(getSql(), id);
   if (!profile) return {};
   return {
     title: es.team.pageTitle(
@@ -67,7 +71,7 @@ export default async function TeamPage({ params }: Props) {
   const [context, profile, teamSeasons, rawMatches, standings, squad, stats] =
     await Promise.all([
       loadLeagueContext(sql, slug, rawSeason),
-      getTeamProfile(sql, teamId),
+      loadProfile(sql, teamId),
       getTeamSeasons(sql, code, teamId),
       getTeamMatches(sql, code, route.season, teamId),
       getStandings(sql, code, route.season),
@@ -232,7 +236,7 @@ export default async function TeamPage({ params }: Props) {
           ) : (
             <>
               <p className="text-sm text-muted">{es.team.squad.note(season)}</p>
-              <SquadList players={squad} on={new Date()} />
+              <SquadList players={squad} on={new Date(Date.UTC(context.season, 8, 1))} />
             </>
           )}
         </section>

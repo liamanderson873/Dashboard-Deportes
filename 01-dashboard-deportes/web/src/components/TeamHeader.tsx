@@ -1,12 +1,13 @@
 import { es } from "@/lib/es";
 import type { TeamProfile } from "@/lib/queries/team";
+import { clubColorsLabel } from "@/lib/translate";
 import { TeamCrest } from "./TeamCrest";
 
 export function TeamHeader({ profile }: { profile: TeamProfile }) {
   const items: [string, string | null][] = [
     [es.team.profile.venue, profile.venue],
     [es.team.profile.founded, profile.founded === null ? null : String(profile.founded)],
-    [es.team.profile.colors, profile.clubColors],
+    [es.team.profile.colors, clubColorsLabel(profile.clubColors)],
     [es.team.profile.coach, profile.coach],
   ];
   return (

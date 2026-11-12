@@ -77,19 +77,8 @@ describe("pointsProgression", () => {
   test("test_points_progression_is_cumulative_and_skips_unplayed", () => {
     const tm = toTeamMatches([matches[0]!, matches[2]!, matches[3]!], 1);
     expect(pointsProgression(tm)).toEqual([
-      { matchday: 1, points: 3, cumulative: 3 },
-      { matchday: 3, points: 3, cumulative: 6 },
-    ]);
-  });
-
-  test("matchday falls back to the ordinal among played matches", () => {
-    const tm = toTeamMatches(
-      [match(1, null, 1, 2, 1, 1), match(2, null, 3, 1, 2, 0)],
-      1,
-    );
-    expect(pointsProgression(tm)).toEqual([
-      { matchday: 1, points: 1, cumulative: 1 },
-      { matchday: 2, points: 0, cumulative: 1 },
+      { points: 3, cumulative: 3 },
+      { points: 3, cumulative: 6 },
     ]);
   });
 });

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { es } from "@/lib/es";
-import { formatMatchDate, formatMatchTime, statusLabel } from "@/lib/matches";
+import { formatMatchDate, kickoffLabel, statusLabel } from "@/lib/matches";
 import { teamHref } from "@/lib/sections";
 import type { TeamMatch } from "@/lib/team";
 import { TeamCrest } from "./TeamCrest";
@@ -42,11 +42,9 @@ function Item({ t, slug, season }: { t: TeamMatch; slug: string; season: number 
             <span className="sr-only">{es.form.results[t.result]}</span>
           </span>
         ) : (
-          <>
-            <span className="text-muted">{formatMatchTime(match.utcDate)}</span>
-            {label ? <span className="text-xs text-muted">{label}</span> : null}
-          </>
+          <span className="text-muted">{kickoffLabel(match)}</span>
         )}
+        {label ? <span className="text-xs text-muted">{label}</span> : null}
       </div>
     </li>
   );

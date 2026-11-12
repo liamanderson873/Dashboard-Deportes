@@ -1,6 +1,7 @@
 import { es } from "@/lib/es";
 import type { SquadPlayer } from "@/lib/queries/team";
 import { ageOn, positionGroup, type PositionGroup } from "@/lib/team";
+import { nationalityLabel } from "@/lib/translate";
 
 const ORDER: PositionGroup[] = [
   "goalkeepers",
@@ -32,7 +33,7 @@ export function SquadList({ players, on }: { players: SquadPlayer[]; on: Date })
                     <span className="min-w-0">
                       <span className="block truncate">{p.name}</span>
                       <span className="block truncate text-xs text-muted">
-                        {p.nationality ?? es.team.squad.missing}
+                        {nationalityLabel(p.nationality) ?? es.team.squad.missing}
                       </span>
                     </span>
                     <span className="num shrink-0 text-sm text-muted">

@@ -34,16 +34,16 @@ export function toTeamMatches(matches: MatchRow[], teamId: number): TeamMatch[] 
 
 const POINTS: Record<Result, number> = { W: 3, D: 1, L: 0 };
 
-export type ProgressPoint = { matchday: number; points: number; cumulative: number };
+export type ProgressPoint = { points: number; cumulative: number };
 
 /** Cumulative points over the played matches, in date order. */
 export function pointsProgression(tm: TeamMatch[]): ProgressPoint[] {
   const played = tm.filter((t) => t.result !== null);
   let cumulative = 0;
-  return played.map((t, i) => {
+  return played.map((t) => {
     const points = POINTS[t.result as Result];
     cumulative += points;
-    return { matchday: t.match.matchday ?? i + 1, points, cumulative };
+    return { points, cumulative };
   });
 }
 

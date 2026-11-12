@@ -126,6 +126,7 @@ export default async function ComparePage({ params, searchParams }: Props) {
                 slug={context.competition.slug}
                 season={context.season}
                 matches={comparison[2]}
+                headingLevel={3}
               />
             )}
           </section>

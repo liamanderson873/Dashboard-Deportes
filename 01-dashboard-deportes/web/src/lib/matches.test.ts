@@ -4,6 +4,7 @@ import {
   formatMatchTime,
   groupByDay,
   isPlayed,
+  kickoffLabel,
   parseMatchday,
   statusLabel,
   type MatchRow,
@@ -42,6 +43,15 @@ describe("matches", () => {
     expect(isPlayed(match({ status: "POSTPONED" }))).toBe(false);
     expect(isPlayed(match({ homeGoals: null }))).toBe(false);
     expect(isPlayed(match({ awayGoals: null }))).toBe(false);
+  });
+
+  test("test_kickoff_label_is_tbd_for_scheduled_and_time_otherwise", () => {
+    expect(kickoffLabel(match({ status: "SCHEDULED", homeGoals: null, awayGoals: null }))).toBe(
+      "Hora por confirmar",
+    );
+    expect(kickoffLabel(match({ status: "TIMED", homeGoals: null, awayGoals: null }))).toBe(
+      "21:30",
+    );
   });
 
   test("test_status_label_in_spanish", () => {

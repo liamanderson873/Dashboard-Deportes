@@ -64,6 +64,11 @@ export function formatMatchTime(d: Date): string {
   return timeFormat.format(d);
 }
 
+/** Kick-off text: SCHEDULED matches have a placeholder time, so say it is unconfirmed. */
+export function kickoffLabel(m: MatchRow): string {
+  return m.status === "SCHEDULED" ? es.results.timeTbd : formatMatchTime(m.utcDate);
+}
+
 export function groupByDay(matches: MatchRow[]): { day: string; matches: MatchRow[] }[] {
   const groups: { day: string; matches: MatchRow[] }[] = [];
   for (const m of matches) {
