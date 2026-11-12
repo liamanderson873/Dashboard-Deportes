@@ -4,9 +4,19 @@ A data project: it downloads real match data from a public football API, enriche
 with match statistics from a second source, stores everything in PostgreSQL, cleans it
 with pandas and shows it in a Next.js web dashboard (`web/`).
 
-The dashboard currently covers league tables, results by matchday and the points
-evolution of any team. It reads only from the database, never from the API, so the
-free-plan rate limits cannot break it.
+![Demo of the web dashboard](docs/img/demo.gif)
+
+The web app covers standings, results by matchday, top scorers, a team page (points chart
+and per-match stats) and a two-team comparator. It reads only from the database, never from
+the API, so the free-plan rate limits cannot break it.
+
+| Standings | Results by matchday |
+|---|---|
+| ![Standings](docs/img/standings.png) | ![Results](docs/img/results.png) |
+| **Top scorers** | **Team page** |
+| ![Top scorers](docs/img/scorers.png) | ![Team page](docs/img/team.png) |
+| **Team comparator** | **Mobile** |
+| ![Comparator](docs/img/compare.png) | ![Mobile view](docs/img/mobile.png) |
 
 The database holds more than the dashboard shows today:
 
@@ -62,6 +72,8 @@ PostgreSQL installation using the default 5432.
 
 ## Web app (Next.js)
 
+It runs locally; there is no public deployment.
+
 `web/` holds a Spanish-language Next.js app (light design) that reads the same PostgreSQL
 database directly with server components. For every league and season in the database it
 shows the league table (summary cards, form, points bar, zones), results by matchday, top
@@ -76,7 +88,7 @@ npm install
 npm run dev                     # http://localhost:3000
 ```
 
-See `web/README.md` for scripts and tests. The web app never calls the API.
+Routes: `/{league}/{year}` (standings), `/{league}/{year}/resultados/{matchday}`, `/{league}/{year}/goleadores`, `/{league}/{year}/equipo/{id}` and `/{league}/{year}/comparar?a={id}&b={id}`. Leagues: `pd`, `pl`, `sa`, `bl1`, `fl1`. See `web/README.md` for scripts and tests. The web app never calls the API.
 
 ## Loading data
 
@@ -174,7 +186,16 @@ is reported as a failure and skipped, and the rest of the run continues.
 - The coach in `teams.coach` is the current coach, whatever season was loaded.
 - The scorers list has no `position` field, so player positions come from the squads.
 
+## CI
+
+GitHub Actions runs two jobs on every push, each with its own PostgreSQL service:
+
+- `python`: pytest for the ingestion code.
+- `web`: ESLint, TypeScript type check, Vitest tests and `next build`.
+
 ## Roadmap
 
+- Phase B: player statistics from API-Football.
+- Phase D: historical analysis with StatsBomb open data.
 - Match outcome prediction with scikit-learn, evaluated against a "home team wins" baseline.
-- Basketball section using a second public API.
+- Next project: a RAG study assistant with local LLMs (Ollama) and pgvector.

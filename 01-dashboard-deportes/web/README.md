@@ -17,6 +17,7 @@ muestra las clasificaciones de fútbol en español.
 - `npm run lint`: ESLint.
 - `npm run typecheck`: TypeScript sin emitir código.
 - `npm test`: tests con Vitest.
+- `npm run screenshots [url]`: regenera las capturas y los fotogramas de `../docs/img/` (por defecto contra `http://localhost:3000`). Requiere Microsoft Edge instalado y el servidor arrancado con datos. Después, `../.venv/Scripts/python ../scripts/make_demo_gif.py` (desde `web/`) construye `demo.gif`.
 
 ## Rutas
 
