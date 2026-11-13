@@ -28,6 +28,7 @@ import {
   parseNbaPersonal,
   type NbaPersonal,
 } from "@/lib/nba-personal";
+import { NbaTeamLogo } from "./TeamCrest";
 import { PlayerPicker } from "./PlayerPicker";
 import { NavIcon } from "./NavIcon";
 
@@ -110,11 +111,7 @@ export function NbaStar({
   );
 }
 function Badge({ team }: { team: NbaTeam | undefined }) {
-  return (
-    <span className="mono inline-flex h-9 w-11 shrink-0 items-center justify-center rounded-control bg-surface-2 text-xs font-bold text-muted">
-      {team?.abbreviation ?? "NBA"}
-    </span>
-  );
+  return <NbaTeamLogo id={team?.id} abbreviation={team?.abbreviation} />;
 }
 
 export function NbaStandings({ data }: { data: NbaData }) {
@@ -152,10 +149,18 @@ export function NbaStandings({ data }: { data: NbaData }) {
         ].map(([label, value, note]) => (
           <div
             key={label}
-            className="rounded-panel border border-border bg-card p-5"
+            className="stat-card rounded-panel border border-border bg-card p-5"
           >
             <p className="eyebrow">{label}</p>
-            <p className="display mt-3 text-2xl font-bold">{value}</p>
+            <div className="mt-3 flex items-center gap-3">
+              {data.teams.find((t) => t.name === value) && (
+                <NbaTeamLogo
+                  id={data.teams.find((t) => t.name === value)?.id}
+                  size={44}
+                />
+              )}
+              <p className="display text-2xl font-bold">{value}</p>
+            </div>
             <p className="mt-2 text-xs leading-relaxed text-subtle">{note}</p>
           </div>
         ))}
@@ -365,7 +370,7 @@ export function NbaGameCards({
             <li key={game.id}>
               <Link
                 href={`/nba/${data.season}/partido/${game.id}`}
-                className="block h-full rounded-panel border border-border bg-card p-5 transition-colors hover:border-accent hover:bg-accent-soft/20"
+                className="match-card block h-full rounded-panel border border-border bg-card p-5 transition-colors hover:border-accent hover:bg-accent-soft/20"
               >
                 <div className="mb-4 flex items-center justify-between gap-2">
                   <span className="mono text-xs text-subtle">
@@ -474,8 +479,18 @@ export function NbaPlayersTable({
                 </Link>
               </th>
               <td className="px-3 py-3">
-                {data.teams.find((t) => t.id === player.teamId)?.abbreviation ??
-                  "Varios"}
+                <span className="inline-flex items-center gap-2 whitespace-nowrap">
+                  <NbaTeamLogo
+                    id={player.teamId}
+                    abbreviation={
+                      data.teams.find((t) => t.id === player.teamId)
+                        ?.abbreviation ?? "VAR"
+                    }
+                    size={28}
+                  />
+                  {data.teams.find((t) => t.id === player.teamId)
+                    ?.abbreviation ?? "Varios"}
+                </span>
               </td>
               <td className="px-3 py-3">{player.position ?? "—"}</td>
               {["gp", "min", "pts", "reb", "ast", "ts_pct", "usg_pct"].map(
@@ -795,7 +810,10 @@ export function NbaFollowing({ data }: { data: NbaData }) {
               key={t.id}
               className="flex items-center justify-between gap-3 rounded-control border border-border p-3"
             >
-              <span className="text-sm font-medium">{t.name}</span>
+              <span className="flex min-w-0 items-center gap-3 text-sm font-medium">
+                <Badge team={t} />
+                {t.name}
+              </span>
               <NbaStar id={t.id} name={t.name} kind="teams" />
             </div>
           ))}
@@ -890,9 +908,13 @@ export function NbaLineup({ data }: { data: NbaData }) {
                   }
                 }}
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-on-ink">
-                  {id ? index + 1 : "+"}
-                </span>
+                {p ? (
+                  <NbaTeamLogo id={p.teamId} size={36} />
+                ) : (
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-on-ink">
+                    +
+                  </span>
+                )}
                 <span className="line-clamp-2 leading-snug">
                   {p?.name ?? names[index]}
                 </span>

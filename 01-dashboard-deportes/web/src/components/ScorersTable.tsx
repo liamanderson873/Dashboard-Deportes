@@ -67,13 +67,17 @@ export function ScorersTable({
               >
                 <td
                   className={`${TD} text-right ${
-                    top ? "score text-[1.375rem] text-accent" : "num font-medium text-muted"
+                    top
+                      ? "score text-[1.375rem] text-accent"
+                      : "num font-medium text-muted"
                   }`}
                 >
                   {r.rank}
                 </td>
                 <td className={`${TD} min-w-0`}>
-                  <span className="block truncate font-semibold text-fg">{r.player}</span>
+                  <span className="block truncate font-semibold text-fg">
+                    {r.player}
+                  </span>
                   {r.position ? (
                     <span className="block truncate text-xs text-subtle">
                       {positionLabel(r.position)}
@@ -83,20 +87,28 @@ export function ScorersTable({
                 <td className={`${TD} min-w-0`}>
                   {r.team ? (
                     <span className="flex min-w-0 items-center gap-2.5">
-                      <TeamCrest crest={r.team.crest} tla={r.team.tla} size={22} />
+                      <TeamCrest
+                        crest={r.team.crest}
+                        tla={r.team.tla}
+                        size={28}
+                      />
                       <Link
                         href={teamHref(slug, season, r.team.id)}
                         title={r.team.name}
                         className="inline-flex min-h-6 min-w-0 items-center hover:underline hover:underline-offset-2"
                       >
-                        <span className="truncate">{r.team.shortName || r.team.name}</span>
+                        <span className="truncate">
+                          {r.team.shortName || r.team.name}
+                        </span>
                       </Link>
                     </span>
                   ) : (
                     <span className="text-subtle">{es.scorers.missing}</span>
                   )}
                 </td>
-                <td className={`${TD} ${MD} num text-right text-muted`}>{orDash(r.playedMatches)}</td>
+                <td className={`${TD} ${MD} num text-right text-muted`}>
+                  {orDash(r.playedMatches)}
+                </td>
                 <td className={`${TD} bg-surface-2/70`}>
                   <span className="flex items-center justify-end gap-3">
                     <span
@@ -111,11 +123,17 @@ export function ScorersTable({
                         }}
                       />
                     </span>
-                    <span className="score w-8 text-right text-[1.5rem] text-fg">{r.goals}</span>
+                    <span className="score w-8 text-right text-[1.5rem] text-fg">
+                      {r.goals}
+                    </span>
                   </span>
                 </td>
-                <td className={`${TD} ${MD} num text-right text-muted`}>{orDash(r.assists)}</td>
-                <td className={`${TD} ${MD} num text-right text-muted`}>{orDash(r.penalties)}</td>
+                <td className={`${TD} ${MD} num text-right text-muted`}>
+                  {orDash(r.assists)}
+                </td>
+                <td className={`${TD} ${MD} num text-right text-muted`}>
+                  {orDash(r.penalties)}
+                </td>
               </tr>
             );
           })}

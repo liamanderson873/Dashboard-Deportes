@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { NbaTeamLogo } from "./TeamCrest";
 import { useState } from "react";
 import {
   type Evaluation,
@@ -308,8 +309,11 @@ export function NbaModels({ data }: { data: NbaData }) {
                           className="font-semibold text-accent hover:underline"
                           href={`/nba/${data.season}/equipo/${row.team_id}`}
                         >
-                          {data.teams.find((t) => t.id === row.team_id)?.name ??
-                            row.team_id}
+                          <span className="flex items-center gap-3">
+                            <NbaTeamLogo id={row.team_id} size={32} />
+                            {data.teams.find((t) => t.id === row.team_id)
+                              ?.name ?? row.team_id}
+                          </span>
                         </Link>
                       </th>
                       <td

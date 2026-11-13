@@ -1,27 +1,48 @@
 @import "tailwindcss";
 
-/* "Marcador" design tokens: a single light theme (chalk background, ink, one
-   pitch-green accent). Text pairs are checked in src/lib/design-tokens.test.ts. */
+/* Marcador: two sport identities, shared semantic roles. Contrast is verified
+   for both palettes in design-tokens.test.ts. :has scopes the server-rendered
+   route without waiting for JavaScript or changing personal browser state. */
 :root {
-  --bg: #f4f5f2;
+  --bg: #f1f5f0;
   --card: #ffffff;
-  --surface-2: #eef0ec;
-  --border: #daddd6;
-  --border-strong: #b9bdb4;
-  --fg: #121614;
-  --muted: #4a514c;
-  --subtle: #5f6661;
-  --accent: #0d6b4c;
-  --accent-soft: #dcefe6;
+  --surface-2: #e7eee7;
+  --border: #d1ddd3;
+  --border-strong: #a8bbae;
+  --fg: #122d24;
+  --muted: #40534b;
+  --subtle: #54685e;
+  --accent: #126344;
+  --accent-soft: #dceee2;
   --win: #0d6b4c;
   --draw: #646b66;
   --loss: #b42318;
   --zone-bottom: #b42318;
-  --ink: #121614;
-  --on-ink: #f4f5f2;
-  --on-ink-muted: #a9afa9;
+  --ink: #082d25;
+  --on-ink: #f5faf4;
+  --on-ink-muted: #bfd3c7;
+  --hero-art: #80bf98;
+  --sport-light: #adf0b7;
   --court: #eed4aa;
   --court-line: #85552c;
+}
+
+:root:has([data-sport="nba"]) {
+  --bg: #f6f2ed;
+  --card: #fffcf8;
+  --surface-2: #eee8df;
+  --border: #ddd4c8;
+  --border-strong: #b8aa9a;
+  --fg: #172434;
+  --muted: #435060;
+  --subtle: #5c626d;
+  --accent: #a24416;
+  --accent-soft: #f8e3d3;
+  --ink: #111f33;
+  --on-ink: #fff9f0;
+  --on-ink-muted: #c4cbd5;
+  --hero-art: #dd8b59;
+  --sport-light: #ffc08c;
 }
 
 @theme inline {
@@ -100,13 +121,28 @@ body {
 
 .lineup-pitch {
   background-color: var(--accent);
-  background-image: repeating-linear-gradient(0deg, transparent, transparent 60px, rgb(255 255 255 / 4%) 60px, rgb(255 255 255 / 4%) 120px);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 60px,
+    rgb(255 255 255 / 4%) 60px,
+    rgb(255 255 255 / 4%) 120px
+  );
 }
 .nba-court {
   background-color: var(--court);
-  background-image: repeating-linear-gradient(90deg, transparent, transparent 39px, rgb(133 85 44 / 8%) 39px, rgb(133 85 44 / 8%) 40px);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 39px,
+    rgb(133 85 44 / 8%) 39px,
+    rgb(133 85 44 / 8%) 40px
+  );
 }
-button, summary { cursor: pointer; }
+button,
+summary {
+  cursor: pointer;
+}
 
 /* Tabular figures in Inter: table cells and inline numbers. */
 .num {
@@ -200,7 +236,134 @@ button, summary { cursor: pointer; }
 @media (max-width: 767px) {
   .scroll-fade {
     padding-right: 32px;
-    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 calc(100% - 32px),
+      transparent
+    );
     mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  }
+}
+
+/* Sport identity: strong editorial headers, field geometry and quiet surfaces. */
+.site-band {
+  border-top: 3px solid var(--sport-light);
+}
+.sport-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 186px;
+  margin-top: 24px;
+  margin-bottom: 22px;
+  padding: 28px;
+  border-radius: 18px;
+  color: var(--on-ink);
+  background: var(--ink);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.football-hero {
+  background-image: linear-gradient(
+    115deg,
+    transparent 55%,
+    rgb(72 130 87 / 17%)
+  );
+}
+.nba-hero {
+  background-image: linear-gradient(
+    115deg,
+    transparent 45%,
+    rgb(190 97 44 / 19%)
+  );
+}
+.sport-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  color: var(--sport-light);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.sport-kicker-line {
+  width: 24px;
+  height: 2px;
+  flex-shrink: 0;
+  background: currentColor;
+}
+.sport-scene {
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  right: 12%;
+  top: -36px;
+  width: 440px;
+  height: 270px;
+  color: var(--hero-art);
+  opacity: 0.18;
+  transform: rotate(-13deg);
+}
+.nba-hero .sport-scene {
+  transform: rotate(-18deg);
+  right: 8%;
+}
+.sport-primary-nav {
+  box-shadow: 0 3px 14px color-mix(in srgb, var(--ink) 4%, transparent);
+}
+.sport-primary-nav a[aria-current="location"] {
+  box-shadow: inset 0 -3px 0 var(--sport-light);
+}
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--ink) 3%, transparent);
+}
+.stat-card-featured {
+  border-top: 3px solid var(--accent);
+  padding-top: 18px;
+}
+.match-card {
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--ink) 3%, transparent);
+}
+.team-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.team-logo-image {
+  padding: 3px;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgb(15 23 42 / 6%);
+}
+.team-logo-fallback {
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 600;
+}
+@media (max-width: 639px) {
+  .sport-hero {
+    min-height: 0;
+    margin-top: 16px;
+    padding: 24px 20px;
+    border-radius: 14px;
+  }
+  .sport-scene {
+    right: -130px;
+    top: 0;
+    opacity: 0.12;
+  }
+  .nba-hero .sport-scene {
+    right: -150px;
   }
 }

@@ -4,7 +4,7 @@ import { es } from "@/lib/es";
 import { SportNav } from "./SportNav";
 
 /** Centre circle of a pitch: the app mark. Decorative. */
-function BrandMark() {
+function BrandMark({ sport }: { sport: "football" | "nba" }) {
   return (
     <svg
       aria-hidden="true"
@@ -16,10 +16,19 @@ function BrandMark() {
       strokeWidth="1.75"
       className="shrink-0"
     >
-      <rect x="2" y="4" width="20" height="16" rx="1.5" />
-      <path d="M12 4v16" />
-      <circle cx="12" cy="12" r="3.5" />
-      <circle cx="12" cy="12" r="0.9" fill="currentColor" stroke="none" />
+      {sport === "nba" ? (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3v18M5.5 5.5c8 3 8 10 0 13m13-13c-8 3-8 10 0 13" />
+        </>
+      ) : (
+        <>
+          <rect x="2" y="4" width="20" height="16" rx="1.5" />
+          <path d="M12 4v16" />
+          <circle cx="12" cy="12" r="3.5" />
+          <circle cx="12" cy="12" r="0.9" fill="currentColor" stroke="none" />
+        </>
+      )}
     </svg>
   );
 }
@@ -36,7 +45,10 @@ export function SiteBand({
   sport?: "football" | "nba";
 }) {
   return (
-    <div className="on-ink full-bleed sticky top-0 z-30 bg-ink px-4 text-on-ink shadow-[0_1px_0_var(--border)] sm:px-6 lg:px-8">
+    <div
+      data-sport={sport}
+      className="site-band on-ink full-bleed sticky top-0 z-30 bg-ink px-4 text-on-ink shadow-[0_1px_0_var(--border)] sm:px-6 lg:px-8"
+    >
       <div className="mx-auto flex max-w-[1200px] flex-col md:flex-row md:items-center md:justify-between md:gap-6">
         <div className="flex min-h-14 items-center justify-between gap-5 md:justify-start">
           <Link
@@ -44,7 +56,7 @@ export function SiteBand({
             aria-label={es.brandHome}
             className="flex min-h-11 shrink-0 items-center gap-2.5 self-start text-on-ink md:self-auto"
           >
-            <BrandMark />
+            <BrandMark sport={sport} />
             <span className="display text-[1.0625rem] font-bold tracking-[0.01em]">
               {es.appTitle}
             </span>

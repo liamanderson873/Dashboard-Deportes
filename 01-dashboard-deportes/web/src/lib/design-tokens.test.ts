@@ -7,8 +7,13 @@ const css = readFileSync(
   "utf8",
 );
 
-function token(name: string): string {
-  const m = css.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})\\s*;`));
+const baseTokens = css.match(/:root \{([^}]+)\}/)![1];
+const nbaTokens = css.match(
+  /:root:has\(\[data-sport="nba"\]\) \{([^}]+)\}/,
+)![1];
+function token(name: string, theme = "football"): string {
+  const palette = theme === "nba" ? nbaTokens + baseTokens : baseTokens;
+  const m = palette.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})\\s*;`));
   if (!m) throw new Error(`token --${name} not found`);
   return m[1];
 }
@@ -44,16 +49,17 @@ const TEXT_PAIRS: [string, string][] = [
   ["loss", "card"],
   ["on-ink", "ink"],
   ["on-ink-muted", "ink"],
+  ["sport-light", "ink"],
 ];
 
 // White letters on filled chips and buttons.
 const WHITE_ON = ["win", "draw", "loss", "accent"];
 
-describe("design tokens", () => {
+describe.each(["football", "nba"])("%s design tokens", (theme) => {
   it("test_every_text_pair_meets_wcag_aa_contrast", () => {
     for (const [text, background] of TEXT_PAIRS) {
       expect(
-        contrast(token(text), token(background)),
+        contrast(token(text, theme), token(background, theme)),
         `--${text} on --${background}`,
       ).toBeGreaterThanOrEqual(4.5);
     }
@@ -61,11 +67,16 @@ describe("design tokens", () => {
 
   it("test_white_text_on_result_chips_and_accent_meets_wcag_aa_contrast", () => {
     for (const fill of WHITE_ON) {
-      expect(contrast("#ffffff", token(fill)), `white on --${fill}`).toBeGreaterThanOrEqual(4.5);
+      expect(
+        contrast("#ffffff", token(fill, theme)),
+        `white on --${fill}`,
+      ).toBeGreaterThanOrEqual(4.5);
     }
   });
 
   it("test_secondary_text_on_white_reaches_aaa", () => {
-    expect(contrast(token("muted"), token("card"))).toBeGreaterThanOrEqual(7);
+    expect(
+      contrast(token("muted", theme), token("card", theme)),
+    ).toBeGreaterThanOrEqual(7);
   });
 });

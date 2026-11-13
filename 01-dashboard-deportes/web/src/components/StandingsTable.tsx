@@ -102,11 +102,16 @@ export function StandingsTable({
                     className={`${TD} num text-right font-medium text-muted ${zone ? ZONE_MARK[zone] : ""}`}
                   >
                     {r.position}
-                    {zone ? <span className="sr-only"> ({es.standings.zones[zone]})</span> : null}
+                    {zone ? (
+                      <span className="sr-only">
+                        {" "}
+                        ({es.standings.zones[zone]})
+                      </span>
+                    ) : null}
                   </td>
                   <td className={`${TD} w-full max-w-0`}>
                     <span className="flex min-w-0 items-center gap-2.5">
-                      <TeamCrest crest={r.crest} tla={r.tla} size={22} />
+                      <TeamCrest crest={r.crest} tla={r.tla} size={28} />
                       <Link
                         href={teamHref(slug, season, r.teamId)}
                         title={r.team || name}
@@ -116,13 +121,27 @@ export function StandingsTable({
                       </Link>
                     </span>
                   </td>
-                  <td className={`${TD} num text-right text-muted`}>{r.played}</td>
-                  <td className={`${TD} ${LG} num text-right text-muted`}>{r.won}</td>
-                  <td className={`${TD} ${LG} num text-right text-muted`}>{r.drawn}</td>
-                  <td className={`${TD} ${LG} num text-right text-muted`}>{r.lost}</td>
-                  <td className={`${TD} ${LG} num text-right text-muted`}>{r.goalsFor}</td>
-                  <td className={`${TD} ${LG} num text-right text-muted`}>{r.goalsAgainst}</td>
-                  <td className={`${TD} ${MD} num text-right font-medium text-fg`}>
+                  <td className={`${TD} num text-right text-muted`}>
+                    {r.played}
+                  </td>
+                  <td className={`${TD} ${LG} num text-right text-muted`}>
+                    {r.won}
+                  </td>
+                  <td className={`${TD} ${LG} num text-right text-muted`}>
+                    {r.drawn}
+                  </td>
+                  <td className={`${TD} ${LG} num text-right text-muted`}>
+                    {r.lost}
+                  </td>
+                  <td className={`${TD} ${LG} num text-right text-muted`}>
+                    {r.goalsFor}
+                  </td>
+                  <td className={`${TD} ${LG} num text-right text-muted`}>
+                    {r.goalsAgainst}
+                  </td>
+                  <td
+                    className={`${TD} ${MD} num text-right font-medium text-fg`}
+                  >
                     {signed(r.goalDifference)}
                   </td>
                   <td className={`${TD} ${MD} pl-4`}>
@@ -149,11 +168,17 @@ export function StandingsLegend({ showZones }: { showZones: boolean }) {
       {showZones ? (
         <>
           <span className="inline-flex items-center gap-2">
-            <span aria-hidden="true" className="h-3.5 w-[3px] rounded-[1px] bg-accent" />
+            <span
+              aria-hidden="true"
+              className="h-3.5 w-[3px] rounded-[1px] bg-accent"
+            />
             {es.standings.legendTop}
           </span>
           <span className="inline-flex items-center gap-2">
-            <span aria-hidden="true" className="h-3.5 w-[3px] rounded-[1px] bg-zone-bottom" />
+            <span
+              aria-hidden="true"
+              className="h-3.5 w-[3px] rounded-[1px] bg-zone-bottom"
+            />
             {es.standings.legendBottom}
           </span>
         </>

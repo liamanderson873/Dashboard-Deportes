@@ -12,6 +12,7 @@ import {
 } from "@/lib/nba";
 import { NbaCoverage, NbaHeader } from "./NbaHeader";
 import { NbaGameCards, NbaPlayersTable, NbaStar } from "./NbaWorkbench";
+import { NbaTeamLogo } from "./TeamCrest";
 import { NbaShotMap } from "./NbaShotMap";
 
 function StatTiles({ metrics, keys }: { metrics: NbaMetrics; keys: string[] }) {
@@ -20,7 +21,7 @@ function StatTiles({ metrics, keys }: { metrics: NbaMetrics; keys: string[] }) {
       {keys.map((key) => (
         <div
           key={key}
-          className="rounded-panel border border-border bg-card p-4"
+          className="stat-card rounded-panel border border-border bg-card p-4"
         >
           <p className="eyebrow">{nbaLabel[key] ?? key}</p>
           <p className="score mt-3 text-3xl">{nbaValue(metrics, key)}</p>
@@ -126,7 +127,18 @@ export async function NbaProfile({
     kind === "team" ? data.players.filter((p) => p.teamId === team!.id) : [];
   return (
     <>
-      <NbaHeader data={data} active={section} title={title} />
+      <NbaHeader
+        data={data}
+        active={section}
+        title={title}
+        team={
+          kind === "team"
+            ? team
+            : kind === "player"
+              ? data.teams.find((t) => t.id === player?.teamId)
+              : undefined
+        }
+      />
       <Link
         href={`${base}${backlink}`}
         className="mb-5 inline-flex min-h-11 items-center text-sm font-semibold text-accent hover:underline"
@@ -290,7 +302,10 @@ export async function NbaProfile({
                 className="display min-w-0 break-words text-left text-xl font-bold sm:text-3xl"
                 href={`${base}/equipo/${game.awayId}`}
               >
-                {name(game.awayId)}
+                <span className="mb-3 inline-flex">
+                  <NbaTeamLogo id={game.awayId} size={48} />
+                </span>
+                <span className="block">{name(game.awayId)}</span>
               </Link>
               <p className="score whitespace-nowrap text-3xl sm:text-5xl">
                 {game.awayPts ?? "—"}{" "}
@@ -301,7 +316,10 @@ export async function NbaProfile({
                 className="display min-w-0 break-words text-right text-xl font-bold sm:text-3xl"
                 href={`${base}/equipo/${game.homeId}`}
               >
-                {name(game.homeId)}
+                <span className="mb-3 inline-flex">
+                  <NbaTeamLogo id={game.homeId} size={48} />
+                </span>
+                <span className="block">{name(game.homeId)}</span>
               </Link>
             </div>
           </section>

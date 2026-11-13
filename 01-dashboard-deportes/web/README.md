@@ -50,3 +50,9 @@ El selector Fútbol/NBA conserva dos espacios distintos. `/nba` redirige a la ú
 La web consulta las tablas `nba_*` sin llamar al proveedor ni entrenar modelos durante una petición. Si faltan datos o modelos se muestran estados vacíos explicativos. La comparación por nombre acepta teclado y sus filtros se reflejan en la URL. El estado personal NBA tiene su propia clave de navegador y admite cinco posiciones sin duplicados.
 
 El panel de modelos publica evaluación temporal, calibración y supuestos. Las simulaciones actuales son condicionales al calendario parcial; los mapas de tiro no incluyen tracking del defensor ni reloj de posesión. Consulta la [metodología NBA](../../docs/nba-integration.md).
+
+## Identidades visuales y logos
+
+Fútbol combina verde profundo y superficies claras; NBA utiliza azul noche, cobre y fondos cálidos. Los tokens semánticos cambian con el deporte renderizado, sin esperar a JavaScript. Las cabeceras muestran trazados decorativos de campo o cancha y las dos paletas tienen comprobaciones de contraste.
+
+`TeamCrest` sirve los escudos de fútbol almacenados en `public/logos/`; `NbaTeamLogo` utiliza los 30 logos NBA locales. `team-logos.json` conserva procedencia y SHA-256. Los recursos mantienen proporciones, colores y espacio reservado; un fallo de carga presenta la abreviatura. Consulta los [criterios visuales](../../docs/diseno-marcador.md).

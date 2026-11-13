@@ -23,7 +23,7 @@ function TeamLink({
   season: number;
   side: "home" | "away";
 }) {
-  const crest = <TeamCrest crest={team.crest} tla={team.tla} size={24} />;
+  const crest = <TeamCrest crest={team.crest} tla={team.tla} size={32} />;
   const name = <span className="min-w-0 truncate">{team.shortName}</span>;
   return (
     <Link
@@ -49,7 +49,17 @@ function TeamLink({
 }
 
 // Optional detail IDs are resolved through the explicit provider mapping.
-function MatchItem({ m, slug, season, detailId }: { m: MatchRow; slug: string; season: number; detailId?: number }) {
+function MatchItem({
+  m,
+  slug,
+  season,
+  detailId,
+}: {
+  m: MatchRow;
+  slug: string;
+  season: number;
+  detailId?: number;
+}) {
   const played = isPlayed(m);
   const label = statusLabel(m.status);
   const halfTime =
@@ -59,36 +69,50 @@ function MatchItem({ m, slug, season, detailId }: { m: MatchRow; slug: string; s
   return (
     <li className="px-3 py-2 sm:px-4">
       <div className="mx-auto grid max-w-[820px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 sm:gap-x-4">
-      <TeamLink team={m.home} slug={slug} season={season} side="home" />
-      <div className="flex w-[5.75rem] flex-col items-center gap-1 sm:w-28">
-        {played ? (
-          <ScorePill>
-            <span aria-hidden="true">
-              {m.homeGoals} - {m.awayGoals}
-            </span>
-            <span className="sr-only">
-              {es.results.score(m.home.shortName, m.homeGoals ?? 0, m.away.shortName, m.awayGoals ?? 0)}
-            </span>
-          </ScorePill>
-        ) : (
-          <ScorePill pending>{kickoffLabel(m)}</ScorePill>
-        )}
-        {halfTime || label ? (
-          <span className="num text-center text-xs leading-tight text-subtle">
-            {halfTime ? (
-              <span title={es.results.halfTime}>
-                <span className="sr-only">{es.results.halfTime} </span>
-                {halfTime}
+        <TeamLink team={m.home} slug={slug} season={season} side="home" />
+        <div className="flex w-[5.75rem] flex-col items-center gap-1 sm:w-28">
+          {played ? (
+            <ScorePill>
+              <span aria-hidden="true">
+                {m.homeGoals} - {m.awayGoals}
               </span>
-            ) : null}
-            {halfTime && label ? " · " : null}
-            {label}
-          </span>
-        ) : null}
+              <span className="sr-only">
+                {es.results.score(
+                  m.home.shortName,
+                  m.homeGoals ?? 0,
+                  m.away.shortName,
+                  m.awayGoals ?? 0,
+                )}
+              </span>
+            </ScorePill>
+          ) : (
+            <ScorePill pending>{kickoffLabel(m)}</ScorePill>
+          )}
+          {halfTime || label ? (
+            <span className="num text-center text-xs leading-tight text-subtle">
+              {halfTime ? (
+                <span title={es.results.halfTime}>
+                  <span className="sr-only">{es.results.halfTime} </span>
+                  {halfTime}
+                </span>
+              ) : null}
+              {halfTime && label ? " · " : null}
+              {label}
+            </span>
+          ) : null}
+        </div>
+        <TeamLink team={m.away} slug={slug} season={season} side="away" />
       </div>
-      <TeamLink team={m.away} slug={slug} season={season} side="away" />
-      </div>
-      {detailId && <div className="text-center"><Link className="inline-flex min-h-11 items-center text-xs font-semibold text-accent hover:underline" href={`/${slug}/${season}/partido/${detailId}`}>Ver análisis del partido →</Link></div>}
+      {detailId && (
+        <div className="text-center">
+          <Link
+            className="inline-flex min-h-11 items-center text-xs font-semibold text-accent hover:underline"
+            href={`/${slug}/${season}/partido/${detailId}`}
+          >
+            Ver análisis del partido →
+          </Link>
+        </div>
+      )}
     </li>
   );
 }
@@ -116,7 +140,13 @@ export function MatchList({
           </Heading>
           <ul className="m-0 list-none divide-y divide-border overflow-hidden rounded-panel border border-border bg-card p-0">
             {g.matches.map((m) => (
-              <MatchItem key={m.id} m={m} slug={slug} season={season} detailId={detailLinks[m.id]} />
+              <MatchItem
+                key={m.id}
+                m={m}
+                slug={slug}
+                season={season}
+                detailId={detailLinks[m.id]}
+              />
             ))}
           </ul>
         </section>

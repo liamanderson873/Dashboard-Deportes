@@ -32,7 +32,7 @@ function KpiTeam({ row }: { row: StandingRow }) {
   const name = row.shortName || row.team;
   return (
     <>
-      <TeamCrest crest={row.crest} tla={row.tla} size={24} />
+      <TeamCrest crest={row.crest} tla={row.tla} size={32} />
       <span className="min-w-0 truncate" title={row.team || name}>
         {name}
       </span>

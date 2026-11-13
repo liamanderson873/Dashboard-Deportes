@@ -17,14 +17,11 @@ export function KpiStrip({
   bare?: boolean;
   children: ReactNode;
 }) {
-  const grid = columns === 6 ? "md:grid-cols-3 lg:grid-cols-6" : "lg:grid-cols-4";
+  const grid =
+    columns === 6 ? "md:grid-cols-3 lg:grid-cols-6" : "lg:grid-cols-4";
   return (
     <section aria-label={label} className={bare ? "" : "mb-6"}>
-      <dl
-        className={`m-0 grid grid-cols-2 gap-px overflow-hidden rounded-panel border border-border bg-border ${grid}`}
-      >
-        {children}
-      </dl>
+      <dl className={`m-0 grid grid-cols-2 gap-3 ${grid}`}>{children}</dl>
     </section>
   );
 }
@@ -47,7 +44,9 @@ export function KpiCell({
   highlight?: boolean;
 }) {
   return (
-    <div className="flex min-w-0 flex-col gap-2.5 bg-card p-4 sm:p-5">
+    <div
+      className={`stat-card flex min-w-0 flex-col gap-2.5 bg-card p-4 sm:p-5 ${highlight ? "stat-card-featured" : ""}`}
+    >
       <dt className="eyebrow">{label}</dt>
       <dd className="m-0 flex min-w-0 flex-col gap-2.5">
         {team ? (
@@ -61,7 +60,9 @@ export function KpiCell({
           >
             {value}
           </span>
-          {unit ? <span className="text-[0.8125rem] text-subtle">{unit}</span> : null}
+          {unit ? (
+            <span className="text-[0.8125rem] text-subtle">{unit}</span>
+          ) : null}
         </span>
       </dd>
     </div>

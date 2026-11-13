@@ -1,6 +1,9 @@
 import Link from "next/link";
 import type { NbaData } from "@/lib/nba";
 import { nbaSeason, nbaFormat } from "@/lib/nba";
+import { SportScene } from "./SportScene";
+import { NbaTeamLogo } from "./TeamCrest";
+import type { NbaTeam } from "@/lib/nba";
 import { SiteBand } from "./SiteBand";
 import { NavIcon } from "./NavIcon";
 
@@ -18,11 +21,13 @@ export function NbaHeader({
   active,
   title,
   subtitle,
+  team,
 }: {
   data: NbaData;
   active: NbaSection;
   title: string;
   subtitle?: string;
+  team?: NbaTeam;
 }) {
   const base = `/nba/${data.season}`;
   return (
@@ -34,20 +39,34 @@ export function NbaHeader({
       </SiteBand>
       <header
         id="contenido"
-        className="flex scroll-mt-28 flex-col gap-4 pb-5 pt-6 md:flex-row md:items-end md:justify-between md:pt-8"
+        className="sport-hero nba-hero on-ink flex scroll-mt-28 flex-col gap-5 md:flex-row md:items-end md:justify-between"
       >
-        <div>
-          <p className="eyebrow mb-2">El juego, en perspectiva</p>
-          <h1 className="display break-words text-4xl font-extrabold md:text-5xl">
+        <SportScene sport="nba" />
+        <div className="relative min-w-0">
+          <p className="sport-kicker">
+            <span className="sport-kicker-line" /> NBA · El juego, en
+            perspectiva
+          </p>
+          {team && (
+            <div className="mb-3 flex items-center gap-3 text-sm font-medium text-on-ink-muted">
+              <NbaTeamLogo
+                id={team.id}
+                abbreviation={team.abbreviation}
+                size={48}
+              />
+              {team.abbreviation} · Conferencia {team.conference}
+            </div>
+          )}
+          <h1 className="display break-words text-4xl font-extrabold tracking-[-0.02em] text-on-ink md:text-5xl">
             {title}
           </h1>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-3 text-sm text-on-ink-muted">
             {subtitle ?? `NBA · Temporada ${nbaSeason(data.season)}`}
           </p>
         </div>
         <nav
           aria-label="Temporadas NBA"
-          className="flex max-w-full flex-wrap gap-2"
+          className="relative flex max-w-full shrink-0 flex-wrap gap-2"
         >
           {(data.seasons.length ? data.seasons : [data.season]).map((year) => (
             <Link
@@ -63,7 +82,7 @@ export function NbaHeader({
       </header>
       <nav
         aria-label="Secciones NBA"
-        className="mb-6 rounded-panel border border-border bg-card p-1.5 shadow-sm"
+        className="sport-primary-nav mb-6 rounded-panel border border-border bg-card p-1.5 shadow-sm"
       >
         <ul className="m-0 grid list-none grid-cols-5 gap-1 p-0">
           {sections.map(([id, label, path, icon]) => (

@@ -1,0 +1,912 @@
+{
+  "football": {
+    "77": {
+      "name": "Athletic Club",
+      "src": "/logos/football/77.png",
+      "source": "https://crests.football-data.org/77.png",
+      "sha256": "3d82fe14e9dab74af3a70b321b03cafdb0ad5f8158ddefaf0dcd98126af00c0d"
+    },
+    "89": {
+      "name": "RCD Mallorca",
+      "src": "/logos/football/89.png",
+      "source": "https://crests.football-data.org/89.png",
+      "sha256": "d4ada71d89eef9f6fe5ee20f311353395b27c90004a8f8af79cb2c8226888205"
+    },
+    "78": {
+      "name": "Club Atlético de Madrid",
+      "src": "/logos/football/78.png",
+      "source": "https://crests.football-data.org/78.png",
+      "sha256": "54da8c510b395b145f51de5b8006bf395bb886354c3f94ad61d947dbb4de8c4b"
+    },
+    "79": {
+      "name": "CA Osasuna",
+      "src": "/logos/football/79.png",
+      "source": "https://crests.football-data.org/79.png",
+      "sha256": "13cc3f4621bb4d1a5958a771a5271d74642570f4e312c5e9835d29ca5d8101a9"
+    },
+    "80": {
+      "name": "RCD Espanyol de Barcelona",
+      "src": "/logos/football/80.png",
+      "source": "https://crests.football-data.org/80.png",
+      "sha256": "5d3b69f6a52f28e4f8211b8e005803dc6b0161122c2506885930e2985e345420"
+    },
+    "81": {
+      "name": "FC Barcelona",
+      "src": "/logos/football/81.png",
+      "source": "https://crests.football-data.org/81.png",
+      "sha256": "be1a01d5a769180e4c418c69d715b746180c3ce29eb55b0b294e510e3bbac760"
+    },
+    "298": {
+      "name": "Girona FC",
+      "src": "/logos/football/298.png",
+      "source": "https://crests.football-data.org/298.png",
+      "sha256": "e3c8d1041fa604dd82414c26c88acb575a8b415bb7c5eae09da12694e602ce98"
+    },
+    "82": {
+      "name": "Getafe CF",
+      "src": "/logos/football/82.png",
+      "source": "https://crests.football-data.org/82.png",
+      "sha256": "83b752b803959ab2cac79d4830e182ab69093cd083fe1d4dfa3d76efd0b0004b"
+    },
+    "84": {
+      "name": "Málaga CF",
+      "src": "/logos/football/84.png",
+      "source": "https://crests.football-data.org/84.png",
+      "sha256": "5c3afb35e9590742a6a6b3b96a2c26164b57bf69edf281a76b638e45de0e95d6"
+    },
+    "86": {
+      "name": "Real Madrid CF",
+      "src": "/logos/football/86.png",
+      "source": "https://crests.football-data.org/86.png",
+      "sha256": "f1067470f3b59ac5c7398b88bcfcc6f608c86ee46693fa40ee0600cbfe3977e4"
+    },
+    "87": {
+      "name": "Rayo Vallecano de Madrid",
+      "src": "/logos/football/87.png",
+      "source": "https://crests.football-data.org/87.png",
+      "sha256": "79693fc26fd3fe622759f42bc3bd1e9d2741cf935deeab9dc20c17a9c6f873fa"
+    },
+    "88": {
+      "name": "Levante UD",
+      "src": "/logos/football/88.png",
+      "source": "https://crests.football-data.org/88.png",
+      "sha256": "d627aeef947bf9eb204b1e36fefbcce3ac41081caaa08aa51f059bee828f3912"
+    },
+    "90": {
+      "name": "Real Betis Balompié",
+      "src": "/logos/football/90.png",
+      "source": "https://crests.football-data.org/90.png",
+      "sha256": "ce6aa10198fcf756612964bc01a0dc5256440e644b452d03463650991a4cebf0"
+    },
+    "92": {
+      "name": "Real Sociedad de Fútbol",
+      "src": "/logos/football/92.png",
+      "source": "https://crests.football-data.org/92.png",
+      "sha256": "fddd6cb7ff210224243f72e17a67c70a13bd3b92b3f9d9f7f4e37fb6ba06086e"
+    },
+    "94": {
+      "name": "Villarreal CF",
+      "src": "/logos/football/94.png",
+      "source": "https://crests.football-data.org/94.png",
+      "sha256": "57c4dc512a2da0760a651fab856b175f33eea3d3d361085113011f8816bc7b55"
+    },
+    "95": {
+      "name": "Valencia CF",
+      "src": "/logos/football/95.png",
+      "source": "https://crests.football-data.org/95.png",
+      "sha256": "aab85de7af2997e61697c2768c86cc44891a42601b12199942f4bd969430cbb3"
+    },
+    "263": {
+      "name": "Deportivo Alavés",
+      "src": "/logos/football/263.png",
+      "source": "https://crests.football-data.org/263.png",
+      "sha256": "3b0d75bfaa34ec1005ac69a5a9932e38bb93efadda749747cc8840a99a5aa590"
+    },
+    "250": {
+      "name": "Real Valladolid CF",
+      "src": "/logos/football/250.png",
+      "source": "https://crests.football-data.org/250.png",
+      "sha256": "8c9f490ace16d8dd93696c42cdb0de41ead7b815db1052ba423e347f512614ec"
+    },
+    "285": {
+      "name": "Elche CF",
+      "src": "/logos/football/285.png",
+      "source": "https://crests.football-data.org/285.png",
+      "sha256": "f5b001a879a7282f265e0b6d2a44163716078251c07eb0e606c243c88ef243f9"
+    },
+    "558": {
+      "name": "RC Celta de Vigo",
+      "src": "/logos/football/558.png",
+      "source": "https://crests.football-data.org/558.png",
+      "sha256": "4e5a5b436a6bcf46a0517ec77ec99756f2fd2e7ef26194193d89338008e394c9"
+    },
+    "275": {
+      "name": "UD Las Palmas",
+      "src": "/logos/football/275.png",
+      "source": "https://crests.football-data.org/275.png",
+      "sha256": "29c8a0c890a1124ed36709b74f534fe64aeb6855da2d80bab56119fbc02a99cb"
+    },
+    "745": {
+      "name": "CD Leganés",
+      "src": "/logos/football/745.png",
+      "source": "https://crests.football-data.org/745.png",
+      "sha256": "24baa80d239d2c2ceaa607c8cb5e01b95ed7773c8ad9af88ab59a53e9d8c0542"
+    },
+    "354": {
+      "name": "Crystal Palace FC",
+      "src": "/logos/football/354.png",
+      "source": "https://crests.football-data.org/354.png",
+      "sha256": "8cd5323ea26846f9991bd5604ae63e124f81e5e3feda7716a3f038ab5151458c"
+    },
+    "397": {
+      "name": "Brighton & Hove Albion FC",
+      "src": "/logos/football/397.png",
+      "source": "https://crests.football-data.org/397.png",
+      "sha256": "b2a60525561839e8a113d95ec80598f8398a28b568124e3d9b15c69c651f5d07"
+    },
+    "402": {
+      "name": "Brentford FC",
+      "src": "/logos/football/402.png",
+      "source": "https://crests.football-data.org/402.png",
+      "sha256": "165adcf2e24288dcabd3e5d5e5de3b83e58e7c549aaa2c6101a37159a12c1753"
+    },
+    "1044": {
+      "name": "AFC Bournemouth",
+      "src": "/logos/football/1044.png",
+      "source": "https://crests.football-data.org/bournemouth.png",
+      "sha256": "ca4303c4bd2fbe2d0dd4a015e208a1cf090d5856fe7936de73da5e1daed45d77"
+    },
+    "57": {
+      "name": "Arsenal FC",
+      "src": "/logos/football/57.png",
+      "source": "https://crests.football-data.org/57.png",
+      "sha256": "36e761b46213d8fa6deb1ddd94add8b61060a74fab48ca77a1f28827ff37d209"
+    },
+    "58": {
+      "name": "Aston Villa FC",
+      "src": "/logos/football/58.png",
+      "source": "https://crests.football-data.org/58.png",
+      "sha256": "cd9d0e04bb7d781bca31fb8575de5ede409e4775db07a2cf64da7cbc3ee93202"
+    },
+    "61": {
+      "name": "Chelsea FC",
+      "src": "/logos/football/61.png",
+      "source": "https://crests.football-data.org/61.png",
+      "sha256": "bb79d3ccd973afb7802d4d48fb9b58de8940e9ac2183b66df28d83b61c1bfc6a"
+    },
+    "338": {
+      "name": "Leicester City FC",
+      "src": "/logos/football/338.png",
+      "source": "https://crests.football-data.org/338.png",
+      "sha256": "ceb62c39abfdce10924e49529d60643e9b1d14f7206af63424fd15d87878b3e9"
+    },
+    "98": {
+      "name": "AC Milan",
+      "src": "/logos/football/98.png",
+      "source": "https://crests.football-data.org/98.png",
+      "sha256": "0501af298c54befd712505660fa70fdba8d29b29f66c4affce3f8bb0e6b0ecdf"
+    },
+    "99": {
+      "name": "ACF Fiorentina",
+      "src": "/logos/football/99.png",
+      "source": "https://crests.football-data.org/99.png",
+      "sha256": "df98422c77e735a69639ce190bc3b935a821e507a30f4508791ff4240b0d8967"
+    },
+    "100": {
+      "name": "AS Roma",
+      "src": "/logos/football/100.png",
+      "source": "https://crests.football-data.org/100.png",
+      "sha256": "f76cce16ebe99a6cab9a2c756328aa8ceff8756a1e8108011e84085938ba964e"
+    },
+    "102": {
+      "name": "Atalanta BC",
+      "src": "/logos/football/102.png",
+      "source": "https://crests.football-data.org/102.png",
+      "sha256": "7245c755485a1cdec8335c019d81d3be9af26684af3bd725b82378b1f27f38f2"
+    },
+    "563": {
+      "name": "West Ham United FC",
+      "src": "/logos/football/563.png",
+      "source": "https://crests.football-data.org/563.png",
+      "sha256": "11e0ae907552888ef9190265cdef5f9b0f3e23052575870dc9fcf47ddca71898"
+    },
+    "62": {
+      "name": "Everton FC",
+      "src": "/logos/football/62.png",
+      "source": "https://crests.football-data.org/62.png",
+      "sha256": "9d8062665589e8089e67175fe479efb2a647b6bd0ec7883a9602fc9557a788d7"
+    },
+    "63": {
+      "name": "Fulham FC",
+      "src": "/logos/football/63.png",
+      "source": "https://crests.football-data.org/63.png",
+      "sha256": "c84fb63fdd0a20e9268e2e5d967fd459b15c1e4194f8d4197a84a071b68187e2"
+    },
+    "340": {
+      "name": "Southampton FC",
+      "src": "/logos/football/340.png",
+      "source": "https://crests.football-data.org/340.png",
+      "sha256": "599189eb8fa34d1f1e34582fa2d8fdfb7e26bcf066e9448be5c21ab9f6f4604b"
+    },
+    "64": {
+      "name": "Liverpool FC",
+      "src": "/logos/football/64.png",
+      "source": "https://crests.football-data.org/64.png",
+      "sha256": "e98ce271542dfc14ecaee2b5b6b228841a8ca19751f537eacec2fe66820fbcce"
+    },
+    "76": {
+      "name": "Wolverhampton Wanderers FC",
+      "src": "/logos/football/76.png",
+      "source": "https://crests.football-data.org/76.png",
+      "sha256": "ab19a729b23877189ac54b7ff7c5b8c10d46adcea98d04b782beff0d4380e950"
+    },
+    "65": {
+      "name": "Manchester City FC",
+      "src": "/logos/football/65.png",
+      "source": "https://crests.football-data.org/65.png",
+      "sha256": "d3602d5a8ecc240c6685d935a502fe56167d127ee53810e3ff618d2bba9db432"
+    },
+    "66": {
+      "name": "Manchester United FC",
+      "src": "/logos/football/66.png",
+      "source": "https://crests.football-data.org/66.png",
+      "sha256": "5bd8bd07d24ac133a75c2c7d93886b5d586cb84a41281378a98b0ef827850846"
+    },
+    "67": {
+      "name": "Newcastle United FC",
+      "src": "/logos/football/67.png",
+      "source": "https://crests.football-data.org/67.png",
+      "sha256": "93ac1da648d20a87e9661564752e32f7d7be2e3d835917807207713149f2b571"
+    },
+    "73": {
+      "name": "Tottenham Hotspur FC",
+      "src": "/logos/football/73.png",
+      "source": "https://crests.football-data.org/73.png",
+      "sha256": "2cfcd7ca5dd94737e52e965f5a44de45da5d08181410737722cd7d9929c5b1a4"
+    },
+    "349": {
+      "name": "Ipswich Town FC",
+      "src": "/logos/football/349.png",
+      "source": "https://crests.football-data.org/349.png",
+      "sha256": "84bd91e8f3aea41cb23c7e01333e41e7409d1a15c5a334d91747675273771b74"
+    },
+    "351": {
+      "name": "Nottingham Forest FC",
+      "src": "/logos/football/351.png",
+      "source": "https://crests.football-data.org/351.png",
+      "sha256": "d4098e62317e19e6dc92d806ded0e77ba7714b22728998466a441aef0c8e9025"
+    },
+    "2": {
+      "name": "TSG 1899 Hoffenheim",
+      "src": "/logos/football/2.png",
+      "source": "https://crests.football-data.org/2.png",
+      "sha256": "c8542fe7cf8c825ffd90a62e3c34c97ed1f620c266c9c4b460dc769a4145935b"
+    },
+    "3": {
+      "name": "Bayer 04 Leverkusen",
+      "src": "/logos/football/3.png",
+      "source": "https://crests.football-data.org/3.png",
+      "sha256": "75a724b7097622ed5d86465e77de58a652b5ee119b5fd740565a31f34b192109"
+    },
+    "4": {
+      "name": "Borussia Dortmund",
+      "src": "/logos/football/4.png",
+      "source": "https://crests.football-data.org/4.png",
+      "sha256": "0a37e290998238721be128b625785a5f4143428782578c0495d0e465cc0ccb40"
+    },
+    "5": {
+      "name": "FC Bayern München",
+      "src": "/logos/football/5.png",
+      "source": "https://crests.football-data.org/5.png",
+      "sha256": "43d63f1fa95cd302176bf34f2e3fdc49f3e5a95859dd693811c566e7a53edd20"
+    },
+    "10": {
+      "name": "VfB Stuttgart",
+      "src": "/logos/football/10.png",
+      "source": "https://crests.football-data.org/10.png",
+      "sha256": "d138a2a3f452fc752c4799f5eec56fc8bb2bbc98c0855df24123132578cfa0d2"
+    },
+    "12": {
+      "name": "SV Werder Bremen",
+      "src": "/logos/football/12.png",
+      "source": "https://crests.football-data.org/12.png",
+      "sha256": "5409fddce618a1608097775e5d8393b01def78c53255072116fcde9d69a95921"
+    },
+    "15": {
+      "name": "1. FSV Mainz 05",
+      "src": "/logos/football/15.png",
+      "source": "https://crests.football-data.org/15.png",
+      "sha256": "dba8481207fcf81f0fc81e4dde8b29358cbd47fa127b5f2ab32402510b3d531e"
+    },
+    "107": {
+      "name": "Genoa CFC",
+      "src": "/logos/football/107.png",
+      "source": "https://crests.football-data.org/107.png",
+      "sha256": "5967681e37e71af4462084c97415690552d285bfba4c59799c9b7ae7e57a0ce1"
+    },
+    "108": {
+      "name": "FC Internazionale Milano",
+      "src": "/logos/football/108.png",
+      "source": "https://crests.football-data.org/108.png",
+      "sha256": "9cedadc7ea48579487a1c1047e94ab1289b1a08b328a3617be20f93d56ec3c26"
+    },
+    "109": {
+      "name": "Juventus FC",
+      "src": "/logos/football/109.png",
+      "source": "https://crests.football-data.org/109.png",
+      "sha256": "4f6c758119fc3954ad5c9716f8df999389c02b79b3ad4a748e652b979e264140"
+    },
+    "110": {
+      "name": "SS Lazio",
+      "src": "/logos/football/110.png",
+      "source": "https://crests.football-data.org/110.png",
+      "sha256": "001681e2e89327028dc7238466a96d4115cf8949182b3301ca9af66c9e63bacf"
+    },
+    "112": {
+      "name": "Parma Calcio 1913",
+      "src": "/logos/football/112.png",
+      "source": "https://crests.football-data.org/112.png",
+      "sha256": "67208dddec54f7c400de4d26d28a685e9547302a09ad49b956da2047ae89d808"
+    },
+    "113": {
+      "name": "SSC Napoli",
+      "src": "/logos/football/113.png",
+      "source": "https://crests.football-data.org/113.png",
+      "sha256": "7382d0fa4e186d4592c8ad9ac6fdc0973ea2f93c431fa65d5c5dbf2f1ab5eec7"
+    },
+    "11": {
+      "name": "VfL Wolfsburg",
+      "src": "/logos/football/11.png",
+      "source": "https://crests.football-data.org/11.png",
+      "sha256": "800bf19c90d54aa1d744efa4c75fe4898d285c584c9d2f4b7c54645c568b6b9e"
+    },
+    "450": {
+      "name": "Hellas Verona FC",
+      "src": "/logos/football/450.png",
+      "source": "https://crests.football-data.org/450.png",
+      "sha256": "439fb4b0c7c7368c30b00a864b0a7ff21142acd13737248633e4e5a098cd1465"
+    },
+    "445": {
+      "name": "Empoli FC",
+      "src": "/logos/football/445.png",
+      "source": "https://crests.football-data.org/445.png",
+      "sha256": "26edd31c6b45d2acc6dc35433084f46b00991611f0d29fb0bbbe199cae0356d1"
+    },
+    "16": {
+      "name": "FC Augsburg",
+      "src": "/logos/football/16.png",
+      "source": "https://crests.football-data.org/16.png",
+      "sha256": "4dfffaca693b6535ae0bb833b5ab6fc8cb54282fe44b249c80fe3df58493c80c"
+    },
+    "115": {
+      "name": "Udinese Calcio",
+      "src": "/logos/football/115.png",
+      "source": "https://crests.football-data.org/115.png",
+      "sha256": "ee5ee1ac535d8bff3b65ff60301939b7da59803dafc3193a19bf90760e006c48"
+    },
+    "454": {
+      "name": "Venezia FC",
+      "src": "/logos/football/454.png",
+      "source": "https://crests.football-data.org/454.png",
+      "sha256": "8765da66bb3e77c310aaa5f3edeb65a0ee7143f9a24c5f31a5db41599fd3f951"
+    },
+    "586": {
+      "name": "Torino FC",
+      "src": "/logos/football/586.png",
+      "source": "https://crests.football-data.org/586.png",
+      "sha256": "564f5bd8a1414df60ba189147fecb154f451bfce35e5feae987224a00af9cd40"
+    },
+    "5890": {
+      "name": "US Lecce",
+      "src": "/logos/football/5890.png",
+      "source": "https://crests.football-data.org/5890.png",
+      "sha256": "eda0498157cf4e9c5f0f112e98632c09877e2b7b6bdefd8702ea7df136283d20"
+    },
+    "17": {
+      "name": "SC Freiburg",
+      "src": "/logos/football/17.png",
+      "source": "https://crests.football-data.org/17.png",
+      "sha256": "6833e520bbddcaa3897dbacd7a61eb07709077092dace937cb18464af3f608cf"
+    },
+    "5911": {
+      "name": "AC Monza",
+      "src": "/logos/football/5911.png",
+      "source": "https://crests.football-data.org/5911.png",
+      "sha256": "e1f9b859f0b07044f832ec61723690e0666cebfeb4c39179f8d88378389e7391"
+    },
+    "18": {
+      "name": "Borussia Mönchengladbach",
+      "src": "/logos/football/18.png",
+      "source": "https://crests.football-data.org/18.png",
+      "sha256": "fda40723b4876d39d2c081c0656667223ca143c0c11b552305f55674472ecf74"
+    },
+    "103": {
+      "name": "Bologna FC 1909",
+      "src": "/logos/football/103.png",
+      "source": "https://crests.football-data.org/103.png",
+      "sha256": "8c09517058df0c7cb4955c399caf8a0014edb84cd21a8ab1f3a4b325bf7ed99e"
+    },
+    "104": {
+      "name": "Cagliari Calcio",
+      "src": "/logos/football/104.png",
+      "source": "https://crests.football-data.org/104.png",
+      "sha256": "cbb4bf8d3c3a3bedfab4702f6895398c809ed93132e93d647cca4b5181dd3531"
+    },
+    "7397": {
+      "name": "Como 1907",
+      "src": "/logos/football/7397.png",
+      "source": "https://crests.football-data.org/7397.png",
+      "sha256": "d5bb95c0fdefef61ccb781f33930502df961ccbd4e7fc6105478aae3a4ca6e16"
+    },
+    "548": {
+      "name": "AS Monaco FC",
+      "src": "/logos/football/548.png",
+      "source": "https://crests.football-data.org/548.png",
+      "sha256": "fd9cca2ca2448eb8fe57c38e19b37e74b8648d4c45a1b0e496bb60ac5b035c2d"
+    },
+    "543": {
+      "name": "FC Nantes",
+      "src": "/logos/football/543.png",
+      "source": "https://crests.football-data.org/543.png",
+      "sha256": "51776dafb247006e668de773f4761fe94ade1a628160837d9d17d18cdfe7fe23"
+    },
+    "36": {
+      "name": "VfL Bochum 1848",
+      "src": "/logos/football/36.png",
+      "source": "https://crests.football-data.org/36.png",
+      "sha256": "0409d955194f7c651197a925bef242d534431dda08d05ccf0f4f953982092aff"
+    },
+    "720": {
+      "name": "Holstein Kiel",
+      "src": "/logos/football/720.png",
+      "source": "https://crests.football-data.org/720.png",
+      "sha256": "645f167dfea8dfa14970447d246f1440a48a9197a3b0d05c4165be9c0e466842"
+    },
+    "19": {
+      "name": "Eintracht Frankfurt",
+      "src": "/logos/football/19.png",
+      "source": "https://crests.football-data.org/19.png",
+      "sha256": "acb4bb58ec7996bac241d21392254c4aa78a4ab8c827f3374ed5eae34b76f9bd"
+    },
+    "28": {
+      "name": "1. FC Union Berlin",
+      "src": "/logos/football/28.png",
+      "source": "https://crests.football-data.org/28.png",
+      "sha256": "a692f3cfc490873fd15145b403b44449b94bb570ca49458cfd67605d7fce9c48"
+    },
+    "721": {
+      "name": "RB Leipzig",
+      "src": "/logos/football/721.png",
+      "source": "https://crests.football-data.org/721.png",
+      "sha256": "ee7de2bf5f033813e90fdaf7bee5ebbe86a2d8941223011c66a776326a31ac75"
+    },
+    "511": {
+      "name": "Toulouse FC",
+      "src": "/logos/football/511.png",
+      "source": "https://crests.football-data.org/511.png",
+      "sha256": "1fe56619bdfe0f043311394d4184ad27a56e77f799d923db3aa9b904fbe35110"
+    },
+    "518": {
+      "name": "Montpellier HSC",
+      "src": "/logos/football/518.png",
+      "source": "https://crests.football-data.org/518.png",
+      "sha256": "683e68cd4ef3780b2cd56faea9381b674cad97908f75857cce77ef534d659b18"
+    },
+    "527": {
+      "name": "AS Saint-Étienne",
+      "src": "/logos/football/527.png",
+      "source": "https://crests.football-data.org/527.png",
+      "sha256": "f86ba00dcd19e05152f76dab544ef17ba2e29ca5e9af3a24ee8220a17c49d9d7"
+    },
+    "512": {
+      "name": "Stade Brestois 29",
+      "src": "/logos/football/512.png",
+      "source": "https://crests.football-data.org/512.png",
+      "sha256": "26c5294393c4715a24211aed2325bd09f956e30f7252f39c539ba2f90f7b4d0d"
+    },
+    "20": {
+      "name": "FC St. Pauli 1910",
+      "src": "/logos/football/20.png",
+      "source": "https://crests.football-data.org/20.png",
+      "sha256": "722e12191fc9aa00daa561a32be01a6f8fb049762fbfdaf9b2160ba91c36aa9a"
+    },
+    "516": {
+      "name": "Olympique de Marseille",
+      "src": "/logos/football/516.png",
+      "source": "https://crests.football-data.org/516.png",
+      "sha256": "6b71dd61b9ea985d6798099583a4b1a7ef08b3ad61f978010781e04e101aae60"
+    },
+    "519": {
+      "name": "AJ Auxerre",
+      "src": "/logos/football/519.png",
+      "source": "https://crests.football-data.org/519.png",
+      "sha256": "d05f99ece834d0abd36c2c0f6d78be4907a84ae8c87b1fa1eb515f8063678f35"
+    },
+    "576": {
+      "name": "RC Strasbourg Alsace",
+      "src": "/logos/football/576.png",
+      "source": "https://crests.football-data.org/576.png",
+      "sha256": "c3618e1e7b04c77a73f8b603c1c495e99583ef73a0606f645915a883aba2c4f4"
+    },
+    "521": {
+      "name": "Lille OSC",
+      "src": "/logos/football/521.png",
+      "source": "https://crests.football-data.org/521.png",
+      "sha256": "2608698c4801cbc5f7bf1e4b97260bd966eb428e6ea2a956c3a736bc529ed6db"
+    },
+    "44": {
+      "name": "1. FC Heidenheim 1846",
+      "src": "/logos/football/44.png",
+      "source": "https://crests.football-data.org/44.png",
+      "sha256": "674cf14bcac9326c4623b714ba755674e274db5aec9790ba98c3c0b811e1b43b"
+    },
+    "522": {
+      "name": "OGC Nice",
+      "src": "/logos/football/522.png",
+      "source": "https://crests.football-data.org/522.png",
+      "sha256": "25b7116597c4af164e637a98c28a2e651219c9f37c3f2aaf7f2017bae41cf234"
+    },
+    "523": {
+      "name": "Olympique Lyonnais",
+      "src": "/logos/football/523.png",
+      "source": "https://crests.football-data.org/523.png",
+      "sha256": "59dc3b56730e2ab7736c65435f15a2bccb0519fb8756e0f0fdc2eb8e9b192c08"
+    },
+    "524": {
+      "name": "Paris Saint-Germain FC",
+      "src": "/logos/football/524.png",
+      "source": "https://crests.football-data.org/524.png",
+      "sha256": "e159c7ee90d2a7b8c97f4b0b621f3f0a909cfd7cea459490acb1309c2964c117"
+    },
+    "529": {
+      "name": "Stade Rennais FC 1901",
+      "src": "/logos/football/529.png",
+      "source": "https://crests.football-data.org/529.png",
+      "sha256": "f1fe54b8f9b8abc99a030c0f98525873f0faf3adb1b517e6fb9b960077ea3826"
+    },
+    "532": {
+      "name": "Angers SCO",
+      "src": "/logos/football/532.png",
+      "source": "https://crests.football-data.org/532.png",
+      "sha256": "9798dfb1b74c64e78ce58b9113c05db115b83efa8f4971884dc96a6385b36a32"
+    },
+    "533": {
+      "name": "Le Havre AC",
+      "src": "/logos/football/533.png",
+      "source": "https://crests.football-data.org/533.png",
+      "sha256": "7c3b06867ab29f2c366ea7fa7184afc1a8b1c977a58d72ff6bcc7807e9fc2493"
+    },
+    "546": {
+      "name": "Racing Club de Lens",
+      "src": "/logos/football/546.png",
+      "source": "https://crests.football-data.org/546.png",
+      "sha256": "ba2e96f6adba5b35bfda37ae2ba75af3e0ec17ccc85663558ce75439e7d73a37"
+    },
+    "547": {
+      "name": "Stade de Reims",
+      "src": "/logos/football/547.png",
+      "source": "https://crests.football-data.org/547.png",
+      "sha256": "f698905232bbc2bc2e186d5d0a26e59fd1d0ee825d18ad0d4b51d6efec06f680"
+    },
+    "487": {
+      "name": "AC Pisa 1909",
+      "src": "/logos/football/487.png",
+      "source": "https://crests.football-data.org/487.png",
+      "sha256": "742cb31278fbe7147d936c2978ccc3628b19e71cacde142a731983b8e933300e"
+    },
+    "471": {
+      "name": "US Sassuolo Calcio",
+      "src": "/logos/football/471.png",
+      "source": "https://crests.football-data.org/471.png",
+      "sha256": "8fa7f83bec035c291cb1bf10afc8679bee149fa31b89ca36b9288aeb81619ed3"
+    },
+    "1": {
+      "name": "1. FC Köln",
+      "src": "/logos/football/1.png",
+      "source": "https://crests.football-data.org/1.png",
+      "sha256": "6e98debef3c847516956702c3f33a89330bb23997c4329a5664477b004e70499"
+    },
+    "6": {
+      "name": "FC Schalke 04",
+      "src": "/logos/football/6.png",
+      "source": "https://crests.football-data.org/6.png",
+      "sha256": "baa0360ac486a86c8c19cce47e09be29c316026a7712f67a336f7775ed9944fc"
+    },
+    "7": {
+      "name": "Hamburger SV",
+      "src": "/logos/football/7.png",
+      "source": "https://crests.football-data.org/7.png",
+      "sha256": "e1a9a88d45f388d2b30394152ba8dd652e92b4a391ee7742e9d93bd1b54b496f"
+    },
+    "29": {
+      "name": "SC Paderborn 07",
+      "src": "/logos/football/29.png",
+      "source": "https://crests.football-data.org/29.png",
+      "sha256": "83a0025fc25bdda33f7b70be2850243e0f1d7f8a628221fc0a58da210e16923a"
+    },
+    "719": {
+      "name": "SV 07 Elversberg",
+      "src": "/logos/football/719.png",
+      "source": "https://crests.football-data.org/719.png",
+      "sha256": "65e6525b1ba90a6ad2735bae1d0ead11dda88eed23c2267f02c63e4cef3621b6"
+    },
+    "545": {
+      "name": "FC Metz",
+      "src": "/logos/football/545.png",
+      "source": "https://crests.football-data.org/545.png",
+      "sha256": "b666e5bbf4c36b62741295f67db6b9a908e308e820a6c1397ce912d4e637660e"
+    },
+    "525": {
+      "name": "FC Lorient",
+      "src": "/logos/football/525.png",
+      "source": "https://crests.football-data.org/525.png",
+      "sha256": "70c7fab8a5ba81a7a443fa7478d77a0918d7930adb3c3fb15eb37396ce4d3925"
+    },
+    "1048": {
+      "name": "Real Oviedo",
+      "src": "/logos/football/1048.png",
+      "source": "https://crests.football-data.org/1048.png",
+      "sha256": "1268a232a8ebaf8595e67ecf72c1cf12ecae8dff6cf1f7d11d24f058e8a1aaf9"
+    },
+    "531": {
+      "name": "ES Troyes AC",
+      "src": "/logos/football/531.png",
+      "source": "https://crests.football-data.org/531.png",
+      "sha256": "7eaa99c84534b7abf6424bba9aec468cbfc3a5f489ab5e2db5f64af5d7638cb2"
+    },
+    "535": {
+      "name": "Le Mans FC",
+      "src": "/logos/football/535.png",
+      "source": "https://crests.football-data.org/535.png",
+      "sha256": "37bc6bffaa21b51e69ed8249445cb65c9eef8d51a40bb2c46859e7a4b3e3fbf3"
+    },
+    "1045": {
+      "name": "Paris FC",
+      "src": "/logos/football/1045.png",
+      "source": "https://crests.football-data.org/1045.png",
+      "sha256": "c0b927b158990b08b54902995bdc003d3d11d64db72794a65d304810c38193f7"
+    },
+    "328": {
+      "name": "Burnley FC",
+      "src": "/logos/football/328.png",
+      "source": "https://crests.football-data.org/328.png",
+      "sha256": "a418607981308fd980be2246d4885b2f6794ebad33e0980315dd90e392b707e5"
+    },
+    "559": {
+      "name": "Sevilla FC",
+      "src": "/logos/football/559.png",
+      "source": "https://crests.football-data.org/559.png",
+      "sha256": "7e2025724de15fb9dcf66367c1fffd4a9910b236a754c6e1914e28ba4a88e3d5"
+    },
+    "560": {
+      "name": "RC Deportivo La Coruña",
+      "src": "/logos/football/560.png",
+      "source": "https://crests.football-data.org/560.png",
+      "sha256": "79e3ab188454681d688b17fbd6eba8639ab97a861e8b46f03839dcd2c89b2fca"
+    },
+    "5335": {
+      "name": "Real Racing Club de Santander",
+      "src": "/logos/football/5335.png",
+      "source": "https://crests.football-data.org/5335.png",
+      "sha256": "4ff2efea1576cf3350b6cfbcc3c8dccb1369ae3a809294eea9b2e19f34c0b346"
+    },
+    "71": {
+      "name": "Sunderland AFC",
+      "src": "/logos/football/71.png",
+      "source": "https://crests.football-data.org/71.png",
+      "sha256": "7690bab9be9d1712314b3982efcca442649f9ea75ad9ca3c4cce54c3621a35aa"
+    },
+    "322": {
+      "name": "Hull City AFC",
+      "src": "/logos/football/322.png",
+      "source": "https://crests.football-data.org/322.png",
+      "sha256": "977e0816b25d712357acc92ff2c732d59536bf0b4e34194dbe26795fa460ed20"
+    },
+    "341": {
+      "name": "Leeds United FC",
+      "src": "/logos/football/341.png",
+      "source": "https://crests.football-data.org/341.png",
+      "sha256": "16e5872c0127c093f14e8338b2ba1d79bc307cc24dcc690ca820c85c3af056f0"
+    },
+    "457": {
+      "name": "US Cremonese",
+      "src": "/logos/football/457.png",
+      "source": "https://crests.football-data.org/457.png",
+      "sha256": "1dfd6236b5e98d58b302d189474aa01ce1bea880ce361c0426861b623bdefaeb"
+    },
+    "1076": {
+      "name": "Coventry City FC",
+      "src": "/logos/football/1076.png",
+      "source": "https://crests.football-data.org/1076.png",
+      "sha256": "1e200eb5b9d3d5d6c9cbf2a41ffdc20cfc83408a8cbf94e8178cfe2512614946"
+    },
+    "470": {
+      "name": "Frosinone Calcio",
+      "src": "/logos/football/470.png",
+      "source": "https://crests.football-data.org/470.png",
+      "sha256": "b1c247ecff36fd543c7256062a503e67d44672cd769cc4f4dbbd99a55829ca76"
+    }
+  },
+  "nba": {
+    "1610612751": {
+      "name": "Brooklyn Nets",
+      "src": "/logos/nba/1610612751.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612751/primary/L/logo.svg",
+      "sha256": "6a3b134fbf97503b196848f6c933246a87c33ee623f13022c4cf7219a785ab34"
+    },
+    "1610612754": {
+      "name": "Indiana Pacers",
+      "src": "/logos/nba/1610612754.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612754/primary/L/logo.svg",
+      "sha256": "07b320f178a5bf9a800e1369289b1af59d777feff21936856b6f8cf9ef66ea8a"
+    },
+    "1610612743": {
+      "name": "Denver Nuggets",
+      "src": "/logos/nba/1610612743.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612743/primary/L/logo.svg",
+      "sha256": "4e180a9d1906a726d1eb5d5074ae3468cdf25da5e388a98a112563683b6c8730"
+    },
+    "1610612766": {
+      "name": "Charlotte Hornets",
+      "src": "/logos/nba/1610612766.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612766/primary/L/logo.svg",
+      "sha256": "cf2c99a2d619f635920a94b69e20b2efb2babb992d5a821c22b0129e0cc57f46"
+    },
+    "1610612745": {
+      "name": "Houston Rockets",
+      "src": "/logos/nba/1610612745.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612745/primary/L/logo.svg",
+      "sha256": "9a0fd3d351f0726db427e8bed6db098bf88d15e98582b4b8dfd5a3638d6263f0"
+    },
+    "1610612752": {
+      "name": "New York Knicks",
+      "src": "/logos/nba/1610612752.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612752/primary/L/logo.svg",
+      "sha256": "42e914c5226c3ff71fa09fe018e8604a4abb6a935e1896e5414733d6cd5fcde9"
+    },
+    "1610612750": {
+      "name": "Minnesota Timberwolves",
+      "src": "/logos/nba/1610612750.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612750/primary/L/logo.svg",
+      "sha256": "e23cca4da95fe6a0629cd0a425e5dbefbf410948abf7499718d8fb858df5fa9d"
+    },
+    "1610612756": {
+      "name": "Phoenix Suns",
+      "src": "/logos/nba/1610612756.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612756/primary/L/logo.svg",
+      "sha256": "b4ec319fc4551e87c13bdfbe4eddcaeb38701a2a946fc977887669bbb6bb06e1"
+    },
+    "1610612764": {
+      "name": "Washington Wizards",
+      "src": "/logos/nba/1610612764.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612764/primary/L/logo.svg",
+      "sha256": "4e99c8f715c1af7e5cce17d507d5a4b21cf83f3c721cbb526f1b8597d58660b4"
+    },
+    "1610612755": {
+      "name": "Philadelphia 76ers",
+      "src": "/logos/nba/1610612755.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612755/primary/L/logo.svg",
+      "sha256": "1e3fbaf4f2d48a4e8e3ce38cea06af858f1ac103e24d16cfb64728d39e29780d"
+    },
+    "1610612753": {
+      "name": "Orlando Magic",
+      "src": "/logos/nba/1610612753.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612753/primary/L/logo.svg",
+      "sha256": "aa38562ae665b4266e21f38698abdd2b45bb5a099e23246973a6bd8b71f056bf"
+    },
+    "1610612744": {
+      "name": "Golden State Warriors",
+      "src": "/logos/nba/1610612744.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612744/primary/L/logo.svg",
+      "sha256": "99af50c32a1b1c19ede6286cda294e98cd19263d1d2b50cd4b79b0e868c96a0a"
+    },
+    "1610612742": {
+      "name": "Dallas Mavericks",
+      "src": "/logos/nba/1610612742.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612742/primary/L/logo.svg",
+      "sha256": "1547494512746c1827808f1650407e675025b20b07bb5bd185093ac49630db5c"
+    },
+    "1610612739": {
+      "name": "Cleveland Cavaliers",
+      "src": "/logos/nba/1610612739.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612739/primary/L/logo.svg",
+      "sha256": "ef345729b4d9f69863d2f6f20b80bda21191ecf5f49a40a0a4f428d0864a301b"
+    },
+    "1610612758": {
+      "name": "Sacramento Kings",
+      "src": "/logos/nba/1610612758.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612758/primary/L/logo.svg",
+      "sha256": "36bcebbe9c06361db15791796bd6fd1ee39dd88047b1ecb7d3a00702617141cf"
+    },
+    "1610612762": {
+      "name": "Utah Jazz",
+      "src": "/logos/nba/1610612762.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612762/primary/L/logo.svg",
+      "sha256": "f1df72b502f198c452085fc01dcfcb1f352a93a5fa085cb0314bd0fa1aea1358"
+    },
+    "1610612740": {
+      "name": "New Orleans Pelicans",
+      "src": "/logos/nba/1610612740.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612740/primary/L/logo.svg",
+      "sha256": "3d74bfcf573428a09814ddae46db420a31dfe5e77faf75b0d7da7b1649ba93b1"
+    },
+    "1610612738": {
+      "name": "Boston Celtics",
+      "src": "/logos/nba/1610612738.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612738/primary/L/logo.svg",
+      "sha256": "531038092e848f7319e05d1785ef875353d6168c20ce419218503f1cc24cfd4c"
+    },
+    "1610612763": {
+      "name": "Memphis Grizzlies",
+      "src": "/logos/nba/1610612763.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612763/primary/L/logo.svg",
+      "sha256": "677c8053201e90471f0eda3fdd8364c7a598bcba72a7a6e61ed26cbc9ecadcaf"
+    },
+    "1610612741": {
+      "name": "Chicago Bulls",
+      "src": "/logos/nba/1610612741.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612741/primary/L/logo.svg",
+      "sha256": "a11d0d6480b75e4eebca54130d195a462547705c8c7e6b501a11a62d57854068"
+    },
+    "1610612737": {
+      "name": "Atlanta Hawks",
+      "src": "/logos/nba/1610612737.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612737/primary/L/logo.svg",
+      "sha256": "efe7639e6daac1a103c13a1c3cc0b2d00979397ab70333e9d8ded492ea250504"
+    },
+    "1610612757": {
+      "name": "Portland Trail Blazers",
+      "src": "/logos/nba/1610612757.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612757/primary/L/logo.svg",
+      "sha256": "65fbdafe950a7064f5303a1a45942b1519061cf9f56681e304763c81f87ca719"
+    },
+    "1610612765": {
+      "name": "Detroit Pistons",
+      "src": "/logos/nba/1610612765.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612765/primary/L/logo.svg",
+      "sha256": "efc20345b37e52206e025a0dbe5b57e28d8f4226b1a70573a9792a2e18595e0b"
+    },
+    "1610612761": {
+      "name": "Toronto Raptors",
+      "src": "/logos/nba/1610612761.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612761/primary/L/logo.svg",
+      "sha256": "cb754caf37f8132f366e20d5af618575c314bc7d716253566d11932e4d723883"
+    },
+    "1610612746": {
+      "name": "LA Clippers",
+      "src": "/logos/nba/1610612746.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612746/primary/L/logo.svg",
+      "sha256": "6fe94cd7b648afe8a700d2ae7c0a78bec1685adb7374214cbde7251520aa6a5a"
+    },
+    "1610612760": {
+      "name": "Oklahoma City Thunder",
+      "src": "/logos/nba/1610612760.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612760/primary/L/logo.svg",
+      "sha256": "fb684464e11e07989b3121108b54f12fafc85631644ad534f3fef53fd9927d89"
+    },
+    "1610612748": {
+      "name": "Miami Heat",
+      "src": "/logos/nba/1610612748.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612748/primary/L/logo.svg",
+      "sha256": "bb56d6319628bed94e5154d20cef555b20321939e05c37f3af7d9fea486b74b3"
+    },
+    "1610612747": {
+      "name": "Los Angeles Lakers",
+      "src": "/logos/nba/1610612747.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg",
+      "sha256": "5b68f7b92ba7d05878ef7130162c77c1e5e7d4c5ac0608c7bb9f13f995a678b7"
+    },
+    "1610612749": {
+      "name": "Milwaukee Bucks",
+      "src": "/logos/nba/1610612749.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612749/primary/L/logo.svg",
+      "sha256": "1a315b6ea7d465c48fc58d42cea16732089422e631d8453e8f2945032d0ff4c5"
+    },
+    "1610612759": {
+      "name": "San Antonio Spurs",
+      "src": "/logos/nba/1610612759.svg",
+      "source": "https://cdn.nba.com/logos/nba/1610612759/primary/L/logo.svg",
+      "sha256": "c4df842e0d660dbc6dd1f8e523b1ca03dd2cfee314624071a6ab8425ab885271"
+    }
+  }
+}

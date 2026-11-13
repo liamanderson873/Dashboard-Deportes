@@ -28,7 +28,7 @@ Los filtros de jugadores se pueden compartir por URL. Favoritos y alineación se
 
 ## NBA · estadísticas y laboratorio predictivo
 
-Un selector **Fútbol / NBA** separa los dos espacios. NBA incluye clasificación por conferencias, ratings avanzados, partidos con resultados y box scores, fichas de equipos y jugadores, comparación visual por nombre, seguimiento y un quinteto sobre el campo.
+Un selector **Fútbol / NBA** separa los dos espacios. Fútbol utiliza verde de estadio y NBA azul noche con cobre; ambos muestran escudos locales de los equipos, cabeceras propias y una navegación coherente. NBA incluye clasificación por conferencias, ratings avanzados, partidos con resultados y box scores, fichas de equipos y jugadores, comparación visual por nombre, seguimiento y un quinteto sobre el campo.
 
 | Clasificación NBA | Simulador de playoffs |
 |---|---|
@@ -143,7 +143,7 @@ npm run typecheck
 npm run build
 ```
 
-Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **127 pruebas Python y 174 pruebas web**, además de lint, tipos y compilación.
+Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **127 pruebas Python y 177 pruebas web**, además de lint, tipos y compilación.
 
 ## Estructura y documentación
 

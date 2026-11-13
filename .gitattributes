@@ -1,0 +1,3 @@
+
+# Preserve upstream logo bytes and SHA-256 across Windows/Linux checkouts.
+01-dashboard-deportes/web/public/logos/**/*.svg binary
