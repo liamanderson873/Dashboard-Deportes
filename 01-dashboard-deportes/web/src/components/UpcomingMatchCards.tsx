@@ -14,7 +14,7 @@ export function MatchCards({ data, base, now }: { data: PlayerData; base: string
   const labels = { upcoming: pe.upcomingMatches, results: pe.recentResults, season: pe.wholeSeason };
   const next = groups.upcoming[0];
   return <section className="my-6">
-    {next && <Link href={`${base}/partido/${next.id}`} className="mb-6 grid gap-5 rounded-panel bg-ink p-5 text-on-ink transition-colors hover:bg-accent sm:grid-cols-[1fr_auto] sm:items-center sm:p-7">
+    {next && <Link href={`${base}/partido/${next.id}`} className="mb-6 grid gap-5 rounded-panel bg-ink p-5 text-on-ink transition-shadow hover:ring-2 hover:ring-accent sm:grid-cols-[1fr_auto] sm:items-center sm:p-7">
       <div><p className="mb-3 text-xs font-semibold uppercase tracking-widest text-on-ink-muted">{isLiveMatch(next) ? pe.liveMatch : pe.nextMatch}</p>
         <p className="display text-2xl font-bold sm:text-3xl">{next.home} <span className="mx-1 text-lg font-normal text-on-ink-muted">vs</span> {next.away}</p>
         <p className="mono mt-3 text-xs text-on-ink-muted">{new Date(next.date).toLocaleString('es-ES', { timeZone: 'Europe/Madrid', weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</p>

@@ -25,7 +25,7 @@ export function LineupPitch({ data, state, update }: {
               const id=state.eleven[slot]; const player=data.players.find(p=>p.id===id);
               return <button key={slot} type="button" aria-pressed={active===slot}
                 aria-label={`Plaza ${slot+1}, ${positionLabel(SLOTS[slot])}: ${player?.name??(id?`Jugador ${id}, otra liga`:pe.emptySlot)}`}
-                onClick={()=>{setActive(slot);if(window.matchMedia('(max-width: 1023px)').matches){editor.current?.focus({preventScroll:true});editor.current?.scrollIntoView({block:'center'});}}} className={`flex min-h-20 w-1/4 max-w-28 flex-col items-center gap-2 rounded-control px-1 py-2 text-on-ink transition-colors ${active===slot?'bg-on-ink/20 ring-2 ring-on-ink':'hover:bg-on-ink/10'}`}>
+                onClick={()=>{setActive(slot);if(window.matchMedia('(max-width: 1023px)').matches){editor.current?.focus({preventScroll:true});editor.current?.scrollIntoView({block:'center'});}}} className={`flex min-h-20 w-1/4 max-w-28 flex-col items-center gap-2 rounded-control px-1 py-2 text-on-ink transition-colors ${active===slot?'bg-ink/20 ring-2 ring-on-ink':'hover:bg-on-ink/10'}`}>
                 <span className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-bold ${id?'border-on-ink bg-on-ink text-accent':'border-dashed border-on-ink/70'}`}>{id?slot+1:'+'}</span>
                 <span className="line-clamp-2 text-xs font-semibold leading-snug">{player?.name??(id?`Jugador #${id}`:positionLabel(SLOTS[slot]))}</span>
               </button>;
