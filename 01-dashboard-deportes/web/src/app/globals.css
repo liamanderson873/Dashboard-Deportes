@@ -180,3 +180,13 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Scroll rows that overflow on phones fade out at the end, so the cut-off tab
+   reads as "more to the right". The padding lets the last tab scroll clear. */
+@media (max-width: 767px) {
+  .scroll-fade {
+    padding-right: 32px;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  }
+}

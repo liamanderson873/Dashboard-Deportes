@@ -21,7 +21,7 @@ export function LeagueNav({
 }) {
   return (
     <nav aria-label={es.nav.leagues}>
-      <ul className="scroll-row m-0 -ml-3 flex list-none p-0 md:ml-0 md:-mr-3">
+      <ul className="scroll-row scroll-fade m-0 -ml-3 flex list-none p-0 md:ml-0 md:-mr-3">
         {COMPETITIONS.map((c) => {
           const active = c.slug === activeSlug;
           const target = targetSeason(seasonsByCompetition[c.code], season);

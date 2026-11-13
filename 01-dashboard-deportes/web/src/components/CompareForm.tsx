@@ -1,7 +1,8 @@
 import { es } from "@/lib/es";
 import { sectionHref } from "@/lib/sections";
 
-const FIELD = "min-h-11 w-full rounded-card border border-border bg-card px-3 text-fg";
+const FIELD =
+  "min-h-11 w-full rounded-control border border-border-strong bg-card px-3 text-[0.9375rem] text-fg";
 
 function TeamSelect({
   name,
@@ -16,8 +17,8 @@ function TeamSelect({
 }) {
   const id = `compare-${name}`;
   return (
-    <div className="flex min-w-0 flex-1 flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium text-muted">
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <label htmlFor={id} className="eyebrow">
         {label}
       </label>
       <select id={id} name={name} defaultValue={value ?? ""} className={FIELD}>
@@ -32,6 +33,7 @@ function TeamSelect({
   );
 }
 
+/** Compact form: two labelled selects and the button on one row from `sm` up. */
 export function CompareForm({
   slug,
   season,
@@ -49,13 +51,13 @@ export function CompareForm({
     <form
       method="get"
       action={sectionHref(slug, season, "comparar")}
-      className="flex flex-col gap-3 sm:flex-row sm:items-end"
+      className="mb-6 grid grid-cols-1 gap-3 rounded-panel border border-border bg-card p-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end"
     >
       <TeamSelect name="a" label={es.compare.form.teamA} teams={teams} value={a} />
       <TeamSelect name="b" label={es.compare.form.teamB} teams={teams} value={b} />
       <button
         type="submit"
-        className="min-h-11 rounded-card bg-accent px-5 font-medium text-white hover:opacity-90"
+        className="min-h-11 rounded-control bg-accent px-6 text-sm font-semibold text-white transition-colors duration-150 hover:bg-fg"
       >
         {es.compare.form.submit}
       </button>

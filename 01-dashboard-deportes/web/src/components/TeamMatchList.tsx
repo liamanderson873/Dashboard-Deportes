@@ -3,6 +3,7 @@ import { es } from "@/lib/es";
 import { formatMatchDate, kickoffLabel, statusLabel } from "@/lib/matches";
 import { teamHref } from "@/lib/sections";
 import type { TeamMatch } from "@/lib/team";
+import { ScorePill } from "./ScorePill";
 import { TeamCrest } from "./TeamCrest";
 
 const COLOR = { W: "bg-win", D: "bg-draw", L: "bg-loss" } as const;
@@ -11,40 +12,42 @@ function Item({ t, slug, season }: { t: TeamMatch; slug: string; season: number 
   const { match, opponent } = t;
   const label = statusLabel(match.status);
   return (
-    <li className="flex items-center gap-3 rounded-card border border-border bg-card px-3 py-1">
-      <div className="num w-8 shrink-0 text-xs text-muted">
+    <li className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-3 px-3 py-2 sm:grid-cols-[2.75rem_minmax(0,1fr)_auto] sm:px-4">
+      <span className="mono text-xs text-subtle">
         {match.matchday !== null ? es.team.matches.matchday(match.matchday) : ""}
-      </div>
-      <div className="flex min-w-0 flex-1 flex-col">
-        <span className="num text-xs text-muted">{formatMatchDate(match.utcDate)}</span>
+      </span>
+      <div className="flex min-w-0 flex-col">
+        <span className="mono text-[0.6875rem] text-subtle">{formatMatchDate(match.utcDate)}</span>
         <Link
           href={teamHref(slug, season, opponent.id)}
           title={opponent.name}
-          className="flex min-h-11 min-w-0 items-center gap-2 hover:underline"
+          className="flex min-h-9 min-w-0 items-center gap-2 text-[0.9375rem] font-semibold text-fg hover:underline hover:underline-offset-2"
         >
-          <span className="text-muted">
+          <span className="w-4 shrink-0 text-xs font-normal text-subtle">
             {t.isHome ? es.team.matches.home : es.team.matches.away}
           </span>
           <TeamCrest crest={opponent.crest} tla={opponent.tla} size={24} />
           <span className="min-w-0 truncate">{opponent.shortName}</span>
         </Link>
       </div>
-      <div className="num flex shrink-0 flex-col items-end text-right">
+      <div className="flex shrink-0 flex-col items-end gap-1">
         {t.result !== null ? (
-          <span className="flex items-center gap-2 font-bold">
-            {t.goalsFor} - {t.goalsAgainst}
+          <span className="flex items-center gap-2">
+            <ScorePill>
+              {t.goalsFor} - {t.goalsAgainst}
+            </ScorePill>
             <span
               aria-hidden="true"
-              className={`inline-flex size-[22px] items-center justify-center rounded-full text-[11px] font-medium text-white ${COLOR[t.result]}`}
+              className={`inline-flex size-[18px] items-center justify-center rounded-[4px] text-[10px] font-bold leading-none text-white ${COLOR[t.result]}`}
             >
               {es.form.letters[t.result]}
             </span>
             <span className="sr-only">{es.form.results[t.result]}</span>
           </span>
         ) : (
-          <span className="text-muted">{kickoffLabel(match)}</span>
+          <ScorePill pending>{kickoffLabel(match)}</ScorePill>
         )}
-        {label ? <span className="text-xs text-muted">{label}</span> : null}
+        {label ? <span className="text-xs text-subtle">{label}</span> : null}
       </div>
     </li>
   );
@@ -64,8 +67,8 @@ function Group({
   if (items.length === 0) return null;
   return (
     <section>
-      <h3 className="mb-2 text-sm font-medium text-muted">{title}</h3>
-      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+      <h3 className="eyebrow mb-2">{title}</h3>
+      <ul className="m-0 list-none divide-y divide-border overflow-hidden rounded-panel border border-border bg-card p-0">
         {items.map((t) => (
           <Item key={t.match.id} t={t} slug={slug} season={season} />
         ))}

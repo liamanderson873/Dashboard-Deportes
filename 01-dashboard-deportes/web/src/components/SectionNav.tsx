@@ -14,7 +14,7 @@ export function SectionNav({
 }) {
   return (
     <nav aria-label={es.nav.sections} className="border-b border-border">
-      <ul className="scroll-row m-0 -mb-px flex list-none gap-5 p-0 sm:gap-6">
+      <ul className="scroll-row m-0 -mb-px flex list-none gap-3.5 p-0 min-[430px]:gap-5 sm:gap-6">
         {SECTIONS.map((s) => {
           const isActive = s.id === active;
           return (
@@ -22,7 +22,7 @@ export function SectionNav({
               <Link
                 href={sectionHref(slug, season, s.id)}
                 aria-current={isActive ? "page" : undefined}
-                className={`inline-flex h-11 items-center whitespace-nowrap border-b-2 text-sm font-medium transition-colors duration-150 ${
+                className={`inline-flex h-11 items-center whitespace-nowrap border-b-2 text-[0.8125rem] font-medium transition-colors duration-150 min-[430px]:text-sm ${
                   isActive
                     ? "border-accent text-fg"
                     : "border-transparent text-muted hover:border-border-strong hover:text-fg"

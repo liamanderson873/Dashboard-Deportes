@@ -124,7 +124,8 @@ export const es = {
       coach: "Entrenador actual",
     },
     summary: {
-      title: "Resumen",
+      title: "Rendimiento",
+      kpiLabel: "Indicadores de rendimiento del equipo",
       position: "Posición en la tabla",
       points: "Puntos",
       record: "Balance V-E-D",
@@ -133,16 +134,13 @@ export const es = {
       form: "Forma",
       home: "En casa",
       away: "Fuera",
-      split: (
-        played: number,
-        won: number,
-        drawn: number,
-        lost: number,
-        gf: number,
-        ga: number,
-        pts: number,
-      ) =>
-        `${played} PJ · ${won}V ${drawn}E ${lost}D · ${gf}-${ga} goles · ${pts} puntos`,
+    },
+    split: {
+      title: "Casa y fuera",
+      points: "puntos",
+      played: "Partidos jugados",
+      record: "Victorias-empates-derrotas",
+      goals: "Goles a favor-en contra",
     },
     evolution: {
       title: "Evolución",
@@ -213,6 +211,7 @@ export const es = {
       `${league} ${season} · Comparador`,
     subtitle: (season: string) => `Temporada ${season} · Comparador de equipos`,
     hint: "Elige dos equipos para compararlos",
+    vs: "vs",
     errors: {
       same: "Elige dos equipos distintos",
       unknown: "Ese equipo no juega en esta liga y temporada",
@@ -226,6 +225,7 @@ export const es = {
     table: {
       caption: (a: string, b: string) => `Comparación entre ${a} y ${b}`,
       metric: "Estadística",
+      unavailableTitle: "No hay datos de este indicador para ese equipo",
       better: "mejor",
     },
     rows: {

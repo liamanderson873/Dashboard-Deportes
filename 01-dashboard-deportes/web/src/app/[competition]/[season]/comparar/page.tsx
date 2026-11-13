@@ -4,6 +4,7 @@ import { CompareForm } from "@/components/CompareForm";
 import { CompareTable } from "@/components/CompareTable";
 import { LeagueHeader } from "@/components/LeagueHeader";
 import { MatchList } from "@/components/MatchList";
+import { PanelSection } from "@/components/PanelSection";
 import { buildCompareRows, parseSelection } from "@/lib/compare";
 import { formatSeason } from "@/lib/competitions";
 import { getSql } from "@/lib/db";
@@ -101,13 +102,18 @@ export default async function ComparePage({ params, searchParams }: Props) {
         b={selection.b}
       />
       {message ? (
-        <p role="status" className="mt-4 text-muted">
+        <p
+          role="status"
+          className={`mb-6 rounded-panel border bg-card px-4 py-3 text-[0.9375rem] ${
+            selection.error ? "border-loss border-l-4 font-medium text-fg" : "border-border text-muted"
+          }`}
+        >
           {message}
         </p>
       ) : null}
       {rowA && rowB && comparison ? (
         <>
-          <div className="mt-6">
+          <div className="mb-10">
             <CompareTable
               a={rowA}
               b={rowB}
@@ -117,10 +123,11 @@ export default async function ComparePage({ params, searchParams }: Props) {
               )}
             />
           </div>
-          <section className="mt-8">
-            <h2 className="mb-3 text-xl font-bold">{es.compare.headToHead.title}</h2>
+          <PanelSection title={es.compare.headToHead.title}>
             {comparison[2].length === 0 ? (
-              <p className="text-muted">{es.compare.headToHead.empty}</p>
+              <p className="m-0 rounded-panel border border-border bg-card px-4 py-3 text-muted">
+                {es.compare.headToHead.empty}
+              </p>
             ) : (
               <MatchList
                 slug={context.competition.slug}
@@ -129,7 +136,7 @@ export default async function ComparePage({ params, searchParams }: Props) {
                 headingLevel={3}
               />
             )}
-          </section>
+          </PanelSection>
         </>
       ) : null}
     </>

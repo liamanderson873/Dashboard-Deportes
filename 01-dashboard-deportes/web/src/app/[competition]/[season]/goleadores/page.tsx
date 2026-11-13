@@ -56,7 +56,7 @@ export default async function ScorersPage({ params }: Props) {
             rows={rows}
             caption={es.scorers.caption(context.competition.name, season)}
           />
-          <p className="mt-4 text-sm text-muted">{es.scorers.source}</p>
+          <p className="mt-4 text-[0.8125rem] text-subtle">{es.scorers.source}</p>
         </>
       )}
     </>

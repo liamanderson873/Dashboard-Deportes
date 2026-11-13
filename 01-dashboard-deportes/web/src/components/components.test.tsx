@@ -513,7 +513,11 @@ describe("LineChart", () => {
     const html = render();
     expect(html).toContain('role="img"');
     expect(html).toContain('aria-label="Evolución"');
-    expect(html.match(/data-series="/g)).toHaveLength(2);
+    // One SVG per width range (only one is displayed): each has one path per series.
+    const charts = html.match(/role="img"/g)?.length ?? 0;
+    expect(charts).toBeGreaterThan(0);
+    expect(html.match(/data-series="2024"/g)).toHaveLength(charts);
+    expect(html.match(/data-series="2023"/g)).toHaveLength(charts);
     expect(html).toContain("Partido");
     expect(html).toContain("Puntos");
   });
@@ -528,6 +532,13 @@ describe("LineChart", () => {
       />,
     );
     expect(html).toContain("<circle");
+  });
+
+  test("test_line_chart_labels_the_end_of_every_line_with_its_season", () => {
+    const html = render();
+    const charts = html.match(/role="img"/g)?.length ?? 0;
+    expect(html.split(">2024/25</text>")).toHaveLength(charts + 1);
+    expect(html.split(">2023/24</text>")).toHaveLength(charts + 1);
   });
 
   test("test_line_chart_legend_names_every_series", () => {
@@ -575,9 +586,26 @@ describe("comparator components", () => {
     );
     expect(html).toContain("<caption");
     expect(html).toContain('scope="col"');
-    expect(html).toContain('scope="row"');
+    expect(html).toContain('scope="rowgroup"');
     expect(html.match(/sr-only">mejor</g)).toHaveLength(1);
     expect(html).toMatch(/font-bold[^>]*>30/);
+  });
+
+  test("test_compare_table_draws_proportional_mirrored_bars_only_for_numeric_pairs", () => {
+    const html = renderToStaticMarkup(
+      <CompareTable
+        a={row(1)}
+        b={row(2)}
+        rows={[
+          { label: "Puntos", a: "30", b: "20", better: "a", aValue: 30, bValue: 20 },
+          { label: "xG", a: "No disponible", b: "2,00", better: null, aValue: null, bValue: 2 },
+        ]}
+      />,
+    );
+    expect(html).toContain("width:100%");
+    expect(html).toContain("width:66.7%");
+    expect(html.match(/aria-hidden="true"[^>]*h-2/g)).toHaveLength(2);
+    expect(html).toContain("No disponible");
   });
 });
 
