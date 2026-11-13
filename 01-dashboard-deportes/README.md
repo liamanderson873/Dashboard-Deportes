@@ -8,7 +8,7 @@ El proyecto descarga partidos reales de una API pública de fútbol, los complet
 estadísticas por partido de una segunda fuente, lo guarda todo en PostgreSQL, lo limpia con
 pandas y lo muestra en una web hecha con Next.js (`web/`).
 
-![Demo de la web](docs/img/demo.gif)
+![Centro de partidos](docs/img/matches-2026.png)
 
 La base de datos contiene:
 
@@ -18,6 +18,16 @@ La base de datos contiene:
 - Fichas de equipo y plantillas por temporada (`squad_members`).
 - Goleadores por temporada.
 - Estadísticas por partido: xG, tiros, córners, faltas y tarjetas.
+
+## Ampliación individual y navegación
+
+La web separa **Liga**, **Partidos**, **Jugadores**, **Seguimiento** y **Mi once**. Bzzoiro Sports Data aporta actuaciones individuales, alineaciones, eventos y tiros en tablas `bsd_*`. Las vistas consultan PostgreSQL, sin peticiones externas al navegar. La importación de 2026-27, las correspondencias entre equipos, los cálculos por 90 y los límites conocidos están en la [guía de integración](../docs/bsd-integration.md).
+
+```powershell
+# Después de cargar los datos base y configurar BZZOIRO_API_KEY en .env
+.venv/Scripts/python.exe -m sports_dashboard.bsd --competitions PD PL SA BL1 FL1 --season 2026
+.venv/Scripts/python.exe -m sports_dashboard.bsd --mapping-file data/bsd_team_map.json
+```
 
 ## Arquitectura
 

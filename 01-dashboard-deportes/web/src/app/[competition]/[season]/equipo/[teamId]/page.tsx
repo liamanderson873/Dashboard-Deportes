@@ -11,6 +11,8 @@ import { SquadList } from "@/components/SquadList";
 import { StatGrid } from "@/components/StatGrid";
 import { TeamHeader } from "@/components/TeamHeader";
 import { TeamMatchList } from "@/components/TeamMatchList";
+import { TeamFollow, TeamPlayerStats } from "@/components/PlayerWorkbench";
+import { getPlayerData, getProviderTeamId } from "@/lib/queries/players";
 import { TeamSeasonsTable, type TeamSeasonRow } from "@/components/TeamSeasonsTable";
 import type { Series } from "@/lib/chart";
 import { formatSeason } from "@/lib/competitions";
@@ -94,6 +96,8 @@ export default async function TeamPage({ params }: Props) {
     .slice(-5);
   const position = standings.find((r) => r.teamId === teamId)?.position ?? null;
   const season = formatSeason(context.season);
+  const providerTeamId = await getProviderTeamId(sql, teamId);
+  const playerData = providerTeamId === null ? null : await getPlayerData(sql, code, route.season);
   const s = es.team.stats;
 
   const evo = es.team.evolution;
@@ -143,6 +147,7 @@ export default async function TeamPage({ params }: Props) {
         }}
       />
       <TeamHeader profile={profile} />
+      {providerTeamId !== null && <div className="mb-6"><TeamFollow id={providerTeamId} /></div>}
 
       <PanelSection title={es.team.summary.title}>
         <KpiStrip label={es.team.summary.kpiLabel} columns={6} bare>
@@ -208,6 +213,7 @@ export default async function TeamPage({ params }: Props) {
           <SquadList players={squad} on={new Date(Date.UTC(context.season, 8, 1))} />
         )}
       </PanelSection>
+      {providerTeamId !== null && playerData && <PanelSection title="Rendimiento individual"><TeamPlayerStats data={playerData} teamId={providerTeamId} base={`/${context.competition.slug}/${context.season}`} /></PanelSection>}
 
       <PanelSection title={es.team.matches.title}>
         <TeamMatchList

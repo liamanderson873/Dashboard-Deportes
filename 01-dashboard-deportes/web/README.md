@@ -1,4 +1,4 @@
-# Web de clasificaciones
+# Marcador · web de análisis de fútbol
 
 Aplicación Next.js que lee la base de datos PostgreSQL local del proyecto y
 muestra las clasificaciones de fútbol en español.
@@ -28,6 +28,13 @@ muestra las clasificaciones de fútbol en español.
 - `/{liga}/{año}/equipo/{id}`: ficha del equipo (datos del club, resumen, evolución de puntos por
   temporada, estadísticas por partido, plantilla de esa temporada y partidos).
 - `/{liga}/{año}/comparar?a={id}&b={id}`: comparador de dos equipos y enfrentamientos directos.
+- `/{liga}/{año}/jugadores`: explorador y comparación individual. `?tab=comparar` abre el comparador y conserva sus filtros en la URL.
+- `/{liga}/{año}/jugador/{id}`: ficha de jugador del proveedor Bzzoiro.
+- `/{liga}/{año}/partidos`: calendario, próximos encuentros primero y resultados recientes.
+- `/{liga}/{año}/partido/{id}`: detalle de partido con eventos, alineaciones y tiros disponibles.
+- `/{liga}/{año}/seguimiento`: equipos y jugadores favoritos, con sus próximos encuentros.
+- `/{liga}/{año}/mi-once`: campo visual 4-3-3, selección por nombre y guardado local.
+- Los antiguos enlaces `/jugadores?tab=partidos|favoritos|once` redirigen a las nuevas secciones.
 - Si la base de datos no responde se muestra una pantalla de error con los pasos para arrancarla.
 
 ## Notas

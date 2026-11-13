@@ -14,7 +14,10 @@ def engine():
 
     eng = get_engine(TEST_DATABASE_URL)
     with eng.begin() as conn:
-        conn.execute(text("DROP TABLE IF EXISTS match_stats, scorers, squad_members, players, competitions, matches, teams CASCADE"))
+        name = conn.execute(text("SELECT current_database()")).scalar()
+        if name != "sports_test":
+            raise RuntimeError(f'Refusing destructive tests against database "{name}"; expected sports_test.')
+        conn.execute(text("DROP TABLE IF EXISTS bsd_player_matches, bsd_squads, bsd_matches, bsd_players, bsd_team_map, bsd_teams, bsd_seasons, match_stats, scorers, squad_members, players, competitions, matches, teams CASCADE"))
     yield eng
     eng.dispose()
 

@@ -197,16 +197,18 @@ describe("components", () => {
     expect(html.match(/aria-current="page"/g)).toHaveLength(1);
     expect(html).toContain('href="/pd/2024/resultados"');
     expect(html).toContain('href="/pd/2024"');
-    expect(html).toContain('href="/pd/2024/goleadores"');
-    expect(html).toContain('href="/pd/2024/comparar"');
-    expect(html).toMatch(/aria-current="page"[^>]*>Resultados</);
+    expect(html).toContain('href="/pd/2024/partidos"');
+    expect(html).not.toContain('href="/pd/2024/goleadores"');
+    expect(html).toMatch(/aria-current="page"[^>]*>Por jornada</);
+    expect(html.match(/aria-current="location"/g)).toHaveLength(1);
   });
 
-  test("test_section_nav_without_active_section_has_no_aria_current", () => {
+  test("team_details_keep_the_league_group_without_marking_a_view", () => {
     const html = renderToStaticMarkup(
       <SectionNav slug="pd" season={2024} active={null} />,
     );
-    expect(html).not.toContain("aria-current");
+    expect(html).not.toContain('aria-current="page"');
+    expect(html.match(/aria-current="location"/g)).toHaveLength(1);
   });
 
   test("test_league_and_season_nav_keep_the_section", () => {

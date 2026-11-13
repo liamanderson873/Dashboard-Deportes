@@ -1,0 +1,30 @@
+import type { Metric } from './player-analytics';
+export const pe = {
+  title:'Jugadores y scouting', subtitle:'Explora el rendimiento, compara perfiles y construye tu once.',
+  tabs:{explorar:'Explorar',comparar:'Comparar jugadores',partidos:'Centro de partidos',favoritos:'Seguimiento',once:'Mi once'},
+  metrics:{goals:'Goles',assists:'Asistencias',shots:'Tiros',shotsOnTarget:'Tiros a puerta',passes:'Pases',keyPasses:'Pases clave',tackles:'Entradas',interceptions:'Intercepciones',dribbles:'Regates completados',duelsWon:'Duelos ganados',yellow:'Amarillas',red:'Rojas',saves:'Paradas',xg:'xG',xa:'xA'} satisfies Record<Metric,string>,
+  positions:{G:'Portería',D:'Defensa',M:'Centro del campo',F:'Ataque'},
+  empty:'Todavía no hay estadísticas individuales importadas para esta temporada.',
+  setup:'Importa los datos de esta liga para activar el análisis de jugadores.',
+  noResults:'No hay jugadores que cumplan estos filtros. Reduce el mínimo de minutos o amplía la búsqueda.',
+  missing:'—', source:'Datos de Bzzoiro Sports Data.',
+  coverage:'Las cifras reflejan los partidos importados. Un dato ausente no equivale a cero.',
+  formula:'Por 90 = total × 90 / minutos de los partidos que sí informan esa métrica. Las cifras con cobertura parcial pueden no representar toda la temporada.',
+  smallSample:'Has permitido muestras pequeñas: una actuación breve puede encabezar el ranking por 90. Los percentiles mantienen un mínimo de 180 minutos (90 en últimos cinco).',
+  similarity:'Similitud por distancia entre métricas por 90 estandarizadas. Misma posición, mínimo de minutos y al menos tres métricas comunes con un 75 % de cobertura. Es afinidad estadística, no calidad.',
+  percentile:'Percentiles por 90 entre jugadores de la misma posición y liga, dentro del equipo y periodo seleccionados si hay filtro. Se exigen al menos 180 minutos de temporada (90 en últimos cinco) y un 75 % de cobertura por métrica. P100 indica el valor más alto, no mayor calidad.',
+  search:'Buscar jugador',team:'Equipo',position:'Posición',all:'Todos',minMinutes:'Mínimo de minutos',maxAge:'Edad máxima',order:'Ordenar por',minutes:'Minutos',appearances:'Partidos',player:'Jugador',age:'Edad',period:'Periodo',season:'Temporada',five:'Últimos 5 partidos',mode:'Mostrar',totals:'Totales',per90:'Por 90',reset:'Restablecer filtros',
+  star:'Seguir',unstar:'Dejar de seguir',favorites:'Jugadores seguidos',favoriteTeams:'Equipos seguidos',noFavorites:'Aún no sigues jugadores. Usa «Seguir» en el explorador o en una ficha.',noTeams:'Aún no sigues equipos. Añádelos desde el selector de seguimiento.',
+  compareA:'Primer jugador',compareB:'Segundo jugador',choose:'Selecciona un jugador',samePlayer:'Elige dos jugadores distintos.',compareHint:'Selecciona dos jugadores para comparar su rendimiento.',
+  searchByName:'Escribe el nombre del jugador…',clearPlayer:'Quitar jugador',noPlayerMatches:'No se encontraron jugadores. Prueba otro nombre.',
+  searchCount:(total:number,shown:number)=>`${total} coincidencias${total>shown?` · ${shown} sugerencias; escribe para afinar`:''}`,
+  upcomingMatches:'Próximos',recentResults:'Resultados',wholeSeason:'Toda la temporada',matchView:'Vista de partidos',nextMatch:'Siguiente partido',liveMatch:'En juego',postponedMatch:'Aplazado',cancelledMatch:'Cancelado',moreMatches:'Ver más partidos',
+  nearestFirst:'Primero el siguiente encuentro por disputarse.',newestFirst:'Resultados desde el más reciente.',oldestFirst:'Calendario del primer partido al último.',noUpcoming:'No hay próximos partidos en los datos disponibles. Puedes consultar los resultados o toda la temporada.',
+  recent:'Registro de partidos',evolution:'Evolución de goles y asistencias',similar:'Jugadores similares',noSimilar:'No hay una muestra suficiente para calcular similitudes fiables con estos filtros.',
+  match:'Partido',date:'Fecha',score:'Marcador',openMatch:'Abrir partido',back:'Volver al explorador',lineups:'Alineaciones',bench:'Suplentes',incidents:'Eventos del partido',noIncidents:'No hay eventos importados.',unknownLineups:'No hay alineaciones importadas.',predicted:'Alineación prevista; no está confirmada.',confirmed:'Alineación confirmada',
+  shotmap:'Mapa de tiros',shotsTable:'Detalle de tiros',allPlayers:'Todos los jugadores',allTeams:'Ambos equipos',noShots:'No hay tiros con coordenadas válidas para estos filtros.',shotNote:'Campo de 0 a 100. Cada punto representa el origen de un tiro; el tamaño refleja su xG cuando está disponible.',estimated:'xG estimado por el proveedor',measured:'xG del registro del proveedor',unknownXg:'Sin xG',outcomes:{goal:'Gol',save:'Parada',miss:'Fuera',block:'Bloqueado',post:'Poste'},
+  formation:'Formación 4-3-3',pickSlot:'Elige un jugador para cada plaza. Solo se admiten jugadores de la posición correspondiente y no se pueden repetir.',emptySlot:'Plaza libre',clearEleven:'Vaciar mi once',remove:'Quitar',savedLocal:'Se guarda solo en este navegador. No requiere cuenta.',storageError:'El navegador no permite guardar cambios. Puedes utilizar esta sesión, pero no se conservarán al cerrar.',
+  updated:'Última importación',sample:'muestra',observed:'partidos con dato',noMatches:'No hay partidos importados para esta temporada.',notPlayed:'Pendiente',
+};
+export function positionLabel(position: string | null): string { return pe.positions[position as keyof typeof pe.positions] ?? 'Sin posición'; }
+export function fmt(value:number|null|undefined,digits=2):string{return value==null?pe.missing:new Intl.NumberFormat('es-ES',{maximumFractionDigits:digits}).format(value);}

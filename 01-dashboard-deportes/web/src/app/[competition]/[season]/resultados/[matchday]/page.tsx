@@ -10,6 +10,7 @@ import { loadLeagueContext } from "@/lib/league-context";
 import { parseMatchday } from "@/lib/matches";
 import { getMatchdays, getMatchesByMatchday } from "@/lib/queries/matches";
 import { resolveRoute } from "@/lib/route-params";
+import { getEnrichedMatchLinks } from "@/lib/queries/players";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +48,7 @@ export default async function MatchdayPage({ params }: Props) {
     getMatchesByMatchday(sql, route.competition.code, route.season, day),
   ]);
   if (!days.some((d) => d.matchday === day)) notFound();
+  const detailLinks = await getEnrichedMatchLinks(sql, route.competition.code, route.season);
 
   return (
     <>
@@ -65,6 +67,7 @@ export default async function MatchdayPage({ params }: Props) {
         slug={context.competition.slug}
         season={context.season}
         matches={matches}
+        detailLinks={detailLinks}
       />
     </>
   );

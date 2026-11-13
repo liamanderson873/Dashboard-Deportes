@@ -94,6 +94,12 @@ body {
   grid-column: full;
 }
 
+.lineup-pitch {
+  background-color: var(--accent);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 60px, rgb(255 255 255 / 4%) 60px, rgb(255 255 255 / 4%) 120px);
+}
+button, summary { cursor: pointer; }
+
 /* Tabular figures in Inter: table cells and inline numbers. */
 .num {
   font-family: var(--font-inter), system-ui, sans-serif;

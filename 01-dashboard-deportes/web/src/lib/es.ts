@@ -19,6 +19,10 @@ export const es = {
     resultados: "Resultados",
     goleadores: "Goleadores",
     comparar: "Comparador",
+    jugadores: "Jugadores",
+    partidos: "Partidos",
+    seguimiento: "Seguimiento",
+    "mi-once": "Mi once",
   },
 
   standings: {

@@ -17,7 +17,7 @@ async function settle(page) {
   await page.addStyleTag({ content: HIDE_DEV_BADGE });
   await page.waitForLoadState("networkidle", { timeout: 60000 });
   // The section tabs only exist once the streamed page has replaced the skeleton.
-  await page.getByRole("link", { name: "Clasificación" }).first().waitFor({ timeout: 60000 });
+  await page.getByRole("navigation", { name: "Secciones", exact: true }).first().waitFor({ timeout: 60000 });
   await page.waitForFunction(() => !document.body.innerText.includes("Cargando…"), null, {
     timeout: 60000,
   });
@@ -33,7 +33,7 @@ async function settle(page) {
   await page
     .waitForFunction(() => [...document.images].every((img) => img.complete), null, { timeout: 20000 })
     .catch(() => console.warn("  some images did not finish loading:", page.url()));
-  // Web fonts (Fira Sans / Fira Code) load asynchronously; capture only once they are applied.
+  // Web fonts (Inter / Archivo / JetBrains Mono) load asynchronously; capture only once they are applied.
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(500);
 }
@@ -54,6 +54,9 @@ try {
   page.setDefaultTimeout(60000);
 
   const shots = [
+    ["matches-2026.png", "/pd/2026/partidos", {}],
+    ["players-2026.png", "/pd/2026/jugadores", {}],
+    ["lineup-2026.png", "/pd/2026/mi-once", {}],
     ["standings.png", "/pd/2024", {}],
     ["results.png", "/pd/2024/resultados/38", {}],
     ["scorers.png", "/pd/2024/goleadores", {}],

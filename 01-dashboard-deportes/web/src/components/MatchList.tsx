@@ -48,7 +48,8 @@ function TeamLink({
   );
 }
 
-function MatchItem({ m, slug, season }: { m: MatchRow; slug: string; season: number }) {
+// Optional detail IDs are resolved through the explicit provider mapping.
+function MatchItem({ m, slug, season, detailId }: { m: MatchRow; slug: string; season: number; detailId?: number }) {
   const played = isPlayed(m);
   const label = statusLabel(m.status);
   const halfTime =
@@ -87,6 +88,7 @@ function MatchItem({ m, slug, season }: { m: MatchRow; slug: string; season: num
       </div>
       <TeamLink team={m.away} slug={slug} season={season} side="away" />
       </div>
+      {detailId && <div className="text-center"><Link className="inline-flex min-h-11 items-center text-xs font-semibold text-accent hover:underline" href={`/${slug}/${season}/partido/${detailId}`}>Ver análisis del partido →</Link></div>}
     </li>
   );
 }
@@ -96,11 +98,13 @@ export function MatchList({
   season,
   matches,
   headingLevel = 2,
+  detailLinks = {},
 }: {
   slug: string;
   season: number;
   matches: MatchRow[];
   headingLevel?: 2 | 3;
+  detailLinks?: Record<number, number>;
 }) {
   const Heading = headingLevel === 3 ? "h3" : "h2";
   return (
@@ -112,7 +116,7 @@ export function MatchList({
           </Heading>
           <ul className="m-0 list-none divide-y divide-border overflow-hidden rounded-panel border border-border bg-card p-0">
             {g.matches.map((m) => (
-              <MatchItem key={m.id} m={m} slug={slug} season={season} />
+              <MatchItem key={m.id} m={m} slug={slug} season={season} detailId={detailLinks[m.id]} />
             ))}
           </ul>
         </section>
