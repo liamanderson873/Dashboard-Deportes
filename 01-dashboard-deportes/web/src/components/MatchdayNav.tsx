@@ -32,6 +32,30 @@ export function MatchdayNav({
   const next = index >= 0 && index < numbers.length - 1 ? numbers[index + 1] : null;
   const href = (n: number) => `${sectionHref(slug, season, "resultados")}/${n}`;
 
+  const grid = (
+    <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
+      {numbers.map((n) => {
+        const isActive = n === active;
+        return (
+          <li key={n}>
+            <Link
+              href={href(n)}
+              aria-current={isActive ? "page" : undefined}
+              aria-label={es.results.matchdayLabel(n)}
+              className={`num inline-flex size-11 items-center justify-center rounded-control border text-[0.8125rem] font-medium transition-colors duration-150 md:size-9 ${
+                isActive
+                  ? "border-accent bg-accent font-bold text-white"
+                  : "border-border bg-card text-fg hover:border-border-strong hover:bg-surface-2"
+              }`}
+            >
+              {n}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
   return (
     <nav aria-label={es.results.matchdayNav} className="mb-8 flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
@@ -55,27 +79,26 @@ export function MatchdayNav({
           <span />
         )}
       </div>
-      <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
-        {numbers.map((n) => {
-          const isActive = n === active;
-          return (
-            <li key={n}>
-              <Link
-                href={href(n)}
-                aria-current={isActive ? "page" : undefined}
-                aria-label={es.results.matchdayLabel(n)}
-                className={`num inline-flex size-9 items-center justify-center rounded-control border text-[0.8125rem] font-medium transition-colors duration-150 ${
-                  isActive
-                    ? "border-accent bg-accent font-bold text-white"
-                    : "border-border bg-card text-fg hover:border-border-strong hover:bg-surface-2"
-                }`}
-              >
-                {n}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      {/* Phones: collapsed native <details>. md+: always open. Two renderings, one displayed. */}
+      <details className="group md:hidden">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-control border border-border bg-card px-4 text-sm font-semibold text-fg [&::-webkit-details-marker]:hidden">
+          {es.results.allMatchdays}
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 16 16"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="transition-transform duration-150 group-open:rotate-180"
+          >
+            <path d="M3 6l5 5 5-5" />
+          </svg>
+        </summary>
+        <div className="pt-3">{grid}</div>
+      </details>
+      <div className="hidden md:block">{grid}</div>
     </nav>
   );
 }

@@ -304,7 +304,8 @@ describe("components", () => {
     expect(html).toContain('href="/pd/2024/resultados/3"');
     expect(html).toContain("Jornada anterior");
     expect(html).toContain("Jornada siguiente");
-    expect(html.match(/aria-current="page"/g)).toHaveLength(1);
+    // Two renderings (collapsed on phones, open from md); one is display:none.
+    expect(html.match(/aria-current="page"/g)).toHaveLength(2);
     const first = renderToStaticMarkup(
       <MatchdayNav slug="pd" season={2024} days={days} active={1} />,
     );

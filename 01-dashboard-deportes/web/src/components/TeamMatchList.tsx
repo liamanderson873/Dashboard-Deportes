@@ -12,7 +12,7 @@ function Item({ t, slug, season }: { t: TeamMatch; slug: string; season: number 
   const { match, opponent } = t;
   const label = statusLabel(match.status);
   return (
-    <li className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-3 px-3 py-2 sm:grid-cols-[2.75rem_minmax(0,1fr)_auto] sm:px-4">
+    <li className="grid border-t border-border first:border-t-0 lg:nth-[2]:border-t-0 lg:odd:border-r grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-x-3 px-3 py-2 sm:grid-cols-[2.75rem_minmax(0,1fr)_auto] sm:px-4">
       <span className="mono text-xs text-subtle">
         {match.matchday !== null ? es.team.matches.matchday(match.matchday) : ""}
       </span>
@@ -68,7 +68,7 @@ function Group({
   return (
     <section>
       <h3 className="eyebrow mb-2">{title}</h3>
-      <ul className="m-0 list-none divide-y divide-border overflow-hidden rounded-panel border border-border bg-card p-0">
+      <ul className="m-0 grid list-none grid-cols-1 overflow-hidden rounded-panel border border-border bg-card p-0 lg:grid-cols-2">
         {items.map((t) => (
           <Item key={t.match.id} t={t} slug={slug} season={season} />
         ))}

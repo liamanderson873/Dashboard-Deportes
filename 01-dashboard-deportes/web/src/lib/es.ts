@@ -71,6 +71,7 @@ export const es = {
       `Temporada ${season} · Jornada ${matchday}`,
     subtitleNoMatchday: (season: string) => `Temporada ${season}`,
     matchdayNav: "Jornadas",
+    allMatchdays: "Todas las jornadas",
     matchdayLabel: (matchday: number) => `Jornada ${matchday}`,
     previous: "Jornada anterior",
     next: "Jornada siguiente",
