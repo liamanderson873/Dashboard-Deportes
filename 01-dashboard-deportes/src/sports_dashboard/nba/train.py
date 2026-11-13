@@ -51,7 +51,7 @@ def run(engine, season, history=10, shot_history=3, runs=10_000):
             for name in ["scikit-learn", "numpy", "pandas", "pyarrow", "nba_api"]
         },
         "code_sha256": {
-            path.name: sha256(path.read_bytes()).hexdigest()
+            path.name: sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
             for path in sorted(Path(__file__).parent.glob("*.py"))
         },
         "seed": 42,

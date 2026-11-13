@@ -14,3 +14,9 @@ Las búsquedas generales de sistema visual produjeron patrones de marketing que 
 - Controles de texto a 16 px en móvil para evitar el zoom de formularios. Se respeta la preferencia de movimiento reducido.
 
 La revisión visual cubre anchos de 390, 768 y 1440 px. Las capturas del README se generan sobre datos locales reales; los datos deportivos reflejan la última importación, no una conexión en directo.
+
+## NBA
+
+Se mantienen tipografías, contraste, bordes y verde de Marca. Un selector de deporte evita mezclar métricas y favoritos. NBA conserva cinco destinos principales: Liga, Partidos, Jugadores, Modelos y Mi NBA; seguimiento y quinteto se agrupan en el espacio personal. El quinteto utiliza una cancha clara, cinco botones y búsqueda con teclado, sin depender del arrastre.
+
+Los mapas ofrecen aciertos y fallos con formas distintas, probabilidad con tamaño/intensidad y una tabla alternativa. La media cancha es la vista inicial; se puede ampliar para ver lanzamientos lejanos. Las probabilidades muy próximas a cero o uno evitan redondeos que sugieran certeza. La advertencia de calendario parcial aparece antes de los resultados del simulador.

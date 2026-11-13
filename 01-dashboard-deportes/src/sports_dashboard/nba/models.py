@@ -80,7 +80,8 @@ def fit_temporal(frame, features, model_factory=logistic):
         "validation": validation_report,
         "test": evaluate(test.target, prediction),
         "home_or_make_rate": evaluate(
-            test.target, np.full(len(test), train.target.mean())
+            test.target,
+            np.full(len(test), frame.loc[frame.season < years[-1], "target"].mean()),
         ),
         "features": features,
         "samples": len(frame),

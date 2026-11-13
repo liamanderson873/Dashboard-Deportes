@@ -1,0 +1,966 @@
+{
+  "games": {
+    "seed": 42,
+    "test": {
+      "n": 1236,
+      "auc": 0.7355039859406926,
+      "brier": 0.2070507079384399,
+      "log_loss": 0.6019079566941051,
+      "calibration": [
+        {
+          "n": 1,
+          "from": 0.0,
+          "observed": 0.0,
+          "predicted": 0.06036917950117709
+        },
+        {
+          "n": 35,
+          "from": 0.1,
+          "observed": 0.17142857142857143,
+          "predicted": 0.16819879155002618
+        },
+        {
+          "n": 86,
+          "from": 0.2,
+          "observed": 0.22093023255813954,
+          "predicted": 0.2497526223741613
+        },
+        {
+          "n": 136,
+          "from": 0.3,
+          "observed": 0.29411764705882354,
+          "predicted": 0.35198674556477333
+        },
+        {
+          "n": 194,
+          "from": 0.4,
+          "observed": 0.422680412371134,
+          "predicted": 0.4520449025301962
+        },
+        {
+          "n": 228,
+          "from": 0.5,
+          "observed": 0.5570175438596491,
+          "predicted": 0.5493489865353495
+        },
+        {
+          "n": 230,
+          "from": 0.6,
+          "observed": 0.6608695652173913,
+          "predicted": 0.6465964650883349
+        },
+        {
+          "n": 191,
+          "from": 0.7,
+          "observed": 0.743455497382199,
+          "predicted": 0.7492419381735119
+        },
+        {
+          "n": 118,
+          "from": 0.8,
+          "observed": 0.8389830508474576,
+          "predicted": 0.8410885421337114
+        },
+        {
+          "n": 17,
+          "from": 0.9,
+          "observed": 0.8823529411764706,
+          "predicted": 0.9258374968007247
+        }
+      ]
+    },
+    "method": "Regresi\u00f3n log\u00edstica regularizada; estad\u00edsticas anteriores al partido. Ratings y pace estimados desde box scores.",
+    "source": {
+      "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2027.parquet",
+      "rows": 348,
+      "sha256": "eaccc85f342a487fede184c656fb4ad31101d1fa125c2556272fe68946445d1f",
+      "source": "SportsDataverse \u00b7 NBA Stats",
+      "fetched": "2026-11-13T17:42:52.072871+00:00",
+      "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador"
+    },
+    "created": "2026-11-13T18:39:56.677640+00:00",
+    "samples": 12022,
+    "features": [
+      "off_est_diff",
+      "def_est_diff",
+      "pace_est_diff",
+      "efg_diff",
+      "tov_rate_diff",
+      "oreb_rate_diff",
+      "ft_rate_diff",
+      "win_diff",
+      "recent_off_diff",
+      "recent_def_diff",
+      "rest_diff",
+      "home_advantage",
+      "playoffs"
+    ],
+    "libraries": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "nba_api": "1.12.0",
+      "pyarrow": "26.0.1",
+      "scikit-learn": "1.9.1"
+    },
+    "parameters": {
+      "C": 0.25,
+      "max_iter": 1000,
+      "minimum_prior_games": 5
+    },
+    "validation": {
+      "n": 1236,
+      "auc": 0.7241232421849162,
+      "brier": 0.20992181834669593,
+      "log_loss": 0.6066239212664026,
+      "calibration": [
+        {
+          "n": 3,
+          "from": 0.0,
+          "observed": 0.0,
+          "predicted": 0.09329679016559707
+        },
+        {
+          "n": 35,
+          "from": 0.1,
+          "observed": 0.14285714285714285,
+          "predicted": 0.15416980132519517
+        },
+        {
+          "n": 82,
+          "from": 0.2,
+          "observed": 0.18292682926829268,
+          "predicted": 0.2592307328818821
+        },
+        {
+          "n": 142,
+          "from": 0.3,
+          "observed": 0.36619718309859156,
+          "predicted": 0.3517159414639388
+        },
+        {
+          "n": 173,
+          "from": 0.4,
+          "observed": 0.43352601156069365,
+          "predicted": 0.45309130823609306
+        },
+        {
+          "n": 227,
+          "from": 0.5,
+          "observed": 0.5154185022026432,
+          "predicted": 0.5521103273191506
+        },
+        {
+          "n": 239,
+          "from": 0.6,
+          "observed": 0.6443514644351465,
+          "predicted": 0.6483909186248143
+        },
+        {
+          "n": 199,
+          "from": 0.7,
+          "observed": 0.7487437185929648,
+          "predicted": 0.7511868686648348
+        },
+        {
+          "n": 111,
+          "from": 0.8,
+          "observed": 0.8198198198198198,
+          "predicted": 0.8433469664395455
+        },
+        {
+          "n": 25,
+          "from": 0.9,
+          "observed": 0.92,
+          "predicted": 0.9232241974068056
+        }
+      ]
+    },
+    "code_sha256": {
+      "shots.py": "ce69e65d43b5a5c071446edd3b50f664add61fe06fa59dc500e5e488076e4247",
+      "train.py": "83f532f2c8859f84b3d0890345afdd9920b838122be89d4e9bdad0a340f43a49",
+      "ingest.py": "2863c5f59473843def16853c2486bbee10413ce9bb3c06ca0df4f06a73aa42dc",
+      "models.py": "219f6a65afd470549e42d7f4137ed50071adc6073eb7d8a42cbd4231cc8cb804",
+      "source.py": "aed5b114620d28a9ade7ef4a8a6fb130000c34fd48cf005962c109bb681faa75",
+      "__init__.py": "bb6f4a12697ca5d56b553b2b04f9284fc1987206c87fe39dd9bf3cfb9eade10b",
+      "features.py": "c5f30e1e5bed51923c098675e55d0dfe7dfe380fc6b4acec7cd7490ce60113dd",
+      "simulation.py": "58e0c6701746e68a5b71515f1f8e3bde2b15f98faf19396943d851220420fd4c"
+    },
+    "test_season": 2026,
+    "elo_baseline": {
+      "n": 1236,
+      "auc": 0.7105534793609791,
+      "brier": 0.21501486857964905,
+      "log_loss": 0.6218546453035009,
+      "calibration": [
+        {
+          "n": 4,
+          "from": 0.0,
+          "observed": 0.0,
+          "predicted": 0.08107112707010958
+        },
+        {
+          "n": 35,
+          "from": 0.1,
+          "observed": 0.14285714285714285,
+          "predicted": 0.16845863616931522
+        },
+        {
+          "n": 76,
+          "from": 0.2,
+          "observed": 0.25,
+          "predicted": 0.2505471018345394
+        },
+        {
+          "n": 155,
+          "from": 0.3,
+          "observed": 0.3225806451612903,
+          "predicted": 0.35452482020879167
+        },
+        {
+          "n": 172,
+          "from": 0.4,
+          "observed": 0.4418604651162791,
+          "predicted": 0.4492841820903604
+        },
+        {
+          "n": 182,
+          "from": 0.5,
+          "observed": 0.554945054945055,
+          "predicted": 0.552616611079899
+        },
+        {
+          "n": 201,
+          "from": 0.6,
+          "observed": 0.6169154228855721,
+          "predicted": 0.653042029774581
+        },
+        {
+          "n": 223,
+          "from": 0.7,
+          "observed": 0.7399103139013453,
+          "predicted": 0.7477381379351395
+        },
+        {
+          "n": 153,
+          "from": 0.8,
+          "observed": 0.738562091503268,
+          "predicted": 0.8439534952954455
+        },
+        {
+          "n": 35,
+          "from": 0.9,
+          "observed": 0.8285714285714286,
+          "predicted": 0.9205886419249402
+        }
+      ]
+    },
+    "season_basis": "end-year",
+    "train_seasons": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "history_sources": [
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2017.parquet",
+        "rows": 2618,
+        "sha256": "3322bdcf760c5f364924c17d7b439d546ae80c9642d67f0b984fe5d984abb229",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:16.012681+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2016
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2017.parquet",
+        "rows": 1414,
+        "sha256": "9d0e3e31133e8cbc7672234172d26950e44c6ac455c076732f09f185f2f51527",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:40.504365+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2016
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2018.parquet",
+        "rows": 2624,
+        "sha256": "59cd89f7d8587f9e9328f2bb277ea173ad01bcbc2e07de1888564aa63fdef50f",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:20.853812+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2017
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2018.parquet",
+        "rows": 1393,
+        "sha256": "0b8bd8690aede3b58b71a32b067ea476bc64a1b0afe27aaed65b8593623ab673",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:41.813937+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2017
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2019.parquet",
+        "rows": 2624,
+        "sha256": "bccf99e3c74f24e1d1e6a11a7d954f7e59ff24ad3eb097c3056757be3af9ad16",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:25.697442+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2018
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2019.parquet",
+        "rows": 1394,
+        "sha256": "3990c1f0b284b6ef3ed009d3a9b42e4ed4e5a2e3fcf6f0951301bf701fcc0afa",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:43.124927+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2018
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2020.parquet",
+        "rows": 2284,
+        "sha256": "5dc18672cb6915ec934d8bdf8e33c07db35c9cae1d4f6878aed80d7bb0f0d16f",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:30.144762+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2019
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2020.parquet",
+        "rows": 1146,
+        "sha256": "6fb45790190b0ce2d3f97cd920c5c8a33ba5f8b1df041cc12ba00ca800fc3156",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:44.507974+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2019
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2021.parquet",
+        "rows": 2330,
+        "sha256": "f27c9cc9c725f9bea2f7b0d9cd71f14823ad132c898529ec1a657c49f0175c2e",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:34.824276+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2020
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2021.parquet",
+        "rows": 1221,
+        "sha256": "a2f694a8ea19e4f1418350d45bd6684c3ac15b0ddb589ca693c84383ad09cc73",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:45.834465+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2020
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2022.parquet",
+        "rows": 2634,
+        "sha256": "b226d146f17b0b416907d6b2157034629018dd0a47a145c5e6d5fb08eef4ef88",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:40.107896+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2021
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2022.parquet",
+        "rows": 1393,
+        "sha256": "e7a968c6f56a9ef0cb2c89d8a315154b6982beb68b42a7fe3e0a4c1464b77bb7",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:46.908947+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2021
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2023.parquet",
+        "rows": 2628,
+        "sha256": "0391c38279a04c669b737bb3161657d71c8b9b807e2807d15125c8035514c243",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:45.119231+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2022
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2023.parquet",
+        "rows": 1394,
+        "sha256": "44e826e8b432b863ddec3976a1c72eb2e5ce345af32e8d0c8b84a6137f6d2164",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:48.350559+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2022
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2024.parquet",
+        "rows": 2624,
+        "sha256": "6186d0357c9a1d4d4214c19da5937faa00c31c68a420664d6865e264473617a3",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:50.883937+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2023
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2024.parquet",
+        "rows": 1396,
+        "sha256": "2d2cd6e93a462a61981e59db5e12132bf4b21bb946fc4f83b75f58bd650f9aa4",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:49.639123+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2023
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2025.parquet",
+        "rows": 2628,
+        "sha256": "672039cf8b102c5cefb39ba1892fa2a46ca4971950f393125f5d92faa21f8acb",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:56.324136+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2024
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2025.parquet",
+        "rows": 1400,
+        "sha256": "959fdff85cf5892f83166d90cc84964075e13440ada5cff2a6bbe0bd9d4052fa",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:51.154780+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2024
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_team_game_logs/team_game_logs_2026.parquet",
+        "rows": 2630,
+        "sha256": "5dd9dfe8a285b89e8e054df53e77af20e4361993ad0b79fd73cf70f12773988a",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:44:01.905050+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2025
+      },
+      {
+        "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-data/main/nba_stats/schedules/parquet/nba_schedule_2026.parquet",
+        "rows": 1400,
+        "sha256": "1604c62a6d0a03dace9f1b8238c1374ecf87efeb6455175514a2d3d064fe520e",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:47:52.736269+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2025
+      }
+    ],
+    "postseason_games": 833,
+    "prediction_scope": "Fuerza fija del equipo seg\u00fan el \u00faltimo corte de datos; descanso seg\u00fan encuentros previos del calendario publicado.",
+    "home_or_make_rate": {
+      "n": 1236,
+      "auc": 0.5,
+      "brier": 0.24748852266494648,
+      "log_loss": 0.688119650096248,
+      "calibration": [
+        {
+          "n": 1236,
+          "from": 0.5,
+          "observed": 0.551779935275081,
+          "predicted": 0.5648062302985352
+        }
+      ]
+    },
+    "validation_season": 2025,
+    "calibration_method": "Probabilidades del modelo sin calibrador posterior; fiabilidad evaluada sobre la temporada reservada.",
+    "production_refit_seasons": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025,
+      2026
+    ]
+  },
+  "shots": {
+    "seed": 42,
+    "test": {
+      "n": 219159,
+      "auc": 0.6511765300542376,
+      "brier": 0.22857949531655766,
+      "log_loss": 0.6486314827973692,
+      "calibration": [
+        {
+          "n": 109,
+          "from": 0.0,
+          "observed": 0.3211009174311927,
+          "predicted": 0.0763218378187793
+        },
+        {
+          "n": 272,
+          "from": 0.1,
+          "observed": 0.18382352941176472,
+          "predicted": 0.16181372059611945
+        },
+        {
+          "n": 2741,
+          "from": 0.2,
+          "observed": 0.2531922655964976,
+          "predicted": 0.26132992342271427
+        },
+        {
+          "n": 88580,
+          "from": 0.3,
+          "observed": 0.36169564235719126,
+          "predicted": 0.36826947924322684
+        },
+        {
+          "n": 69087,
+          "from": 0.4,
+          "observed": 0.4424566126767699,
+          "predicted": 0.4395003721090655
+        },
+        {
+          "n": 15327,
+          "from": 0.5,
+          "observed": 0.5670385594049716,
+          "predicted": 0.5524023355195202
+        },
+        {
+          "n": 22106,
+          "from": 0.6,
+          "observed": 0.6520401700895685,
+          "predicted": 0.6479534103733748
+        },
+        {
+          "n": 10123,
+          "from": 0.7,
+          "observed": 0.7621258520201522,
+          "predicted": 0.7593373029791008
+        },
+        {
+          "n": 10814,
+          "from": 0.8,
+          "observed": 0.8341964120584427,
+          "predicted": 0.8287501549572526
+        }
+      ]
+    },
+    "scope": "Posici\u00f3n, distancia, \u00e1ngulo, periodo y reloj del cuarto. Sin tracking de defensor ni shot clock.",
+    "heaves": "Incluye tiros lejanos; no se eliminan los fallos de final de periodo.",
+    "source": {
+      "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_2027.parquet",
+      "rows": 29857,
+      "sha256": "c54fc5ecdfb18ab064accf36365a696fc3af8c50b5b04aab47cf8135a8d9a950",
+      "source": "SportsDataverse \u00b7 NBA Stats",
+      "fetched": "2026-11-13T17:42:59.780048+00:00",
+      "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador"
+    },
+    "target": "P(acierto del tiro), no una medici\u00f3n causal de calidad defensiva.",
+    "created": "2026-11-13T18:40:19.925293+00:00",
+    "samples": 657388,
+    "by_value": {
+      "2": {
+        "n": 128189,
+        "auc": 0.656535126014659,
+        "brier": 0.22781863437887592,
+        "log_loss": 0.6462214923864228,
+        "calibration": [
+          {
+            "n": 10,
+            "from": 0.1,
+            "observed": 0.3,
+            "predicted": 0.19467068077024355
+          },
+          {
+            "n": 431,
+            "from": 0.2,
+            "observed": 0.2691415313225058,
+            "predicted": 0.26086032850122337
+          },
+          {
+            "n": 4740,
+            "from": 0.3,
+            "observed": 0.369620253164557,
+            "predicted": 0.3810647940932093
+          },
+          {
+            "n": 64638,
+            "from": 0.4,
+            "observed": 0.445527398743773,
+            "predicted": 0.4416729478409653
+          },
+          {
+            "n": 15327,
+            "from": 0.5,
+            "observed": 0.5670385594049716,
+            "predicted": 0.5524023355195202
+          },
+          {
+            "n": 22106,
+            "from": 0.6,
+            "observed": 0.6520401700895685,
+            "predicted": 0.6479534103733748
+          },
+          {
+            "n": 10123,
+            "from": 0.7,
+            "observed": 0.7621258520201522,
+            "predicted": 0.7593373029791008
+          },
+          {
+            "n": 10814,
+            "from": 0.8,
+            "observed": 0.8341964120584427,
+            "predicted": 0.8287501549572526
+          }
+        ]
+      },
+      "3": {
+        "n": 90970,
+        "auc": 0.5290441040900181,
+        "brier": 0.22965165100239351,
+        "log_loss": 0.6520274843450089,
+        "calibration": [
+          {
+            "n": 109,
+            "from": 0.0,
+            "observed": 0.3211009174311927,
+            "predicted": 0.0763218378187793
+          },
+          {
+            "n": 262,
+            "from": 0.1,
+            "observed": 0.17938931297709923,
+            "predicted": 0.1605596381467254
+          },
+          {
+            "n": 2310,
+            "from": 0.2,
+            "observed": 0.2502164502164502,
+            "predicted": 0.26141754048382365
+          },
+          {
+            "n": 83840,
+            "from": 0.3,
+            "observed": 0.3612476145038168,
+            "predicted": 0.3675460800019468
+          },
+          {
+            "n": 4449,
+            "from": 0.4,
+            "observed": 0.3978422117329737,
+            "predicted": 0.40793576204870635
+          }
+        ]
+      }
+    },
+    "features": [
+      "x",
+      "y",
+      "distance",
+      "angle",
+      "period",
+      "seconds",
+      "value"
+    ],
+    "libraries": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.1",
+      "nba_api": "1.12.0",
+      "pyarrow": "26.0.1",
+      "scikit-learn": "1.9.1"
+    },
+    "parameters": {
+      "max_iter": 100,
+      "learning_rate": 0.08,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 150,
+      "l2_regularization": 5
+    },
+    "validation": {
+      "n": 219527,
+      "auc": 0.6467389218754604,
+      "brier": 0.2288856301204976,
+      "log_loss": 0.6488281889313854,
+      "calibration": [
+        {
+          "n": 764,
+          "from": 0.0,
+          "observed": 0.04712041884816754,
+          "predicted": 0.038494574236488756
+        },
+        {
+          "n": 494,
+          "from": 0.1,
+          "observed": 0.2125506072874494,
+          "predicted": 0.16103547958950798
+        },
+        {
+          "n": 2737,
+          "from": 0.2,
+          "observed": 0.2597734746072342,
+          "predicted": 0.2671876217572274
+        },
+        {
+          "n": 86164,
+          "from": 0.3,
+          "observed": 0.36490877860823545,
+          "predicted": 0.3694107358851917
+        },
+        {
+          "n": 72405,
+          "from": 0.4,
+          "observed": 0.4389061528899938,
+          "predicted": 0.43702689924453825
+        },
+        {
+          "n": 14923,
+          "from": 0.5,
+          "observed": 0.5561214233063057,
+          "predicted": 0.5510969746480239
+        },
+        {
+          "n": 20887,
+          "from": 0.6,
+          "observed": 0.6389141571312299,
+          "predicted": 0.6525005276183509
+        },
+        {
+          "n": 11131,
+          "from": 0.7,
+          "observed": 0.7583325846734346,
+          "predicted": 0.7583383920731454
+        },
+        {
+          "n": 10022,
+          "from": 0.8,
+          "observed": 0.8389543005388146,
+          "predicted": 0.8273994301375038
+        }
+      ]
+    },
+    "code_sha256": {
+      "shots.py": "ce69e65d43b5a5c071446edd3b50f664add61fe06fa59dc500e5e488076e4247",
+      "train.py": "83f532f2c8859f84b3d0890345afdd9920b838122be89d4e9bdad0a340f43a49",
+      "ingest.py": "2863c5f59473843def16853c2486bbee10413ce9bb3c06ca0df4f06a73aa42dc",
+      "models.py": "219f6a65afd470549e42d7f4137ed50071adc6073eb7d8a42cbd4231cc8cb804",
+      "source.py": "aed5b114620d28a9ade7ef4a8a6fb130000c34fd48cf005962c109bb681faa75",
+      "__init__.py": "bb6f4a12697ca5d56b553b2b04f9284fc1987206c87fe39dd9bf3cfb9eade10b",
+      "features.py": "c5f30e1e5bed51923c098675e55d0dfe7dfe380fc6b4acec7cd7490ce60113dd",
+      "simulation.py": "58e0c6701746e68a5b71515f1f8e3bde2b15f98faf19396943d851220420fd4c"
+    },
+    "test_season": 2025,
+    "season_basis": "start-year",
+    "train_seasons": [
+      2023
+    ],
+    "value_baseline": {
+      "n": 219159,
+      "auc": 0.5927666581417452,
+      "brier": 0.24037640218789522,
+      "log_loss": 0.6736741898736895,
+      "calibration": [
+        {
+          "n": 90970,
+          "from": 0.3,
+          "observed": 0.35964603715510607,
+          "predicted": 0.36286204833090047
+        },
+        {
+          "n": 128189,
+          "from": 0.5,
+          "observed": 0.5500471959372489,
+          "predicted": 0.545146866085884
+        }
+      ]
+    },
+    "history_sources": [
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_2024.parquet",
+        "rows": 233789,
+        "sha256": "699a34c2ce52133b20a8dbc50b3d9e3cc411449c050ff9d1ef1987a22da78c19",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:54.197248+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2023
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_2025.parquet",
+        "rows": 235140,
+        "sha256": "231a6200ddea88ce997e967f99396830b1c41a6df0f0d7678b37852d6aa5759f",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:43:59.468392+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2024
+      },
+      {
+        "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_stats_shots/shots_2026.parquet",
+        "rows": 234876,
+        "sha256": "d27617bb872c2c94aa8e96ce1edcfc51e11bda5d48155fbeea2c50d2aa764064",
+        "source": "SportsDataverse \u00b7 NBA Stats",
+        "fetched": "2026-11-13T17:44:05.163875+00:00",
+        "attribution": "hoopR.nba.stats authors \u00b7 CC BY 4.0; normalized by Marcador",
+        "season_start": 2025
+      }
+    ],
+    "home_or_make_rate": {
+      "n": 219159,
+      "auc": 0.5,
+      "brier": 0.24915988282378027,
+      "log_loss": 0.6914660041509454,
+      "calibration": [
+        {
+          "n": 219159,
+          "from": 0.4,
+          "observed": 0.4710141951733673,
+          "predicted": 0.4707698486407791
+        }
+      ]
+    },
+    "logistic_baseline": {
+      "n": 219159,
+      "auc": 0.6429380417576599,
+      "brier": 0.2338999862178445,
+      "log_loss": 0.6604643995544168,
+      "calibration": [
+        {
+          "n": 18,
+          "from": 0.0,
+          "observed": 0.6111111111111112,
+          "predicted": 0.07091790438844316
+        },
+        {
+          "n": 66,
+          "from": 0.1,
+          "observed": 0.2878787878787879,
+          "predicted": 0.16313933679572895
+        },
+        {
+          "n": 4289,
+          "from": 0.2,
+          "observed": 0.3231522499417114,
+          "predicted": 0.27880062058307087
+        },
+        {
+          "n": 96696,
+          "from": 0.3,
+          "observed": 0.3675229585505088,
+          "predicted": 0.3633117736387735
+        },
+        {
+          "n": 26233,
+          "from": 0.4,
+          "observed": 0.4362063050356421,
+          "predicted": 0.44329354339143484
+        },
+        {
+          "n": 38029,
+          "from": 0.5,
+          "observed": 0.4614636198690473,
+          "predicted": 0.559049282893983
+        },
+        {
+          "n": 53828,
+          "from": 0.6,
+          "observed": 0.6925949320056476,
+          "predicted": 0.6302316431052815
+        }
+      ]
+    },
+    "validation_season": 2024,
+    "calibration_method": "Probabilidades del modelo sin calibrador posterior; fiabilidad evaluada sobre la temporada reservada.",
+    "production_refit_seasons": [
+      2023,
+      2024,
+      2025
+    ]
+  },
+  "coverage": {
+    "nba_games": 1200,
+    "nba_players": 528,
+    "nba_player_games": 3933,
+    "nba_shots": 29857,
+    "finished": 174,
+    "individual_games": 174,
+    "shot_games": 170,
+    "predicted_shots": 29857,
+    "missing_individual_game_ids": [],
+    "simulation": {
+      "rest": "D\u00edas libres seg\u00fan calendario conocido; un d\u00eda libre por equipo en partidos de postemporada sin fecha asignada.",
+      "runs": 10000,
+      "seed": 42,
+      "ties": "Desempates aproximados: enfrentamientos directos, porcentaje de victorias de conferencia y sorteo. No reproduce todas las reglas NBA.",
+      "scope": "Simulaci\u00f3n del calendario publicado, play-in y series. Las fuerzas de los equipos permanecen fijas.",
+      "conditional": true,
+      "uncertainty": "El error Monte Carlo no mide la incertidumbre del modelo ni futuros cambios de plantilla.",
+      "missing_games": 30,
+      "expected_games": 1230,
+      "game_model_test": {
+        "n": 1236,
+        "auc": 0.7355039859406926,
+        "brier": 0.2070507079384399,
+        "log_loss": 0.6019079566941051,
+        "calibration": [
+          {
+            "n": 1,
+            "from": 0.0,
+            "observed": 0.0,
+            "predicted": 0.06036917950117709
+          },
+          {
+            "n": 35,
+            "from": 0.1,
+            "observed": 0.17142857142857143,
+            "predicted": 0.16819879155002618
+          },
+          {
+            "n": 86,
+            "from": 0.2,
+            "observed": 0.22093023255813954,
+            "predicted": 0.2497526223741613
+          },
+          {
+            "n": 136,
+            "from": 0.3,
+            "observed": 0.29411764705882354,
+            "predicted": 0.35198674556477333
+          },
+          {
+            "n": 194,
+            "from": 0.4,
+            "observed": 0.422680412371134,
+            "predicted": 0.4520449025301962
+          },
+          {
+            "n": 228,
+            "from": 0.5,
+            "observed": 0.5570175438596491,
+            "predicted": 0.5493489865353495
+          },
+          {
+            "n": 230,
+            "from": 0.6,
+            "observed": 0.6608695652173913,
+            "predicted": 0.6465964650883349
+          },
+          {
+            "n": 191,
+            "from": 0.7,
+            "observed": 0.743455497382199,
+            "predicted": 0.7492419381735119
+          },
+          {
+            "n": 118,
+            "from": 0.8,
+            "observed": 0.8389830508474576,
+            "predicted": 0.8410885421337114
+          },
+          {
+            "n": 17,
+            "from": 0.9,
+            "observed": 0.8823529411764706,
+            "predicted": 0.9258374968007247
+          }
+        ]
+      },
+      "published_games": 1200
+    }
+  }
+}

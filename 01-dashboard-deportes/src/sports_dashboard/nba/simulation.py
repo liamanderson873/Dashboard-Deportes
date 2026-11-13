@@ -116,6 +116,9 @@ def simulate(model, snapshots, teams, games, runs=10_000, seed=42):
     probability_matrix = model.predict_proba(pd.DataFrame(pinputs, columns=FEATURES))[
         :, 1
     ].reshape(30, 30)
+    playin_inputs = pd.DataFrame(pinputs, columns=FEATURES)
+    playin_inputs["playoffs"] = 0
+    playin_matrix = model.predict_proba(playin_inputs)[:, 1].reshape(30, 30)
     totals = {
         key: np.zeros(30, dtype=int)
         for key in [
@@ -132,8 +135,9 @@ def simulate(model, snapshots, teams, games, runs=10_000, seed=42):
     def add(key, values):
         totals[key] += np.bincount(np.asarray(values).ravel(), minlength=30)
 
-    def single(home, away):
-        return np.where(rng.random(runs) < probability_matrix[home, away], home, away)
+    def single(home, away, playoffs=True):
+        matrix = probability_matrix if playoffs else playin_matrix
+        return np.where(rng.random(runs) < matrix[home, away], home, away)
 
     def series(first, second, rank_order):
         # Rank order gives home court within a conference; league win rate in finals.
@@ -154,10 +158,10 @@ def simulate(model, snapshots, teams, games, runs=10_000, seed=42):
     for order in ranked.values():
         add("direct", order[:, :6])
         add("playin", order[:, 6:10])
-        seven = single(order[:, 6], order[:, 7])
+        seven = single(order[:, 6], order[:, 7], playoffs=False)
         loser = np.where(seven == order[:, 6], order[:, 7], order[:, 6])
-        survivor = single(order[:, 8], order[:, 9])
-        eight = single(loser, survivor)
+        survivor = single(order[:, 8], order[:, 9], playoffs=False)
+        eight = single(loser, survivor, playoffs=False)
         field = np.column_stack([order[:, :6], seven, eight])
         add("playoffs", field)
         rank_order = np.full((runs, 30), 99, dtype=int)
@@ -178,7 +182,20 @@ def simulate(model, snapshots, teams, games, runs=10_000, seed=42):
         final = series(cf[:, 0], cf[:, 1], rank_order)
         add("final", final)
         finalists.append(final)
-    league_order = np.argsort(np.argsort(-rates, axis=1), axis=1)
+    first, second = finalists
+    equal_record = rates[sample, first] == rates[sample, second]
+    first_h2h = head[sample, first, second]
+    second_h2h = head[sample, second, first]
+    prefer_first = (rates[sample, first] > rates[sample, second]) | (
+        equal_record
+        & (
+            (first_h2h > second_h2h)
+            | ((first_h2h == second_h2h) & (rng.random(runs) < 0.5))
+        )
+    )
+    league_order = np.full((runs, 30), 99, dtype=int)
+    league_order[sample, first] = np.where(prefer_first, 0, 1)
+    league_order[sample, second] = np.where(prefer_first, 1, 0)
     champion = series(finalists[0], finalists[1], league_order)
     add("champion", champion)
     output = []

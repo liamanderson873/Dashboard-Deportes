@@ -105,6 +105,51 @@ def regular(frame):
     return frame[frame["game_id"].astype(str).str.startswith("002")].copy()
 
 
+def complete_player_stats(stats, logs, roster=None):
+    """A newly returned player may appear in game logs before season aggregates."""
+    output = {pid: dict(values) for pid, values in stats.items()}
+    for player_id, group in logs.groupby("player_id"):
+        if int(player_id) in output:
+            continue
+        ordered = group.sort_values(["game_date", "game_id"])
+        last = records(ordered.tail(1))[0]
+        values = {
+            key: float(pd.to_numeric(group[key]).mean())
+            for key in STAT_FIELDS
+            if key in group and pd.to_numeric(group[key]).notna().any()
+        }
+        values.update(
+            {
+                "gp": int(group.game_id.nunique()),
+                "stats_from_logs": 1,
+                "player_name": last["player_name"],
+                "team_id": int(last["team_id"]),
+                "team_abbreviation": last["team_abbreviation"],
+            }
+        )
+        for made, attempts, percentage in [
+            ("fgm", "fga", "fg_pct"),
+            ("fg3m", "fg3a", "fg3_pct"),
+            ("ftm", "fta", "ft_pct"),
+        ]:
+            denominator = group[attempts].sum()
+            values[percentage] = (
+                float(group[made].sum() / denominator) if denominator else None
+            )
+        output[int(player_id)] = values
+    if roster is not None:
+        for row in records(roster):
+            player_id = int(row["player_id"])
+            if player_id not in output:
+                output[player_id] = {
+                    "player_name": row["player"],
+                    "team_id": int(row["team_id"]),
+                    "age": row.get("age"),
+                    "stats_unavailable": 1,
+                }
+    return output
+
+
 def init_schema(engine):
     with engine.begin() as connection:
         connection.exec_driver_sql(SQL_PATH.read_text(encoding="utf-8"))
@@ -208,8 +253,12 @@ def ingest_season(engine, season, refresh=False):
         )
     team_stats = stats_snapshot(frames["team_season_stats"], "team_id")
     player_stats = stats_snapshot(frames["player_season_stats"], "player_id")
+    player_logs = regular(frames["player_game_logs"])
     roster = frames["rosters"]
     roster.columns = [str(c).lower() for c in roster.columns]
+    player_stats = complete_player_stats(
+        player_stats, player_logs, roster[roster.team_id.isin(teams)]
+    )
     positions = {}
     if {"player_id", "position"}.issubset(roster.columns):
         positions = {

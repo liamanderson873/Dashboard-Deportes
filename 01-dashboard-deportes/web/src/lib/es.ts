@@ -1,11 +1,11 @@
 /** Every user-visible string of the app. Components never hard-code Spanish. */
 export const es = {
-  appTitle: "Estadísticas de fútbol",
+  appTitle: "Marcador",
   appDescription:
-    "Clasificaciones, forma reciente y estadísticas de las cinco grandes ligas europeas.",
+    "Estadísticas de fútbol y NBA, análisis de jugadores y modelos predictivos.",
   skipLink: "Saltar al contenido",
   loading: "Cargando…",
-  brandHome: "Estadísticas de fútbol, ir al inicio",
+  brandHome: "Marcador, ir al inicio",
 
   nav: {
     leagues: "Ligas",

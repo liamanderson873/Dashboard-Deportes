@@ -71,3 +71,7 @@ Files: root README, project/web READMEs, `docs/nba-integration.md`, screenshots 
 2. Run real ingestion/training only on verified data and audit actual coverage/counts/metrics. Explicitly report anything unavailable; mock test data must never populate production.
 3. Scan changed files for configured credentials; publish code, docs and small summary artifacts without raw external datasets/models.
 4. Commit coherent milestones, push the feature work when validated and inspect GitHub Actions before reporting publication complete.
+
+## Delivery record
+
+Implemented and exercised on real archived 2026-27 data. The importer, temporal team and shot models, conditional simulator, NBA routes, profiles, comparison, shot charts, favourites and five-player lineup are present. Source/API limitations and approximate tiebreakers are explicit in `docs/nba-integration.md`. Local verification currently passes 127 Python and 174 web tests; final visual checks and publication are tracked in the delivery summary.

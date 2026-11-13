@@ -8,7 +8,12 @@ import responses
 from sqlalchemy import text
 
 from sports_dashboard.nba.features import FEATURES, STRENGTH, build_games, with_schedule
-from sports_dashboard.nba.ingest import init_schema, stats_snapshot, write_rows
+from sports_dashboard.nba.ingest import (
+    complete_player_stats,
+    init_schema,
+    stats_snapshot,
+    write_rows,
+)
 from sports_dashboard.nba.models import evaluate, fit_temporal
 from sports_dashboard.nba.shots import (
     SHOT_FEATURES,
@@ -78,6 +83,9 @@ def test_cached_download_is_validated_and_network_is_not_repeated(tmp_path):
     second, _ = load_frame("shots", 2026, cache=tmp_path)
     assert len(responses.calls) == 1 and len(metadata["sha256"]) == 64
     pd.testing.assert_frame_equal(first, second)
+    (tmp_path / "shots_2027.parquet").write_bytes(b"corrupted cache")
+    with pytest.raises(SourceError, match="checksum"):
+        load_frame("shots", 2026, cache=tmp_path)
 
 
 @responses.activate
@@ -213,6 +221,38 @@ def test_snapshot_does_not_lose_base_values_when_advanced_is_null():
     )
     result = stats_snapshot(frame, "team_id")[1]
     assert result["pts"] == 100 and result["off_rating"] == 110
+
+
+def test_recent_participant_gets_an_observed_profile_without_invented_advanced_stats():
+    frame = pd.DataFrame(
+        [
+            {
+                "player_id": 7,
+                "player_name": "New return",
+                "team_id": 1,
+                "team_abbreviation": "AAA",
+                "game_date": "2026-11-12",
+                "game_id": "0022600001",
+                "pts": 11,
+                "min": 16,
+                "fgm": 4,
+                "fga": 8,
+                "fg3m": 1,
+                "fg3a": 3,
+                "ftm": 2,
+                "fta": 2,
+            }
+        ]
+    )
+    roster = pd.DataFrame(
+        [{"player_id": 8, "player": "Roster only", "team_id": 1, "age": 20}]
+    )
+    profiles = complete_player_stats({}, frame, roster)
+    assert profiles[8]["stats_unavailable"] == 1 and "pts" not in profiles[8]
+    result = profiles[7]
+    assert result["player_name"] == "New return" and result["gp"] == 1
+    assert result["pts"] == 11 and result["stats_from_logs"] == 1
+    assert "off_rating" not in result and "usg_pct" not in result
 
 
 def test_nba_tables_do_not_touch_football_and_json_rows_roundtrip(seeded):

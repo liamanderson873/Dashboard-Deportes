@@ -20,6 +20,8 @@
   --ink: #121614;
   --on-ink: #f4f5f2;
   --on-ink-muted: #a9afa9;
+  --court: #eed4aa;
+  --court-line: #85552c;
 }
 
 @theme inline {
@@ -40,6 +42,8 @@
   --color-ink: var(--ink);
   --color-on-ink: var(--on-ink);
   --color-on-ink-muted: var(--on-ink-muted);
+  --color-court: var(--court);
+  --color-court-line: var(--court-line);
 
   --radius-card: 10px;
   --radius-panel: 12px;
@@ -97,6 +101,10 @@ body {
 .lineup-pitch {
   background-color: var(--accent);
   background-image: repeating-linear-gradient(0deg, transparent, transparent 60px, rgb(255 255 255 / 4%) 60px, rgb(255 255 255 / 4%) 120px);
+}
+.nba-court {
+  background-color: var(--court);
+  background-image: repeating-linear-gradient(90deg, transparent, transparent 39px, rgb(133 85 44 / 8%) 39px, rgb(133 85 44 / 8%) 40px);
 }
 button, summary { cursor: pointer; }
 

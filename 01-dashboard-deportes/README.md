@@ -1,4 +1,4 @@
-# Dashboard de fútbol: detalles técnicos
+# Marcador: datos de fútbol y NBA
 
 Este documento explica cómo cargar los datos, cómo está organizado el código y qué
 limitaciones tienen los datos. La presentación general, con capturas, está en el
@@ -27,6 +27,15 @@ La web separa **Liga**, **Partidos**, **Jugadores**, **Seguimiento** y **Mi once
 # Después de cargar los datos base y configurar BZZOIRO_API_KEY en .env
 .venv/Scripts/python.exe -m sports_dashboard.bsd --competitions PD PL SA BL1 FL1 --season 2026
 .venv/Scripts/python.exe -m sports_dashboard.bsd --mapping-file data/bsd_team_map.json
+```
+
+## NBA y modelos predictivos
+
+NBA tiene ingesta propia, tablas `nba_*`, estadísticas avanzadas y entrenamiento offline de regresión logística y gradient boosting. Los partidos y tiros proceden del archivo público de NBA Stats de SportsDataverse, con atribución. No se utilizan datos futuros para construir las características de un encuentro. Configuración, comandos, evaluación y límites están en la [guía NBA](../docs/nba-integration.md).
+
+```powershell
+.venv/Scripts/python.exe -m sports_dashboard.nba.ingest --season 2026 --history 10
+.venv/Scripts/python.exe -m sports_dashboard.nba.train --season 2026 --history 10 --shot-history 3 --runs 10000
 ```
 
 ## Arquitectura

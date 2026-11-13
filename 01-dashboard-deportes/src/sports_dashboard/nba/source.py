@@ -74,9 +74,12 @@ def load_frame(
         and time.time() - path.stat().st_mtime < 86400
     )
     if fresh and not refresh:
+        metadata = json.loads(meta_path.read_text(encoding="utf-8"))
+        if sha256(path.read_bytes()).hexdigest() != metadata.get("sha256"):
+            raise SourceError(f"{dataset}: cache checksum mismatch; use --refresh")
         frame = pd.read_parquet(path)
         validate_frame(dataset, season, frame)
-        return frame, json.loads(meta_path.read_text(encoding="utf-8"))
+        return frame, metadata
     # Fixed public sources only. No credentials, arbitrary URLs or unbounded retries.
     try:
         with requests.get(url, timeout=(10, 45), stream=True) as response:

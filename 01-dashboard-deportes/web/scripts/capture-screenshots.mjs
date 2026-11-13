@@ -17,7 +17,7 @@ async function settle(page) {
   await page.addStyleTag({ content: HIDE_DEV_BADGE });
   await page.waitForLoadState("networkidle", { timeout: 60000 });
   // The section tabs only exist once the streamed page has replaced the skeleton.
-  await page.getByRole("navigation", { name: "Secciones", exact: true }).first().waitFor({ timeout: 60000 });
+  await page.locator('nav[aria-label="Secciones"], nav[aria-label="Secciones NBA"]').first().waitFor({ timeout: 60000 });
   await page.waitForFunction(() => !document.body.innerText.includes("Cargando…"), null, {
     timeout: 60000,
   });
@@ -54,6 +54,10 @@ try {
   page.setDefaultTimeout(60000);
 
   const shots = [
+    ["nba-standings.png", "/nba/2026", {}],
+    ["nba-models.png", "/nba/2026/modelos", {}],
+    ["nba-lineup.png", "/nba/2026/quinteto", {}],
+    ["nba-shots.png", "/nba/2026/jugador/201939", { nbaShotRegion: true }],
     ["matches-2026.png", "/pd/2026/partidos", {}],
     ["players-2026.png", "/pd/2026/jugadores", {}],
     ["lineup-2026.png", "/pd/2026/mi-once", {}],
@@ -65,7 +69,11 @@ try {
   ];
   for (const [file, route, opts] of shots) {
     await open(page, route);
-    await page.screenshot({ path: path.join(imgDir, file), ...opts });
+    if (opts.nbaShotRegion) {
+      await page.getByRole("region", { name: "Mapa y calidad de tiro NBA" }).screenshot({ path: path.join(imgDir, file) });
+    } else {
+      await page.screenshot({ path: path.join(imgDir, file), ...opts });
+    }
     console.log("saved", file);
   }
 

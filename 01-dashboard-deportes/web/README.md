@@ -42,3 +42,11 @@ muestra las clasificaciones de fútbol en español.
 - Los tests de base de datos usan `sports_test` (nunca la base `sports`) y se niegan a
   ejecutarse contra otra.
 - Usa `127.0.0.1` y no `localhost` en `DATABASE_URL` (en Windows `localhost` puede resolver a IPv6).
+
+## NBA
+
+El selector Fútbol/NBA conserva dos espacios distintos. `/nba` redirige a la última temporada NBA importada. `/nba/{año}` ofrece clasificación; sus secciones son `/partidos`, `/jugadores`, `/modelos`, `/seguimiento` y `/quinteto`. Las fichas se encuentran en `/equipo/{id}`, `/jugador/{id}` y `/partido/{id}`. El año indica inicio de temporada: 2026 es 2026-27.
+
+La web consulta las tablas `nba_*` sin llamar al proveedor ni entrenar modelos durante una petición. Si faltan datos o modelos se muestran estados vacíos explicativos. La comparación por nombre acepta teclado y sus filtros se reflejan en la URL. El estado personal NBA tiene su propia clave de navegador y admite cinco posiciones sin duplicados.
+
+El panel de modelos publica evaluación temporal, calibración y supuestos. Las simulaciones actuales son condicionales al calendario parcial; los mapas de tiro no incluyen tracking del defensor ni reloj de posesión. Consulta la [metodología NBA](../../docs/nba-integration.md).

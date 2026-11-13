@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { es } from "@/lib/es";
+import { SportNav } from "./SportNav";
 
 /** Centre circle of a pitch: the app mark. Decorative. */
 function BrandMark() {
@@ -27,22 +28,33 @@ function BrandMark() {
  * Sticky ink band at the top of every page: the brand and, on pages with a
  * league context, the league tabs (passed as children).
  */
-export function SiteBand({ children }: { children?: ReactNode }) {
+export function SiteBand({
+  children,
+  sport = "football",
+}: {
+  children?: ReactNode;
+  sport?: "football" | "nba";
+}) {
   return (
     <div className="on-ink full-bleed sticky top-0 z-30 bg-ink px-4 text-on-ink shadow-[0_1px_0_var(--border)] sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-[1200px] flex-col md:flex-row md:items-center md:justify-between md:gap-6">
-        <Link
-          href="/"
-          aria-label={es.brandHome}
-          className="flex min-h-11 shrink-0 items-center gap-2.5 self-start text-on-ink md:self-auto"
-        >
-          <BrandMark />
-          <span className="display text-[1.0625rem] font-bold tracking-[0.01em]">
-            {es.appTitle}
-          </span>
-        </Link>
+        <div className="flex min-h-14 items-center justify-between gap-5 md:justify-start">
+          <Link
+            href="/"
+            aria-label={es.brandHome}
+            className="flex min-h-11 shrink-0 items-center gap-2.5 self-start text-on-ink md:self-auto"
+          >
+            <BrandMark />
+            <span className="display text-[1.0625rem] font-bold tracking-[0.01em]">
+              {es.appTitle}
+            </span>
+          </Link>
+          <SportNav active={sport} />
+        </div>
         {children ? (
-          <div className="-mx-4 min-w-0 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0">{children}</div>
+          <div className="-mx-4 min-w-0 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0">
+            {children}
+          </div>
         ) : null}
       </div>
     </div>

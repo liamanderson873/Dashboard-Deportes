@@ -1,14 +1,14 @@
-# Marcador · análisis de fútbol
+# Marcador · fútbol, NBA y modelos predictivos
 
 [![CI](https://github.com/liamanderson873/Dashboard-Deportes/actions/workflows/ci.yml/badge.svg)](https://github.com/liamanderson873/Dashboard-Deportes/actions/workflows/ci.yml)
 
-Cinco grandes ligas europeas, estadísticas de equipos y jugadores, y un espacio personal para seguir favoritos y construir un once ideal. Una aplicación en español que transforma datos reales con **Python**, los almacena en **PostgreSQL** y los presenta con **Next.js**.
+Cinco grandes ligas europeas y la NBA, estadísticas de equipos y jugadores, favoritos, alineaciones y modelos predictivos evaluados con datos históricos. Una aplicación en español que transforma datos reales con **Python**, los almacena en **PostgreSQL** y los presenta con **Next.js**.
 
 Proyecto personal de portfolio para prácticas. Se ejecuta en local; el repositorio contiene el código, las pruebas y las instrucciones para reproducirlo.
 
 ![Centro de partidos de Marcador](01-dashboard-deportes/docs/img/matches-2026.png)
 
-## Explora, compara y guarda
+## Fútbol · explora, compara y guarda
 
 | Sección | Qué permite hacer |
 |---|---|
@@ -26,6 +26,24 @@ Las fichas individuales incluyen registro de partidos, evolución de goles y asi
 
 Los filtros de jugadores se pueden compartir por URL. Favoritos y alineación se guardan en el navegador, sin registro y sin sincronización entre dispositivos. La interfaz incluye navegación por teclado, controles con etiquetas, tablas alternativas a los gráficos y adaptación a móvil.
 
+## NBA · estadísticas y laboratorio predictivo
+
+Un selector **Fútbol / NBA** separa los dos espacios. NBA incluye clasificación por conferencias, ratings avanzados, partidos con resultados y box scores, fichas de equipos y jugadores, comparación visual por nombre, seguimiento y un quinteto sobre el campo.
+
+| Clasificación NBA | Simulador de playoffs |
+|---|---|
+| ![Estadísticas NBA](01-dashboard-deportes/docs/img/nba-standings.png) | ![Simulación NBA](01-dashboard-deportes/docs/img/nba-models.png) |
+| **Calidad contextual del tiro** | **Mi quinteto** |
+| ![Mapa y probabilidad de tiro](01-dashboard-deportes/docs/img/nba-shots.png) | ![Quinteto NBA](01-dashboard-deportes/docs/img/nba-lineup.png) |
+
+- **Partidos y playoffs:** regresión logística con diez temporadas completas, variables anteriores al partido y 10.000 simulaciones para clasificación, play-in, avance de rondas y título.
+- **Tiros:** gradient boosting con tres temporadas recientes, coordenadas, distancia, ángulo, periodo, reloj del cuarto y valor del lanzamiento. Mapa de aciertos/fallos, probabilidad estimada, xFG y puntos esperados.
+- **Evaluación visible:** prueba temporal reservada de 2025-26, referencias, log loss, Brier, AUC y gráficos de calibración. AUC no equivale al porcentaje de aciertos.
+
+La muestra actual contiene **30 equipos, 528 perfiles de jugadores, 174 encuentros terminados y 29.857 tiros** de 2026-27. Los datos llegan de archivos públicos de NBA Stats publicados por SportsDataverse, sin una clave NBA. La conexión directa con NBA no respondió en las pruebas; la procedencia del archivo se identifica en la web.
+
+**Límites visibles:** faltan treinta partidos por asignar en el calendario; el simulador representa un escenario condicionado a los 1.200 encuentros conocidos. Los desempates son aproximados. El modelo de tiro no incluye distancia al defensor ni reloj de posesión individual. Consulta [la metodología y reproducción de NBA](docs/nba-integration.md) y [los resultados completos](docs/nba-evaluation-2026.json).
+
 ## Datos y temporada actual
 
 **LaLiga, Premier League, Serie A, Bundesliga y Ligue 1.** El año de la ruta identifica el comienzo de la temporada: `/pd/2026` corresponde a **2026-27**. La clasificación y las vistas de equipos admiten también temporadas anteriores cargadas; la ampliación individual se ha verificado con 2026-27.
@@ -34,7 +52,8 @@ Los filtros de jugadores se pueden compartir por URL. Favoritos y alineación se
 |---|---|
 | [football-data.org](https://www.football-data.org/) | Equipos, calendario, resultados, plantillas y goleadores. |
 | [football-data.co.uk](https://www.football-data.co.uk/) | Estadísticas de partido importadas desde CSV. |
-| [Bzzoiro Sports Data](https://sports.bzzoiro.com/) | Jugadores, actuaciones, alineaciones, eventos y tiros. |
+| [Bzzoiro Sports Data](https://sports.bzzoiro.com/) | Jugadores, actuaciones, alineaciones, eventos y tiros de fútbol. |
+| [SportsDataverse / NBA Stats](https://github.com/sportsdataverse/hoopR-nba-stats-data) | Estadísticas NBA e histórico, archivos públicos con atribución CC BY 4.0. |
 
 Las claves de las APIs se configuran solo en Python. **La web consulta PostgreSQL y no consume peticiones de las APIs al navegar.** Los planes gratuitos tienen cuotas y condiciones propias; no se incluyen claves ni archivos externos de datos en el repositorio.
 
@@ -49,7 +68,10 @@ flowchart LR
   A[football-data.org] --> P[Ingesta Python]
   B[football-data.co.uk · CSV] --> P
   C[Bzzoiro Sports Data] --> P
+  S[SportsDataverse · NBA Stats] --> P
   P --> D[(PostgreSQL 16)]
+  D --> M[Entrenamiento Python · scikit-learn]
+  M --> D
   D --> W[Next.js · React · TypeScript]
   W --> N[Navegador]
   N --> L[Almacenamiento local: favoritos y once]
@@ -59,7 +81,7 @@ Las ingestas realizan actualizaciones idempotentes. Los datos de Bzzoiro viven e
 
 | Capa | Tecnologías |
 |---|---|
-| Datos | Python 3.12+, pandas, requests, SQLAlchemy, psycopg |
+| Datos y modelos | Python 3.12+, pandas, pyarrow, requests, SQLAlchemy, scikit-learn, nba_api |
 | Base de datos | PostgreSQL 16, Docker Compose |
 | Interfaz | Next.js 16, React 19, TypeScript, Tailwind CSS 4 |
 | Calidad | pytest, Vitest, ESLint, TypeScript y GitHub Actions |
@@ -98,6 +120,17 @@ Abre [localhost:3000](http://localhost:3000). En Linux/macOS usa `.venv/bin/pyth
 
 Para actualizar los datos, vuelve a ejecutar las ingestas. **No hay actualización automática ni servicio en directo.** Si Bzzoiro termina con código `2`, revisa los partidos pendientes que informa: los demás datos importados se conservan. La [guía de Bzzoiro](docs/bsd-integration.md) describe límites de peticiones, reintentos y correspondencias.
 
+## Cargar NBA y entrenar los modelos
+
+Con PostgreSQL, el entorno Python y `DATABASE_URL` ya configurados, desde `01-dashboard-deportes`:
+
+```powershell
+.venv/Scripts/python.exe -m sports_dashboard.nba.ingest --season 2026 --history 10
+.venv/Scripts/python.exe -m sports_dashboard.nba.train --season 2026 --history 10 --shot-history 3 --runs 10000
+```
+
+Abre [localhost:3000/nba](http://localhost:3000/nba). NBA no requiere las claves de fútbol. La primera carga descarga y valida el histórico; las siguientes reutilizan una caché local. Se entrena en CPU y los resultados se guardan en PostgreSQL. Una nueva ingesta invalida los modelos de esa temporada hasta volver a entrenarlos. Los datos externos y artefactos binarios permanecen fuera de Git.
+
 ## Validación
 
 ```powershell
@@ -110,7 +143,7 @@ npm run typecheck
 npm run build
 ```
 
-Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **111 pruebas Python y 165 pruebas web**, además de lint, tipos y compilación.
+Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **127 pruebas Python y 174 pruebas web**, además de lint, tipos y compilación.
 
 ## Estructura y documentación
 
@@ -131,5 +164,6 @@ docs/                     Guías y decisiones del proyecto
 - [Jugadores: configuración, fórmulas y limitaciones](docs/bsd-integration.md).
 - [Guía explicada del proyecto](docs/guia-explicada.md).
 - [Criterios de interfaz](docs/diseno-marcador.md).
+- [NBA: datos, modelos, evaluación y límites](docs/nba-integration.md).
 
-El siguiente paso es ampliar la validación de cobertura y facilitar las actualizaciones de datos. El uso de cada fuente está sujeto a sus condiciones; revisa las de [Bzzoiro](https://sports.bzzoiro.com/docs/api-license/) y las condiciones de uso particular de los CSV antes de reutilizar los datos.
+Los siguientes pasos son ampliar el backtesting por temporadas, mejorar la calibración en extremos y completar el calendario NBA cuando se publiquen los encuentros pendientes. El uso de cada fuente está sujeto a sus condiciones; revisa las de [Bzzoiro](https://sports.bzzoiro.com/docs/api-license/) y las condiciones de uso particular de los CSV antes de reutilizar los datos.
