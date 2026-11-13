@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import { notFound, redirect } from "next/navigation";
 import { FormDots } from "@/components/FormDots";
-import { KpiCard } from "@/components/KpiCard";
+import { KpiCell, KpiStrip } from "@/components/KpiStrip";
 import { LeagueHeader } from "@/components/LeagueHeader";
 import { LineChart } from "@/components/LineChart";
+import { PanelSection } from "@/components/PanelSection";
+import { SplitRecord } from "@/components/SplitRecord";
 import { SquadList } from "@/components/SquadList";
 import { StatGrid } from "@/components/StatGrid";
 import { TeamHeader } from "@/components/TeamHeader";
@@ -53,8 +55,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function decimal(value: number | null): string {
-  return value === null ? es.team.unavailable : formatDecimalEs(value);
+function stat(label: string, value: number | null) {
+  return value === null
+    ? { label, value: es.team.unavailable, unavailable: true }
+    : { label, value: formatDecimalEs(value) };
 }
 
 export default async function TeamPage({ params }: Props) {
@@ -138,118 +142,80 @@ export default async function TeamPage({ params }: Props) {
           hrefFor: (y) => teamHref(context.competition.slug, y, teamId),
         }}
       />
-      <div className="flex flex-col gap-8">
-        <TeamHeader profile={profile} />
+      <TeamHeader profile={profile} />
 
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold">{es.team.summary.title}</h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-            <KpiCard label={es.team.summary.position}>
-              <span className="num">{position ?? es.team.unavailable}</span>
-            </KpiCard>
-            <KpiCard label={es.team.summary.points}>
-              <span className="num">{total.points}</span>
-            </KpiCard>
-            <KpiCard label={es.team.summary.record}>
-              <span className="num">
-                {total.won}-{total.drawn}-{total.lost}
-              </span>
-            </KpiCard>
-            <KpiCard label={es.team.summary.goalsFor}>
-              <span className="num">{total.goalsFor}</span>
-            </KpiCard>
-            <KpiCard label={es.team.summary.goalsAgainst}>
-              <span className="num">{total.goalsAgainst}</span>
-            </KpiCard>
-            <KpiCard label={es.team.summary.form}>
-              <FormDots form={form} />
-            </KpiCard>
-          </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <KpiCard label={es.team.summary.home}>
-              <span className="num text-base">
-                {es.team.summary.split(
-                  home.played,
-                  home.won,
-                  home.drawn,
-                  home.lost,
-                  home.goalsFor,
-                  home.goalsAgainst,
-                  home.points,
-                )}
-              </span>
-            </KpiCard>
-            <KpiCard label={es.team.summary.away}>
-              <span className="num text-base">
-                {es.team.summary.split(
-                  away.played,
-                  away.won,
-                  away.drawn,
-                  away.lost,
-                  away.goalsFor,
-                  away.goalsAgainst,
-                  away.points,
-                )}
-              </span>
-            </KpiCard>
-          </div>
-        </section>
-
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold">{evo.title}</h2>
-          <div className="rounded-panel border border-border bg-card p-4">
-            <LineChart
-              series={chartSeries}
-              ariaLabel={evo.chartLabel(profile.name)}
-              xLabel={evo.xLabel}
-              yLabel={evo.yLabel}
-            />
-          </div>
-          <TeamSeasonsTable rows={seasonRows} />
-        </section>
-
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold">{s.title}</h2>
-          <StatGrid
-            items={[
-              { label: s.xgFor, value: decimal(stats.xgFor) },
-              { label: s.xgAgainst, value: decimal(stats.xgAgainst) },
-              { label: s.shots, value: decimal(stats.shots) },
-              { label: s.shotsOnTarget, value: decimal(stats.shotsOnTarget) },
-              { label: s.corners, value: decimal(stats.corners) },
-              { label: s.fouls, value: decimal(stats.fouls) },
-              { label: s.yellow, value: decimal(stats.yellow) },
-              { label: s.red, value: decimal(stats.red) },
-            ]}
+      <PanelSection title={es.team.summary.title}>
+        <KpiStrip label={es.team.summary.kpiLabel} columns={6} bare>
+          <KpiCell
+            label={es.team.summary.position}
+            value={position ?? es.team.unavailable}
+            highlight={position === 1}
           />
-          <p className="text-sm text-muted">
-            {s.note(stats.matchesWithStats, stats.matchesWithXg)}
+          <KpiCell label={es.team.summary.points} value={total.points} highlight />
+          <KpiCell
+            label={es.team.summary.record}
+            value={`${total.won}-${total.drawn}-${total.lost}`}
+          />
+          <KpiCell label={es.team.summary.goalsFor} value={total.goalsFor} />
+          <KpiCell label={es.team.summary.goalsAgainst} value={total.goalsAgainst} />
+          <KpiCell label={es.team.summary.form} value={<FormDots form={form} />} />
+        </KpiStrip>
+      </PanelSection>
+
+      <PanelSection title={es.team.split.title}>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <SplitRecord label={es.team.summary.home} record={home} />
+          <SplitRecord label={es.team.summary.away} record={away} />
+        </div>
+      </PanelSection>
+
+      <PanelSection title={evo.title}>
+        <div className="rounded-panel border border-border bg-card p-3 sm:p-4">
+          <LineChart
+            series={chartSeries}
+            ariaLabel={evo.chartLabel(profile.name)}
+            xLabel={evo.xLabel}
+            yLabel={evo.yLabel}
+          />
+        </div>
+        <TeamSeasonsTable rows={seasonRows} />
+      </PanelSection>
+
+      <PanelSection title={s.title} note={s.note(stats.matchesWithStats, stats.matchesWithXg)}>
+        <StatGrid
+          items={[
+            stat(s.xgFor, stats.xgFor),
+            stat(s.xgAgainst, stats.xgAgainst),
+            stat(s.shots, stats.shots),
+            stat(s.shotsOnTarget, stats.shotsOnTarget),
+            stat(s.corners, stats.corners),
+            stat(s.fouls, stats.fouls),
+            stat(s.yellow, stats.yellow),
+            stat(s.red, stats.red),
+          ]}
+        />
+      </PanelSection>
+
+      <PanelSection
+        title={es.team.squad.title}
+        note={squad.length === 0 ? undefined : es.team.squad.note(season)}
+      >
+        {squad.length === 0 ? (
+          <p className="rounded-card border border-border bg-card p-4 text-muted">
+            {es.team.squad.empty}
           </p>
-        </section>
+        ) : (
+          <SquadList players={squad} on={new Date(Date.UTC(context.season, 8, 1))} />
+        )}
+      </PanelSection>
 
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold">{es.team.squad.title}</h2>
-          {squad.length === 0 ? (
-            <p className="rounded-card border border-border bg-card p-4 text-muted">
-              {es.team.squad.empty}
-            </p>
-          ) : (
-            <>
-              <p className="text-sm text-muted">{es.team.squad.note(season)}</p>
-              <SquadList players={squad} on={new Date(Date.UTC(context.season, 8, 1))} />
-            </>
-          )}
-        </section>
-
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold">{es.team.matches.title}</h2>
-          <TeamMatchList
-            slug={context.competition.slug}
-            season={context.season}
-            matches={matches}
-          />
-        </section>
-      </div>
+      <PanelSection title={es.team.matches.title}>
+        <TeamMatchList
+          slug={context.competition.slug}
+          season={context.season}
+          matches={matches}
+        />
+      </PanelSection>
     </>
   );
 }

@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
-import { Fira_Code, Fira_Sans } from "next/font/google";
+import { Archivo, Inter, JetBrains_Mono } from "next/font/google";
 import { es } from "@/lib/es";
 import "./globals.css";
 
-const firaSans = Fira_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-fira-sans",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const firaCode = Fira_Code({
+// Narrow scoreboard figures and titles use the width axis (font-stretch 75%).
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-fira-code",
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -22,24 +28,22 @@ export const metadata: Metadata = {
   description: es.appDescription,
 };
 
+// The ink band and the page header are rendered by each page (LeagueHeader or
+// SiteBand), because only the page knows the current league.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${firaSans.variable} ${firaCode.variable}`}>
+    <html
+      lang="es"
+      className={`${inter.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
+    >
       <body>
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-card focus:bg-card focus:px-4 focus:py-2 focus:font-semibold focus:text-accent"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-2 focus:z-50 focus:rounded-control focus:bg-card focus:px-4 focus:py-2 focus:font-semibold focus:text-accent"
         >
           {es.skipLink}
         </a>
-        <header className="mx-auto max-w-[1040px] px-6 pt-6">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-accent">
-            {es.appTitle}
-          </p>
-        </header>
-        <main id="contenido" className="mx-auto max-w-[1040px] px-6 pb-14 pt-4">
-          {children}
-        </main>
+        <main className="shell min-h-dvh">{children}</main>
       </body>
     </html>
   );

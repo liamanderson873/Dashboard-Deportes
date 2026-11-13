@@ -9,6 +9,7 @@ import {
   type TeamRef,
 } from "@/lib/matches";
 import { teamHref } from "@/lib/sections";
+import { ScorePill } from "./ScorePill";
 import { TeamCrest } from "./TeamCrest";
 
 function TeamLink({
@@ -28,7 +29,7 @@ function TeamLink({
     <Link
       href={teamHref(slug, season, team.id)}
       title={team.name}
-      className={`flex min-h-11 min-w-0 flex-1 items-center gap-2 hover:underline ${
+      className={`flex min-h-11 min-w-0 items-center gap-2 text-[0.9375rem] font-semibold text-fg hover:underline hover:underline-offset-2 ${
         side === "home" ? "justify-end text-right" : "justify-start"
       }`}
     >
@@ -55,31 +56,37 @@ function MatchItem({ m, slug, season }: { m: MatchRow; slug: string; season: num
       ? `(${m.homeHtGoals}-${m.awayHtGoals})`
       : null;
   return (
-    <li className="rounded-card border border-border bg-card px-3 py-1">
-      <div className="flex items-center gap-2">
-        <TeamLink team={m.home} slug={slug} season={season} side="home" />
-        <div className="num flex w-20 shrink-0 flex-col items-center text-center">
-          {played ? (
-            <span className="font-bold">
-              <span aria-hidden="true">
-                {m.homeGoals} - {m.awayGoals}
-              </span>
-              <span className="sr-only">
-                {es.results.score(m.home.shortName, m.homeGoals ?? 0, m.away.shortName, m.awayGoals ?? 0)}
-              </span>
+    <li className="px-3 py-2 sm:px-4">
+      <div className="mx-auto grid max-w-[820px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 sm:gap-x-4">
+      <TeamLink team={m.home} slug={slug} season={season} side="home" />
+      <div className="flex w-[5.75rem] flex-col items-center gap-1 sm:w-28">
+        {played ? (
+          <ScorePill>
+            <span aria-hidden="true">
+              {m.homeGoals} - {m.awayGoals}
             </span>
-          ) : (
-            <span className="text-muted">{kickoffLabel(m)}</span>
-          )}
-          {halfTime ? (
-            <span className="text-xs text-muted" title={es.results.halfTime}>
-              {halfTime}
+            <span className="sr-only">
+              {es.results.score(m.home.shortName, m.homeGoals ?? 0, m.away.shortName, m.awayGoals ?? 0)}
             </span>
-          ) : null}
-        </div>
-        <TeamLink team={m.away} slug={slug} season={season} side="away" />
+          </ScorePill>
+        ) : (
+          <ScorePill pending>{kickoffLabel(m)}</ScorePill>
+        )}
+        {halfTime || label ? (
+          <span className="num text-center text-xs leading-tight text-subtle">
+            {halfTime ? (
+              <span title={es.results.halfTime}>
+                <span className="sr-only">{es.results.halfTime} </span>
+                {halfTime}
+              </span>
+            ) : null}
+            {halfTime && label ? " · " : null}
+            {label}
+          </span>
+        ) : null}
       </div>
-      {label ? <p className="pb-1 text-center text-xs text-muted">{label}</p> : null}
+      <TeamLink team={m.away} slug={slug} season={season} side="away" />
+      </div>
     </li>
   );
 }
@@ -100,10 +107,10 @@ export function MatchList({
     <div className="flex flex-col gap-6">
       {groupByDay(matches).map((g) => (
         <section key={g.day}>
-          <Heading className="mb-2 text-sm font-medium text-muted">
+          <Heading className="eyebrow mono mb-2 !font-medium">
             {g.day.charAt(0).toUpperCase() + g.day.slice(1)}
           </Heading>
-          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+          <ul className="m-0 list-none divide-y divide-border overflow-hidden rounded-panel border border-border bg-card p-0">
             {g.matches.map((m) => (
               <MatchItem key={m.id} m={m} slug={slug} season={season} />
             ))}

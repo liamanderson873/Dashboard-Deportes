@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { buildCompareRows, parseSelection } from "@/lib/compare";
+import { buildCompareRows, duelBars, parseSelection } from "@/lib/compare";
 import type { StandingRow } from "@/lib/standings";
 import type { AdvancedStats } from "@/lib/queries/team";
 
@@ -104,5 +104,34 @@ describe("buildCompareRows", () => {
       { row: standing(), adv: adv() },
     );
     expect(rows.every((r) => r.better === null)).toBe(true);
+  });
+});
+
+describe("duelBars", () => {
+  test("test_duel_bars_are_proportional_to_the_larger_value", () => {
+    expect(duelBars(30, 20)).toEqual({ a: 100, b: (20 / 30) * 100 });
+    expect(duelBars(5, 10)).toEqual({ a: 50, b: 100 });
+  });
+
+  test("test_duel_bars_are_empty_when_both_values_are_zero", () => {
+    expect(duelBars(0, 0)).toEqual({ a: 0, b: 0 });
+  });
+
+  test("test_duel_bars_are_skipped_when_a_value_is_missing_or_negative", () => {
+    expect(duelBars(null, 3)).toBeNull();
+    expect(duelBars(4, undefined)).toBeNull();
+    expect(duelBars(-1, 3)).toBeNull();
+    expect(duelBars(Number.NaN, 3)).toBeNull();
+  });
+
+  test("test_compare_rows_carry_the_raw_values", () => {
+    const rows = buildCompareRows(
+      { row: standing({ points: 20 }), adv: adv({ xgFor: null }) },
+      { row: standing({ points: 30 }), adv: adv({ xgFor: 2 }) },
+    );
+    const points = find(rows, "Puntos");
+    expect([points.aValue, points.bValue]).toEqual([20, 30]);
+    const xg = find(rows, "xG a favor por partido");
+    expect([xg.aValue, xg.bValue]).toEqual([null, 2]);
   });
 });

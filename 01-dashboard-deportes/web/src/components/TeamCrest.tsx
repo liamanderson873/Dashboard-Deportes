@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+/** Club crest, or a neutral circle with the club code when there is none. */
 export function TeamCrest({
   crest,
   tla,
@@ -25,8 +26,8 @@ export function TeamCrest({
   return (
     <span
       aria-hidden="true"
-      className="num inline-flex shrink-0 items-center justify-center rounded-full border border-border bg-bg text-[10px] font-medium text-muted"
-      style={{ width: size, height: size }}
+      className="mono inline-flex shrink-0 items-center justify-center rounded-full bg-surface-2 font-medium tracking-tight text-muted"
+      style={{ width: size, height: size, fontSize: Math.max(8, Math.round(size * 0.36)) }}
     >
       {tla ?? ""}
     </span>

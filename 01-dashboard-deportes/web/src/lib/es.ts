@@ -5,6 +5,7 @@ export const es = {
     "Clasificaciones, forma reciente y estadísticas de las cinco grandes ligas europeas.",
   skipLink: "Saltar al contenido",
   loading: "Cargando…",
+  brandHome: "Estadísticas de fútbol, ir al inicio",
 
   nav: {
     leagues: "Ligas",
@@ -35,10 +36,32 @@ export const es = {
       goalDifference: "DG",
       form: "Forma",
       points: "Puntos",
+      won: "V",
+      drawn: "E",
+      lost: "D",
+      goalsFor: "GF",
+      goalsAgainst: "GC",
     },
-    legendZones: "Franja azul: primeras 4 posiciones. Franja roja: últimas 3.",
+    columnTitles: {
+      position: "Posición",
+      played: "Partidos jugados",
+      won: "Victorias",
+      drawn: "Empates",
+      lost: "Derrotas",
+      goalsFor: "Goles a favor",
+      goalsAgainst: "Goles en contra",
+      goalDifference: "Diferencia de goles",
+      form: "Últimos 5 partidos",
+    },
+    zones: {
+      top: "zona alta",
+      bottom: "descenso",
+    },
+    legendTitle: "Leyenda",
+    legendTop: "Zona alta: puestos 1–4",
+    legendBottom: "Descenso: últimos 3",
     legendForm:
-      "Los círculos son los últimos 5 partidos (V victoria, E empate, D derrota).",
+      "Forma: últimos 5 partidos, del más antiguo al más reciente (V victoria, E empate, D derrota)",
   },
 
   results: {
@@ -48,6 +71,7 @@ export const es = {
       `Temporada ${season} · Jornada ${matchday}`,
     subtitleNoMatchday: (season: string) => `Temporada ${season}`,
     matchdayNav: "Jornadas",
+    allMatchdays: "Todas las jornadas",
     matchdayLabel: (matchday: number) => `Jornada ${matchday}`,
     previous: "Jornada anterior",
     next: "Jornada siguiente",
@@ -101,7 +125,8 @@ export const es = {
       coach: "Entrenador actual",
     },
     summary: {
-      title: "Resumen",
+      title: "Rendimiento",
+      kpiLabel: "Indicadores de rendimiento del equipo",
       position: "Posición en la tabla",
       points: "Puntos",
       record: "Balance V-E-D",
@@ -110,16 +135,13 @@ export const es = {
       form: "Forma",
       home: "En casa",
       away: "Fuera",
-      split: (
-        played: number,
-        won: number,
-        drawn: number,
-        lost: number,
-        gf: number,
-        ga: number,
-        pts: number,
-      ) =>
-        `${played} PJ · ${won}V ${drawn}E ${lost}D · ${gf}-${ga} goles · ${pts} puntos`,
+    },
+    split: {
+      title: "Casa y fuera",
+      points: "puntos",
+      played: "Partidos jugados",
+      record: "Victorias-empates-derrotas",
+      goals: "Goles a favor-en contra",
     },
     evolution: {
       title: "Evolución",
@@ -190,6 +212,7 @@ export const es = {
       `${league} ${season} · Comparador`,
     subtitle: (season: string) => `Temporada ${season} · Comparador de equipos`,
     hint: "Elige dos equipos para compararlos",
+    vs: "vs",
     errors: {
       same: "Elige dos equipos distintos",
       unknown: "Ese equipo no juega en esta liga y temporada",
@@ -203,6 +226,7 @@ export const es = {
     table: {
       caption: (a: string, b: string) => `Comparación entre ${a} y ${b}`,
       metric: "Estadística",
+      unavailableTitle: "No hay datos de este indicador para ese equipo",
       better: "mejor",
     },
     rows: {
@@ -232,6 +256,14 @@ export const es = {
     bestAttack: "Mejor ataque",
     bestDefense: "Mejor defensa",
     goalsPerMatch: "Goles por partido",
+    title: "Indicadores de la temporada",
+    leagueAverage: "Media de la liga",
+    units: {
+      points: "pts",
+      goals: "goles",
+      goalsAgainst: "goles en contra",
+      perMatch: "por partido",
+    },
   },
 
   form: {
@@ -255,6 +287,9 @@ export const es = {
     noData: "Todavía no hay datos cargados",
     noDataHint:
       "Carga datos con el comando: python -m sports_dashboard.ingest --competitions PD --seasons 2024",
+    noFinishedMatchesHint:
+      "La clasificación aparecerá cuando se juegue el primer partido. Mientras tanto puedes consultar el calendario.",
+    seeResults: "Ver el calendario de partidos",
   },
 
   error: {

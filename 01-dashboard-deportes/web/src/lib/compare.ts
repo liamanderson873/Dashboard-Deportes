@@ -43,6 +43,9 @@ export type CompareRow = {
   a: string;
   b: string;
   better: "a" | "b" | null;
+  /** Raw values, for the proportional bars; `null` when the metric is missing. */
+  aValue?: number | null;
+  bValue?: number | null;
 };
 
 type Side = { row: StandingRow; adv: AdvancedStats };
@@ -65,6 +68,8 @@ function line(
     a: a === null ? missing : format(a),
     b: b === null ? missing : format(b),
     better: winner,
+    aValue: a,
+    bValue: b,
   };
 }
 
@@ -92,4 +97,19 @@ export function buildCompareRows(a: Side, b: Side): CompareRow[] {
     adv(r.fouls, (s) => s.fouls, null),
     adv(r.yellow, (s) => s.yellow, "lower"),
   ];
+}
+
+/**
+ * Bar lengths (0 to 100) for a duel row: each value over the larger of the two,
+ * only when both are numbers >= 0. `null` means "draw no bars".
+ */
+export function duelBars(
+  a: number | null | undefined,
+  b: number | null | undefined,
+): { a: number; b: number } | null {
+  if (typeof a !== "number" || typeof b !== "number") return null;
+  if (!Number.isFinite(a) || !Number.isFinite(b) || a < 0 || b < 0) return null;
+  const max = Math.max(a, b);
+  if (max === 0) return { a: 0, b: 0 };
+  return { a: (a / max) * 100, b: (b / max) * 100 };
 }
