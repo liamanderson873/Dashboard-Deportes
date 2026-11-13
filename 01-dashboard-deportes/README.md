@@ -1,49 +1,51 @@
-# Football dashboard
+# Dashboard de fútbol: detalles técnicos
 
-A data project: it downloads real match data from a public football API, enriches it
-with match statistics from a second source, stores everything in PostgreSQL, cleans it
-with pandas and shows it in an interactive Streamlit dashboard.
+Este documento explica cómo cargar los datos, cómo está organizado el código y qué
+limitaciones tienen los datos. La presentación general, con capturas, está en el
+[README principal](../README.md).
 
-The dashboard currently covers league tables, results by matchday and the points
-evolution of any team. It reads only from the database, never from the API, so the
-free-plan rate limits cannot break it.
+El proyecto descarga partidos reales de una API pública de fútbol, los completa con
+estadísticas por partido de una segunda fuente, lo guarda todo en PostgreSQL, lo limpia con
+pandas y lo muestra en una web hecha con Next.js (`web/`).
 
-The database holds more than the dashboard shows today:
+![Demo de la web](docs/img/demo.gif)
 
-- Several leagues: LaLiga (PD), Premier League (PL), Serie A (SA), Bundesliga (BL1)
-  and Ligue 1 (FL1).
-- Matches with half-time goals.
-- Team profiles and squads per season (`squad_members`).
-- Top scorers per season.
-- Match statistics: xG, shots, corners, fouls and cards.
+La base de datos contiene:
 
-## Architecture
+- Cinco ligas: LaLiga (PD), Premier League (PL), Serie A (SA), Bundesliga (BL1) y
+  Ligue 1 (FL1).
+- Partidos con los goles al descanso.
+- Fichas de equipo y plantillas por temporada (`squad_members`).
+- Goleadores por temporada.
+- Estadísticas por partido: xG, tiros, córners, faltas y tarjetas.
+
+## Arquitectura
 
 ```
 football-data.org  ->  client  ->  transform (pandas)  ->  ingest  ->  PostgreSQL
                                                                            ^   |
-football-data.co.uk (CSV files)  ->  stats_import  ---------------------+   |
-                                                         queries (SQL)  <----+
-                                                                |
-                                                         Streamlit app
+football-data.co.uk (archivos CSV)  ->  stats_import  ------------------+   |
+                                                                            v
+                                                              Web Next.js (web/)
 ```
 
-| Module | Responsibility |
+| Módulo | Qué hace |
 |---|---|
-| `client.py` | HTTP client with request spacing and retries on HTTP 429 |
-| `transform.py` | Pure functions that clean raw API data into tables |
-| `ingest.py` | Idempotent upsert of matches, teams, squads and scorers into PostgreSQL (running it twice never duplicates rows) |
-| `stats_import.py` | Imports match statistics from football-data.co.uk CSV files |
-| `queries.py` | SQL for the league table, team form, results and available seasons |
-| `app.py` | Streamlit dashboard |
+| `client.py` | Cliente HTTP que espacia las peticiones y reintenta cuando la API responde 429 |
+| `transform.py` | Funciones puras que limpian los datos de la API y los convierten en tablas |
+| `ingest.py` | Guarda partidos, equipos, plantillas y goleadores en PostgreSQL sin duplicar filas aunque se ejecute dos veces (upsert idempotente) |
+| `stats_import.py` | Importa las estadísticas por partido de los CSV de football-data.co.uk |
+| `queries.py` | Consultas SQL de apoyo en Python: clasificación, forma, resultados y temporadas (la web tiene sus propias consultas en `web/`) |
 
-The league table is computed from finished matches with SQL (win 3 points, draw 1); matches decided off the pitch count with the awarded score.
-Ties are broken by goal difference and then goals scored, not by official head-to-head
-rules, so teams level on points can appear in a different order than in an official table.
+La clasificación se calcula con SQL a partir de los partidos terminados (victoria 3 puntos,
+empate 1); los partidos decididos en los despachos cuentan con el resultado oficial. Los
+empates a puntos se deshacen por diferencia de goles y después por goles a favor, no con las
+reglas oficiales de enfrentamiento directo, así que dos equipos empatados pueden salir en
+otro orden que en la tabla oficial.
 
-## Run it locally
+## Arrancarlo en local
 
-You need Python 3.12+, Docker and a free API key from
+Necesitas Python 3.12+, Docker y una clave gratuita de
 [football-data.org](https://www.football-data.org/client/register).
 
 ```bash
@@ -51,100 +53,106 @@ cd 01-dashboard-deportes
 python -m venv .venv
 .venv\Scripts\activate          # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
-pip install -e .                # makes `sports_dashboard` importable
+pip install -e .                # permite importar `sports_dashboard`
 
-cp .env.example .env            # then put your key in FOOTBALL_API_KEY
-docker compose up -d            # PostgreSQL on localhost:5433
+cp .env.example .env            # pon tu clave en FOOTBALL_API_KEY
+docker compose up -d            # PostgreSQL en localhost:5433
 
 python -m sports_dashboard.ingest --competitions PD --seasons 2024
-streamlit run app.py
 ```
 
-PostgreSQL is published on host port **5433** so it does not clash with a local
-PostgreSQL installation using the default 5432.
+PostgreSQL se publica en el puerto **5433** del ordenador para no chocar con una instalación
+local de PostgreSQL que use el puerto por defecto, 5432.
 
-## Web app (Next.js)
+## Web (Next.js)
 
-`web/` holds a Spanish-language Next.js app (light design) that reads the same PostgreSQL
-database directly with server components. For every league and season in the database it
-shows the league table (summary cards, form, points bar, zones), results by matchday, top
-scorers, a team page (club profile, home/away record, points evolution chart across seasons,
-per-match stats such as xG and shots, squad of that season, matches) and a two-team
-comparator with head-to-head results. Charts are server-rendered SVG with a table alternative.
+Funciona en local; no hay despliegue público.
+
+`web/` contiene una web en español (diseño claro) que lee la misma base de datos
+directamente con componentes de servidor. Para cada liga y temporada de la base muestra la
+clasificación (tarjetas de resumen, forma, barra de puntos y zonas), los resultados por
+jornada, los goleadores, una ficha de equipo (datos del club, balance en casa y fuera,
+gráfico de evolución de puntos por temporada, estadísticas por partido como xG y tiros,
+plantilla de la temporada y partidos) y un comparador de dos equipos con sus enfrentamientos
+directos. Los gráficos son SVG generados en el servidor, con una tabla como alternativa.
 
 ```bash
 cd web
-cp .env.example .env.local      # DATABASE_URL only; never committed
+cp .env.example .env.local      # solo DATABASE_URL; nunca se sube a git
 npm install
 npm run dev                     # http://localhost:3000
 ```
 
-See `web/README.md` for scripts and tests. The web app never calls the API.
+Rutas: `/{liga}/{año}` (clasificación), `/{liga}/{año}/resultados/{jornada}`,
+`/{liga}/{año}/goleadores`, `/{liga}/{año}/equipo/{id}` y
+`/{liga}/{año}/comparar?a={id}&b={id}`. Ligas: `pd`, `pl`, `sa`, `bl1`, `fl1`. Los scripts
+y los tests están en [`web/README.md`](web/README.md). La web nunca llama a la API.
 
-## Loading data
+## Cargar datos
 
-### Matches, teams, squads and scorers (football-data.org)
+### Partidos, equipos, plantillas y goleadores (football-data.org)
 
 ```bash
-# several leagues and seasons in one call
+# varias ligas y temporadas de una vez
 python -m sports_dashboard.ingest --competitions PD,PL,SA,BL1,FL1 --seasons 2024,2025,2026
 
-# only some of the steps
+# solo algunos pasos
 python -m sports_dashboard.ingest --competitions PD --seasons 2024 --what matches,scorers
 ```
 
-| Flag | Meaning |
+| Opción | Significado |
 |---|---|
-| `--competitions` | Comma-separated competition codes. Default `PD`. The free plan covers `PD`, `PL`, `SA`, `BL1` and `FL1`. |
-| `--seasons` | Comma-separated season start years, for example `2024,2025`. Required. |
-| `--what` | Comma-separated steps: `matches`, `teams`, `scorers`. Default: all three. |
+| `--competitions` | Códigos de competición separados por comas. Por defecto `PD`. El plan gratuito incluye `PD`, `PL`, `SA`, `BL1` y `FL1`. |
+| `--seasons` | Años de inicio de temporada separados por comas, por ejemplo `2024,2025`. Obligatoria. |
+| `--what` | Pasos separados por comas: `matches`, `teams`, `scorers`. Por defecto, los tres. |
 
-### Match statistics (football-data.co.uk)
+### Estadísticas por partido (football-data.co.uk)
 
-football-data.org does not provide per-match statistics, so xG, shots, corners, fouls and
-cards come from the CSV files published by [football-data.co.uk](https://www.football-data.co.uk/).
-Each user downloads them by hand. The files are never committed to this repository
-(`data/external/` is ignored by git).
+football-data.org no da estadísticas por partido, así que el xG, los tiros, los córners, las
+faltas y las tarjetas vienen de los CSV que publica
+[football-data.co.uk](https://www.football-data.co.uk/). Cada usuario los descarga a mano y
+nunca se suben al repositorio (`data/external/` está ignorado por git).
 
-1. Download one file per division and season from
-   `https://www.football-data.co.uk/mmz4281/<yyzz>/<DIV>.csv`, for example
-   `https://www.football-data.co.uk/mmz4281/2627/SP1.csv`. `<yyzz>` is the season written
-   as two-digit start and end years (`2627` is 2026-27).
-2. Save each file as `data/external/football-data-co-uk/<yyzz>/<DIV>.csv`.
-3. Run the import:
+1. Descarga un archivo por división y temporada desde
+   `https://www.football-data.co.uk/mmz4281/<aaAA>/<DIV>.csv`, por ejemplo
+   `https://www.football-data.co.uk/mmz4281/2627/SP1.csv`. `<aaAA>` es la temporada escrita
+   con los dos últimos dígitos del año de inicio y del de fin (`2627` es 2026-27).
+2. Guarda cada archivo como `data/external/football-data-co-uk/<aaAA>/<DIV>.csv`.
+3. Ejecuta la importación:
 
 ```bash
 python -m sports_dashboard.stats_import
 ```
 
-Divisions map to competitions as `SP1` -> `PD`, `E0` -> `PL`, `I1` -> `SA`,
-`D1` -> `BL1` and `F1` -> `FL1`. Options: `--folder` (default
-`data/external/football-data-co-uk`) and `--aliases` (default `data/team_aliases.csv`).
+Las divisiones corresponden a estas competiciones: `SP1` -> `PD`, `E0` -> `PL`,
+`I1` -> `SA`, `D1` -> `BL1` y `F1` -> `FL1`. Opciones: `--folder` (por defecto
+`data/external/football-data-co-uk`) y `--aliases` (por defecto `data/team_aliases.csv`).
 
-Run the football-data.org ingest first: the import matches CSV rows to the matches
-already in the database.
+Ejecuta antes la ingesta de football-data.org: la importación busca cada fila del CSV entre
+los partidos que ya están en la base.
 
-The import prints one line per file (`matched`, `unmatched`). Under it, on stderr, it lists
-each unmatched pair as `  Home - Away`: a CSV row with no match in the database, or the
-sign of a wrong alias (an alias that points to the wrong team). Unmatched rows do not fail
-the run. Exit code 0 means ok; 1 means unrecognised team names or a problem with the aliases
-file.
+La importación escribe una línea por archivo (`matched`, `unmatched`). Debajo, por stderr,
+lista cada pareja sin emparejar como `  Local - Visitante`: una fila del CSV sin partido en
+la base, o la señal de un alias equivocado (que apunta al equipo que no es). Las filas sin
+emparejar no hacen fallar la ejecución. Código de salida 0: todo bien; 1: hay nombres de
+equipo que no reconoce o un problema en el archivo de alias.
 
-**Team name aliases.** The two sources spell some team names differently. The import
-lists every team name it does not recognise and imports nothing until
-`data/team_aliases.csv` covers them. The file has two columns, `alias,team_id`: `alias`
-is the name as written in the CSV (case, accents and punctuation are ignored) and `team_id` is the id of that team in the
-`teams` table. Add one line per unrecognised name and run the import again.
-The file is validated before anything is imported: empty cells, a `team_id` that is not a
-number or does not exist in `teams` are reported together with their line numbers.
+**Alias de nombres de equipo.** Las dos fuentes escriben algunos nombres de forma distinta.
+La importación lista todos los nombres que no reconoce y no importa nada hasta que
+`data/team_aliases.csv` los cubra. El archivo tiene dos columnas, `alias,team_id`: `alias`
+es el nombre tal como aparece en el CSV (se ignoran mayúsculas, tildes y signos) y `team_id`
+es el id de ese equipo en la tabla `teams`. Añade una línea por cada nombre no reconocido y
+vuelve a ejecutar la importación. El archivo se valida antes de importar nada: las celdas
+vacías y los `team_id` que no son un número o no existen en `teams` se informan juntos, con
+su número de línea.
 
 ```
 alias,team_id
 Ath Madrid,78
 ```
 
-**Terms of use.** football-data.co.uk states that its data is for private individuals,
-not for commercial use or AI training. Read their terms before reusing the files.
+**Condiciones de uso.** football-data.co.uk indica que sus datos son para particulares, no
+para uso comercial ni para entrenar IA. Lee sus condiciones antes de reutilizar los archivos.
 
 ## Tests
 
@@ -152,32 +160,41 @@ not for commercial use or AI training. Read their terms before reusing the files
 pytest -q
 ```
 
-The tests use a separate `sports_test` database from the same Docker container, a fake
-API client and a simulated clock, so they never call the real API or wait for rate
-limits. The CI workflow runs them on every push.
+Los tests usan una base de datos aparte, `sports_test`, del mismo contenedor de Docker, un
+cliente de API falso y un reloj simulado, así que nunca llaman a la API real ni esperan por
+los límites de peticiones. GitHub Actions los ejecuta en cada cambio.
 
-## Data sources and limits
+## Fuentes de datos y límites
 
-- [football-data.org](https://www.football-data.org/), free tier: matches, teams, squads
-  and scorers. Check their terms before reusing the data.
-- [football-data.co.uk](https://www.football-data.co.uk/): match statistics, loaded from
-  CSV files you download yourself (see above).
+- [football-data.org](https://www.football-data.org/), plan gratuito: partidos, equipos,
+  plantillas y goleadores. Revisa sus condiciones antes de reutilizar los datos.
+- [football-data.co.uk](https://www.football-data.co.uk/): estadísticas por partido, a partir
+  de CSV que descargas tú (ver arriba).
 
-The free plan of football-data.org allows about 10 requests per minute, so loading
-5 leagues x 3 seasons takes about 5 minutes. A competition that is not part of your plan
-is reported as a failure and skipped, and the rest of the run continues.
+El plan gratuito de football-data.org permite unas 10 peticiones por minuto, así que cargar
+5 ligas x 3 temporadas tarda unos 5 minutos. Una competición que no entra en tu plan se
+informa como fallo y se salta, y el resto de la carga continúa.
 
-## Data caveats
+## Limitaciones de los datos
 
-- Squads are per season and live in `squad_members(season, team_id, player_id)`. Loading
-  a season again replaces that team's squad for that season.
-- `players` has one row per person. Its `team_id` is the team of the latest season loaded,
-  so load the seasons in one call (for example `--seasons 2024,2025,2026`): the oldest is
-  processed first and the latest wins.
-- The coach in `teams.coach` is the current coach, whatever season was loaded.
-- The scorers list has no `position` field, so player positions come from the squads.
+- Las plantillas son por temporada y están en `squad_members(season, team_id, player_id)`.
+  Volver a cargar una temporada sustituye la plantilla de ese equipo en esa temporada.
+- `players` tiene una fila por persona. Su `team_id` es el equipo de la última temporada
+  cargada, así que conviene cargar las temporadas de una vez (por ejemplo
+  `--seasons 2024,2025,2026`): se procesa primero la más antigua y gana la más reciente.
+- El entrenador de `teams.coach` es siempre el actual, sea cual sea la temporada cargada.
+- La lista de goleadores no trae la posición, así que la posición de cada jugador sale de las
+  plantillas.
 
-## Roadmap
+## CI
 
-- Match outcome prediction with scikit-learn, evaluated against a "home team wins" baseline.
-- Basketball section using a second public API.
+GitHub Actions ejecuta dos trabajos en cada cambio, cada uno con su propio PostgreSQL:
+
+- `python`: pytest para el código de ingesta.
+- `web`: ESLint, comprobación de tipos de TypeScript, tests de Vitest y `next build`.
+
+## Próximos pasos
+
+- Fase B: estadísticas de jugadores con API-Football.
+- Fase D: análisis histórico con los datos abiertos de StatsBomb.
+- Predicción de resultados con scikit-learn, comparada con la regla "gana el de casa".
