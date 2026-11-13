@@ -2,6 +2,7 @@ import Link from "next/link";
 import { es } from "@/lib/es";
 import { SECTIONS, sectionHref, type SectionId } from "@/lib/sections";
 
+/** Underlined section tabs; the active one is underlined in the accent. */
 export function SectionNav({
   slug,
   season,
@@ -12,19 +13,19 @@ export function SectionNav({
   active: SectionId | null;
 }) {
   return (
-    <nav aria-label={es.nav.sections}>
-      <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+    <nav aria-label={es.nav.sections} className="border-b border-border">
+      <ul className="scroll-row m-0 -mb-px flex list-none gap-5 p-0 sm:gap-6">
         {SECTIONS.map((s) => {
           const isActive = s.id === active;
           return (
-            <li key={s.id}>
+            <li key={s.id} className="shrink-0">
               <Link
                 href={sectionHref(slug, season, s.id)}
                 aria-current={isActive ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center rounded-card border px-4 text-sm ${
+                className={`inline-flex h-11 items-center whitespace-nowrap border-b-2 text-sm font-medium transition-colors duration-150 ${
                   isActive
-                    ? "border-accent bg-accent-soft font-medium text-accent"
-                    : "border-border bg-card text-fg hover:bg-bg"
+                    ? "border-accent text-fg"
+                    : "border-transparent text-muted hover:border-border-strong hover:text-fg"
                 }`}
               >
                 {es.sections[s.id]}

@@ -5,6 +5,7 @@ export const es = {
     "Clasificaciones, forma reciente y estadísticas de las cinco grandes ligas europeas.",
   skipLink: "Saltar al contenido",
   loading: "Cargando…",
+  brandHome: "Estadísticas de fútbol, ir al inicio",
 
   nav: {
     leagues: "Ligas",
@@ -35,10 +36,32 @@ export const es = {
       goalDifference: "DG",
       form: "Forma",
       points: "Puntos",
+      won: "V",
+      drawn: "E",
+      lost: "D",
+      goalsFor: "GF",
+      goalsAgainst: "GC",
     },
-    legendZones: "Franja azul: primeras 4 posiciones. Franja roja: últimas 3.",
+    columnTitles: {
+      position: "Posición",
+      played: "Partidos jugados",
+      won: "Victorias",
+      drawn: "Empates",
+      lost: "Derrotas",
+      goalsFor: "Goles a favor",
+      goalsAgainst: "Goles en contra",
+      goalDifference: "Diferencia de goles",
+      form: "Últimos 5 partidos",
+    },
+    zones: {
+      top: "zona alta",
+      bottom: "descenso",
+    },
+    legendTitle: "Leyenda",
+    legendTop: "Zona alta: puestos 1–4",
+    legendBottom: "Descenso: últimos 3",
     legendForm:
-      "Los círculos son los últimos 5 partidos (V victoria, E empate, D derrota).",
+      "Forma: últimos 5 partidos, del más antiguo al más reciente (V victoria, E empate, D derrota)",
   },
 
   results: {
@@ -232,6 +255,14 @@ export const es = {
     bestAttack: "Mejor ataque",
     bestDefense: "Mejor defensa",
     goalsPerMatch: "Goles por partido",
+    title: "Indicadores de la temporada",
+    leagueAverage: "Media de la liga",
+    units: {
+      points: "pts",
+      goals: "goles",
+      goalsAgainst: "goles en contra",
+      perMatch: "por partido",
+    },
   },
 
   form: {
@@ -255,6 +286,9 @@ export const es = {
     noData: "Todavía no hay datos cargados",
     noDataHint:
       "Carga datos con el comando: python -m sports_dashboard.ingest --competitions PD --seasons 2024",
+    noFinishedMatchesHint:
+      "La clasificación aparecerá cuando se juegue el primer partido. Mientras tanto puedes consultar el calendario.",
+    seeResults: "Ver el calendario de partidos",
   },
 
   error: {

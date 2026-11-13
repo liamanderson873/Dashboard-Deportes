@@ -25,14 +25,47 @@ function contrast(a: string, b: string): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
+// Every text/background pair the UI actually uses, as [text, background].
+const TEXT_PAIRS: [string, string][] = [
+  ["fg", "bg"],
+  ["fg", "card"],
+  ["fg", "surface-2"],
+  ["fg", "accent-soft"],
+  ["muted", "bg"],
+  ["muted", "card"],
+  ["muted", "surface-2"],
+  ["subtle", "bg"],
+  ["subtle", "card"],
+  ["subtle", "surface-2"],
+  ["accent", "bg"],
+  ["accent", "card"],
+  ["accent", "surface-2"],
+  ["accent", "accent-soft"],
+  ["loss", "card"],
+  ["on-ink", "ink"],
+  ["on-ink-muted", "ink"],
+];
+
+// White letters on filled chips and buttons.
+const WHITE_ON = ["win", "draw", "loss", "accent"];
+
 describe("design tokens", () => {
-  it("test_text_and_form_circle_colors_meet_wcag_aa_contrast", () => {
-    const white = "#ffffff";
-    expect(contrast(white, token("win"))).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(white, token("draw"))).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(white, token("loss"))).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(token("fg"), token("bg"))).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(token("muted"), token("bg"))).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(token("accent"), token("card"))).toBeGreaterThanOrEqual(4.5);
+  it("test_every_text_pair_meets_wcag_aa_contrast", () => {
+    for (const [text, background] of TEXT_PAIRS) {
+      expect(
+        contrast(token(text), token(background)),
+        `--${text} on --${background}`,
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it("test_white_text_on_result_chips_and_accent_meets_wcag_aa_contrast", () => {
+    for (const fill of WHITE_ON) {
+      expect(contrast("#ffffff", token(fill)), `white on --${fill}`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it("test_secondary_text_on_white_reaches_aaa", () => {
+    expect(contrast(token("muted"), token("card"))).toBeGreaterThanOrEqual(7);
   });
 });

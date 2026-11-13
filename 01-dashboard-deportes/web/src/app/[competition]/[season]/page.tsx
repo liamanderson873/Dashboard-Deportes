@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { EmptyState } from "@/components/EmptyState";
-import { KpiCard } from "@/components/KpiCard";
+import Link from "next/link";
+import { ACTION_SECONDARY, EmptyState } from "@/components/EmptyState";
+import { KpiCell, KpiStrip } from "@/components/KpiStrip";
 import { LeagueHeader } from "@/components/LeagueHeader";
-import { StandingsTable } from "@/components/StandingsTable";
+import { StandingsLegend, StandingsTable } from "@/components/StandingsTable";
 import { TeamCrest } from "@/components/TeamCrest";
 import { formatSeason } from "@/lib/competitions";
 import { getSql } from "@/lib/db";
@@ -11,6 +12,7 @@ import { es } from "@/lib/es";
 import { loadLeagueContext } from "@/lib/league-context";
 import { getStandings } from "@/lib/queries/standings";
 import { formatDecimalEs, resolveRoute } from "@/lib/route-params";
+import { sectionHref } from "@/lib/sections";
 import { summarize, type StandingRow } from "@/lib/standings";
 
 export const dynamic = "force-dynamic";
@@ -26,14 +28,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function TeamValue({ row, value }: { row: StandingRow; value: string }) {
+function KpiTeam({ row }: { row: StandingRow }) {
+  const name = row.shortName || row.team;
   return (
-    <span className="flex min-w-0 items-center gap-2">
+    <>
       <TeamCrest crest={row.crest} tla={row.tla} size={24} />
-      <span className="min-w-0 truncate">
-        {row.shortName || row.team} <span className="num text-muted">{value}</span>
+      <span className="min-w-0 truncate" title={row.team || name}>
+        {name}
       </span>
-    </span>
+    </>
   );
 }
 
@@ -64,39 +67,55 @@ export default async function StandingsPage({ params }: Props) {
 
       {summary ? (
         <>
-          <section className="mb-6 grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 lg:grid-cols-4">
-            <KpiCard label={es.kpi.leader}>
-              <TeamValue row={summary.leader} value={`${summary.leader.points}`} />
-            </KpiCard>
-            <KpiCard label={es.kpi.bestAttack}>
-              <TeamValue
-                row={summary.bestAttack}
-                value={`${summary.bestAttack.goalsFor}`}
-              />
-            </KpiCard>
-            <KpiCard label={es.kpi.bestDefense}>
-              <TeamValue
-                row={summary.bestDefense}
-                value={`${summary.bestDefense.goalsAgainst}`}
-              />
-            </KpiCard>
-            <KpiCard label={es.kpi.goalsPerMatch}>
-              <span className="num">{formatDecimalEs(summary.goalsPerMatch)}</span>
-            </KpiCard>
-          </section>
+          <KpiStrip label={es.kpi.title}>
+            <KpiCell
+              label={es.kpi.leader}
+              team={<KpiTeam row={summary.leader} />}
+              value={`${summary.leader.points}`}
+              unit={es.kpi.units.points}
+              highlight
+            />
+            <KpiCell
+              label={es.kpi.bestAttack}
+              team={<KpiTeam row={summary.bestAttack} />}
+              value={`${summary.bestAttack.goalsFor}`}
+              unit={es.kpi.units.goals}
+            />
+            <KpiCell
+              label={es.kpi.bestDefense}
+              team={<KpiTeam row={summary.bestDefense} />}
+              value={`${summary.bestDefense.goalsAgainst}`}
+              unit={es.kpi.units.goalsAgainst}
+            />
+            <KpiCell
+              label={es.kpi.goalsPerMatch}
+              team={<span className="font-medium text-muted">{es.kpi.leagueAverage}</span>}
+              value={formatDecimalEs(summary.goalsPerMatch)}
+              unit={es.kpi.units.perMatch}
+            />
+          </KpiStrip>
           <StandingsTable
             slug={context.competition.slug}
             season={context.season}
             rows={rows}
             caption={es.standings.caption(context.competition.name, seasonLabel)}
           />
-          <p className="mt-4 text-sm text-muted">
-            {rows.length >= 10 ? `${es.standings.legendZones} ` : ""}
-            {es.standings.legendForm}
-          </p>
+          <StandingsLegend showZones={rows.length >= 10} />
         </>
       ) : (
-        <EmptyState title={es.empty.noFinishedMatches} />
+        <EmptyState
+          title={es.empty.noFinishedMatches}
+          action={
+            <Link
+              href={sectionHref(context.competition.slug, context.season, "resultados")}
+              className={ACTION_SECONDARY}
+            >
+              {es.empty.seeResults}
+            </Link>
+          }
+        >
+          <p>{es.empty.noFinishedMatchesHint}</p>
+        </EmptyState>
       )}
     </>
   );

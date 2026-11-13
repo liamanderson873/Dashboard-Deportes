@@ -1,26 +1,42 @@
 "use client";
 
-import { EmptyState } from "@/components/EmptyState";
+import { ACTION_PRIMARY, EmptyState } from "@/components/EmptyState";
+import { SiteBand } from "@/components/SiteBand";
 import { es } from "@/lib/es";
 
 // `retry` re-fetches the server render (Next 16); `reset` alone would only
 // re-render the cached failure.
 export default function ErrorPage({ retry }: { error: unknown; retry: () => void }) {
   return (
-    <EmptyState level={1} title={es.error.title}>
-      <p>{es.error.stepsIntro}</p>
-      <ul className="mx-auto mt-2 max-w-md list-disc pl-5 text-left">
-        {es.error.steps.map((step) => (
-          <li key={step}>{step}</li>
-        ))}
-      </ul>
-      <button
-        type="button"
-        onClick={() => retry()}
-        className="mt-4 inline-flex min-h-11 items-center rounded-card bg-accent px-5 font-medium text-white"
-      >
-        {es.error.retry}
-      </button>
-    </EmptyState>
+    <>
+      <SiteBand />
+      <div id="contenido" className="pt-8">
+        <EmptyState
+          level={1}
+          tone="error"
+          title={es.error.title}
+          action={
+            <button type="button" onClick={() => retry()} className={ACTION_PRIMARY}>
+              {es.error.retry}
+            </button>
+          }
+        >
+          <p>{es.error.stepsIntro}</p>
+          <ol className="mt-3 flex list-none flex-col gap-2 p-0">
+            {es.error.steps.map((step, i) => (
+              <li key={step} className="flex gap-3">
+                <span
+                  aria-hidden="true"
+                  className="num inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[0.75rem] font-semibold text-fg"
+                >
+                  {i + 1}
+                </span>
+                <span className="pt-0.5">{step}</span>
+              </li>
+            ))}
+          </ol>
+        </EmptyState>
+      </div>
+    </>
   );
 }

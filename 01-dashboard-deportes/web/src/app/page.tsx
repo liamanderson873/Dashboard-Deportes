@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { EmptyState } from "@/components/EmptyState";
+import { SiteBand } from "@/components/SiteBand";
 import { COMPETITIONS } from "@/lib/competitions";
 import { getSql } from "@/lib/db";
 import { es } from "@/lib/es";
@@ -13,8 +14,13 @@ export default async function Home() {
   if (view && competition) redirect(`/${competition.slug}/${view.season}`);
 
   return (
-    <EmptyState level={1} title={es.empty.noData}>
-      <p>{es.empty.noDataHint}</p>
-    </EmptyState>
+    <>
+      <SiteBand />
+      <div id="contenido" className="pt-8">
+        <EmptyState level={1} title={es.empty.noData}>
+          <p>{es.empty.noDataHint}</p>
+        </EmptyState>
+      </div>
+    </>
   );
 }

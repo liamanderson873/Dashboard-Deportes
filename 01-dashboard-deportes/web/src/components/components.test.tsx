@@ -105,6 +105,9 @@ describe("components", () => {
     const html = renderToStaticMarkup(<StandingsTable slug="pd" season={2024} rows={rows(20)} />);
     expect(html.match(/data-zone="top"/g)).toHaveLength(4);
     expect(html.match(/data-zone="bottom"/g)).toHaveLength(3);
+    // Zones are also named in text, not only by the coloured mark.
+    expect(html.match(/\(zona alta\)/g)).toHaveLength(4);
+    expect(html.match(/\(descenso\)/g)).toHaveLength(3);
   });
 
   test("standings_table_renders_rows_with_null_names_and_crest", () => {
