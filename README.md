@@ -36,13 +36,13 @@ Un selector **Fútbol / NBA** separa los dos espacios. Fútbol utiliza verde de 
 | **Calidad contextual del tiro** | **Mi quinteto** |
 | ![Mapa y probabilidad de tiro](01-dashboard-deportes/docs/img/nba-shots.png) | ![Quinteto NBA](01-dashboard-deportes/docs/img/nba-lineup.png) |
 
-- **Partidos y playoffs:** regresión logística con diez temporadas completas, variables anteriores al partido y 10.000 simulaciones para clasificación, play-in, avance de rondas y título.
+- **Partidos y playoffs:** regresión logística con diez temporadas completas y variables anteriores al partido. El laboratorio ejecuta 2.000 simulaciones de temporada de 82 partidos, NBA Cup, play-in y playoffs; permite condicionar resultados y explorar cuadros con logos.
 - **Tiros:** gradient boosting con tres temporadas recientes, coordenadas, distancia, ángulo, periodo, reloj del cuarto y valor del lanzamiento. Mapa de aciertos/fallos, probabilidad estimada, xFG y puntos esperados.
 - **Evaluación visible:** prueba temporal reservada de 2025-26, referencias, log loss, Brier, AUC y gráficos de calibración. AUC no equivale al porcentaje de aciertos.
 
 La muestra actual contiene **30 equipos, 528 perfiles de jugadores, 174 encuentros terminados y 29.857 tiros** de 2026-27. Los datos llegan de archivos públicos de NBA Stats publicados por SportsDataverse, sin una clave NBA. La conexión directa con NBA no respondió en las pruebas; la procedencia del archivo se identifica en la web.
 
-**Límites visibles:** faltan treinta partidos por asignar en el calendario; el simulador representa un escenario condicionado a los 1.200 encuentros conocidos. Los desempates son aproximados. El modelo de tiro no incluye distancia al defensor ni reloj de posesión individual. Consulta [la metodología y reproducción de NBA](docs/nba-integration.md) y [los resultados completos](docs/nba-evaluation-2026.json).
+**Límites visibles:** el calendario publicado asigna 1.200 encuentros. El laboratorio completa los treinta restantes con emparejamientos hipotéticos dependientes de NBA Cup, sin escribirlos en el calendario real. Los marcadores auxiliares y los desempates por puntos siguen siendo aproximados. El modelo de tiro no incluye distancia al defensor ni reloj de posesión individual. El historial guarda pronósticos antes del partido; las fichas incorporan tendencias de cinco/diez encuentros, análisis por zonas y explicaciones de la regresión. Consulta [el laboratorio NBA](docs/nba-laboratory.md) y [la metodología y reproducción de NBA](docs/nba-integration.md) y [los resultados completos](docs/nba-evaluation-2026.json).
 
 ## Datos y temporada actual
 
@@ -143,7 +143,7 @@ npm run typecheck
 npm run build
 ```
 
-Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **127 pruebas Python y 177 pruebas web**, además de lint, tipos y compilación.
+Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **130 pruebas Python y 190 pruebas web**, además de lint, tipos y compilación.
 
 ## Estructura y documentación
 

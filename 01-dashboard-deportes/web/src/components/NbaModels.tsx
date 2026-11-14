@@ -1,16 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { NbaTeamLogo } from "./TeamCrest";
-import { useState } from "react";
+import { NbaLaboratory } from "./NbaLaboratory";
 import {
   type Evaluation,
-  type Forecast,
   type NbaData,
   type NbaModel,
   nbaFormat,
   nbaSeason,
-  nbaProbability,
 } from "@/lib/nba";
 
 function Calibration({ evaluation }: { evaluation: Evaluation }) {
@@ -198,185 +194,9 @@ function ModelReport({
   );
 }
 
-export function NbaModels({ data }: { data: NbaData }) {
-  const forecast = data.models.playoffs;
-  const [sort, setSort] = useState<keyof Forecast>("champion");
-  const [conference, setConference] = useState("");
-  const rows = ((forecast?.predictions ?? []) as Forecast[])
-    .filter(
-      (p) =>
-        !conference ||
-        data.teams.find((t) => t.id === p.team_id)?.conference === conference,
-    )
-    .toSorted((a, b) => Number(b[sort]) - Number(a[sort]));
-  const metadata = forecast?.metadata;
+function NbaModelDetails({ data }: { data: NbaData }) {
   return (
     <>
-      <section className="mb-8 rounded-panel bg-ink p-5 text-on-ink sm:p-7">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-on-ink-muted">
-          Laboratorio NBA · probabilidades explicables
-        </p>
-        <h2 className="display max-w-3xl text-3xl font-bold">
-          Del próximo partido a la lucha por el título
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-on-ink-muted">
-          La regresión logística estima cada encuentro y el simulador recorre
-          temporada, play-in y series. El modelo de tiro estima la probabilidad
-          de acierto con contexto observable.
-        </p>
-      </section>
-      <section className="mb-8">
-        <h2 className="display mb-4 text-2xl font-bold">
-          Simulación de temporada y playoffs
-        </h2>
-        {metadata?.conditional === true && (
-          <div className="mb-5 rounded-panel border border-border-strong bg-surface-2 p-4">
-            <p className="text-sm font-semibold">
-              Escenario condicionado al calendario publicado:{" "}
-              {nbaFormat(Number(metadata.published_games), 0)} de{" "}
-              {nbaFormat(Number(metadata.expected_games), 0)} encuentros
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
-              Faltan {String(metadata.missing_games)} partidos por asignar. Las
-              victorias y probabilidades de esta tabla se calculan con los
-              encuentros conocidos. Los cruces futuros de la NBA Cup todavía
-              pueden cambiar el escenario.
-            </p>
-          </div>
-        )}
-        {rows.length ? (
-          <>
-            <div className="mb-4 flex flex-wrap gap-3">
-              <label className="flex flex-col gap-2">
-                <span className="eyebrow">Conferencia</span>
-                <select
-                  value={conference}
-                  onChange={(e) => setConference(e.target.value)}
-                  className="min-h-11 rounded-control border border-border-strong bg-card px-3 text-base sm:text-sm"
-                >
-                  <option value="">Ambas</option>
-                  <option value="Este">Este</option>
-                  <option value="Oeste">Oeste</option>
-                </select>
-              </label>
-              <label className="flex flex-col gap-2">
-                <span className="eyebrow">Ordenar por probabilidad de</span>
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value as keyof Forecast)}
-                  className="min-h-11 rounded-control border border-border-strong bg-card px-3 text-base sm:text-sm"
-                >
-                  <option value="champion">Ganar el título</option>
-                  <option value="playoffs">Entrar en playoffs</option>
-                  <option value="round2">Avanzar a segunda ronda</option>
-                  <option value="final">Llegar a la final</option>
-                </select>
-              </label>
-            </div>
-            <div className="overflow-x-auto rounded-panel border border-border bg-card">
-              <table className="w-full text-left text-sm">
-                <caption className="sr-only">
-                  Probabilidades de temporada condicionadas al calendario
-                  conocido
-                </caption>
-                <thead className="bg-surface-2">
-                  <tr>
-                    {[
-                      "Equipo",
-                      "V proyectadas",
-                      "PJ previstos",
-                      "Playoffs",
-                      "2.ª ronda",
-                      "Final conf.",
-                      "Final NBA",
-                      "Campeón",
-                    ].map((h) => (
-                      <th
-                        key={h}
-                        scope="col"
-                        className="whitespace-nowrap px-3 py-3"
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((row) => (
-                    <tr key={row.team_id} className="border-t border-border">
-                      <th scope="row" className="min-w-44 px-3 py-3">
-                        <Link
-                          className="font-semibold text-accent hover:underline"
-                          href={`/nba/${data.season}/equipo/${row.team_id}`}
-                        >
-                          <span className="flex items-center gap-3">
-                            <NbaTeamLogo id={row.team_id} size={32} />
-                            {data.teams.find((t) => t.id === row.team_id)
-                              ?.name ?? row.team_id}
-                          </span>
-                        </Link>
-                      </th>
-                      <td
-                        className="num whitespace-nowrap px-3 py-3"
-                        title={`Intervalo central del 90%: ${row.wins_p05}–${row.wins_p95}`}
-                      >
-                        {nbaFormat(row.wins_mean)}{" "}
-                        <span className="text-xs text-subtle">
-                          ({row.wins_p05}–{row.wins_p95})
-                        </span>
-                      </td>
-                      <td className="num px-3 py-3">{row.scheduled_games}</td>
-                      {(
-                        [
-                          "playoffs",
-                          "round2",
-                          "conference_final",
-                          "final",
-                          "champion",
-                        ] as const
-                      ).map((key) => (
-                        <td
-                          key={key}
-                          className={`num px-3 py-3 ${key === "champion" ? "font-bold text-accent" : ""}`}
-                        >
-                          {nbaProbability(row[key])}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <details className="mt-4 rounded-panel border border-border bg-card p-4">
-              <summary className="cursor-pointer text-sm font-semibold">
-                Supuestos y límites · {nbaFormat(Number(metadata?.runs), 0)}{" "}
-                simulaciones
-              </summary>
-              {["scope", "ties", "rest", "uncertainty"].map((key) => (
-                <p
-                  key={key}
-                  className="mt-3 text-xs leading-relaxed text-subtle"
-                >
-                  {String(metadata?.[key] ?? "")}
-                </p>
-              ))}
-              <p className="mt-3 text-xs text-subtle">
-                La clasificación directa y el play-in se simulan antes de formar
-                el cuadro. Los intervalos junto a las victorias recogen el 90%
-                central de las simulaciones. No se modelan lesiones futuras ni
-                cambios de plantilla.
-              </p>
-            </details>
-          </>
-        ) : (
-          <p className="rounded-panel border border-border bg-card p-6 text-muted">
-            No hay una simulación disponible para esta temporada.{" "}
-            {typeof metadata?.unavailable === "string"
-              ? metadata.unavailable
-              : ""}
-          </p>
-        )}
-      </section>
       <div className="grid items-start gap-5 xl:grid-cols-2">
         <ModelReport
           model={data.models.games}
@@ -387,12 +207,30 @@ export function NbaModels({ data }: { data: NbaData }) {
           title="Gradient boosting de tiros"
         />
       </div>
-      <p className="mt-5 max-w-4xl text-xs leading-relaxed text-subtle">
-        El modelo de tiro no dispone de distancia al defensor ni reloj de
-        posesión. El tiempo restante del cuarto es una variable diferente. Los
-        gráficos y métricas permiten revisar el comportamiento real de los
-        modelos; ninguna probabilidad garantiza un resultado.
+      <p className="mt-5 text-sm leading-relaxed text-muted">
+        El simulador reutiliza la regresión logística histórica con la fuerza
+        actual. Los márgenes auxiliares para desempates se ajustan con Ridge y
+        se evalúan cronológicamente. La temporada se completa con
+        emparejamientos hipotéticos de NBA Cup; no representa un calendario
+        oficial publicado. El modelo de tiro no incluye defensor ni reloj de
+        posesión. Ninguna probabilidad garantiza un resultado.
       </p>
+    </>
+  );
+}
+
+export function NbaModels({ data }: { data: NbaData }) {
+  return (
+    <>
+      <NbaLaboratory data={data} />
+      <details className="mb-8 rounded-panel border border-border bg-card p-5">
+        <summary className="display min-h-11 text-xl font-bold">
+          Metodología y evaluación histórica de los modelos
+        </summary>
+        <div className="mt-5">
+          <NbaModelDetails data={data} />
+        </div>
+      </details>
     </>
   );
 }

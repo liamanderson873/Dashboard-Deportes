@@ -56,6 +56,10 @@ try {
   const shots = [
     ["nba-standings.png", "/nba/2026", {}],
     ["nba-models.png", "/nba/2026/modelos", {}],
+    ["nba-playoff-bracket.png", "/nba/2026/modelos", { nbaRegion: "Cuadro de un recorrido simulado" }],
+    ["nba-cup.png", "/nba/2026/modelos", { cup: true }],
+    ["nba-trends.png", "/nba/2026/jugador/201939", { nbaRegion: "Tendencias recientes" }],
+    ["nba-explanation.png", "/nba/2026/partido/0022600034", { nbaRegion: "Explicación del pronóstico" }],
     ["nba-lineup.png", "/nba/2026/quinteto", {}],
     ["nba-shots.png", "/nba/2026/jugador/201939", { nbaShotRegion: true }],
     ["matches-2026.png", "/pd/2026/partidos", {}],
@@ -69,10 +73,16 @@ try {
   ];
   for (const [file, route, opts] of shots) {
     await open(page, route);
-    if (opts.nbaShotRegion) {
-      await page.getByRole("region", { name: "Mapa y calidad de tiro NBA" }).screenshot({ path: path.join(imgDir, file) });
+    const { nbaShotRegion, nbaRegion, cup, ...screenshotOptions } = opts;
+    if (cup) {
+      await page.getByRole("button", { name: "NBA Cup", exact: true }).click();
+      await page.getByRole("heading", { name: "Oeste A", exact: true }).scrollIntoViewIfNeeded();
+    }
+    const region = nbaShotRegion ? "Mapa y calidad de tiro NBA" : nbaRegion;
+    if (region) {
+      await page.getByRole("region", { name: region, exact: true }).screenshot({ path: path.join(imgDir, file) });
     } else {
-      await page.screenshot({ path: path.join(imgDir, file), ...opts });
+      await page.screenshot({ path: path.join(imgDir, file), ...screenshotOptions });
     }
     console.log("saved", file);
   }

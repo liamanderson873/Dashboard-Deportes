@@ -17,14 +17,16 @@ export function testSql(): Sql {
 
 /** Drops every table and recreates the schema from the Python project's SQL file. */
 export async function resetTestDatabase(sql: Sql): Promise<void> {
-  const [row] = await sql<{ name: string }[]>`SELECT current_database() AS name`;
+  const [row] = await sql<
+    { name: string }[]
+  >`SELECT current_database() AS name`;
   if (row?.name !== TEST_DATABASE_NAME) {
     throw new Error(
       `Refusing to reset database "${row?.name}": only "${TEST_DATABASE_NAME}" is allowed.`,
     );
   }
   await sql.unsafe(
-    "DROP TABLE IF EXISTS nba_models, nba_sources, nba_shots, nba_player_games, nba_players, nba_team_stats, nba_team_games, nba_games, nba_teams, bsd_player_matches, bsd_squads, bsd_matches, bsd_players, bsd_team_map, bsd_teams, bsd_seasons, match_stats, squad_members, scorers, players, competitions, matches, teams CASCADE",
+    "DROP TABLE IF EXISTS nba_prediction_history, nba_models, nba_sources, nba_shots, nba_player_games, nba_players, nba_team_stats, nba_team_games, nba_games, nba_teams, bsd_player_matches, bsd_squads, bsd_matches, bsd_players, bsd_team_map, bsd_teams, bsd_seasons, match_stats, squad_members, scorers, players, competitions, matches, teams CASCADE",
   );
   await sql.unsafe(readFileSync(SCHEMA_PATH, "utf8"));
 }

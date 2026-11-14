@@ -56,3 +56,9 @@ El panel de modelos publica evaluación temporal, calibración y supuestos. Las 
 Fútbol combina verde profundo y superficies claras; NBA utiliza azul noche, cobre y fondos cálidos. Los tokens semánticos cambian con el deporte renderizado, sin esperar a JavaScript. Las cabeceras muestran trazados decorativos de campo o cancha y las dos paletas tienen comprobaciones de contraste.
 
 `TeamCrest` sirve los escudos de fútbol almacenados en `public/logos/`; `NbaTeamLogo` utiliza los 30 logos NBA locales. `team-logos.json` conserva procedencia y SHA-256. Los recursos mantienen proporciones, colores y espacio reservado; un fallo de carga presenta la abreviatura. Consulta los [criterios visuales](../../docs/diseno-marcador.md).
+
+## Laboratorio NBA
+
+El destino Simulador (`/nba/{año}/modelos`) incorpora cuadros de playoffs y NBA Cup, condiciones de resultados y un historial prospectivo. Las rutas `/api/nba/{año}/simulate` y `/api/nba/{año}/history` consultan PostgreSQL; la primera calcula escenarios acotados de 2.000 recorridos y la segunda solo lee predicciones anteriores al encuentro. No se escriben escenarios en el historial.
+
+Las fichas muestran tendencias de cinco/diez partidos, zonas de tiro y contribuciones exactas de la regresión logística. Consulta el [contrato y los límites del laboratorio](../../docs/nba-laboratory.md).

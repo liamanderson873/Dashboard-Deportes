@@ -37,3 +37,13 @@ CREATE TABLE IF NOT EXISTS nba_models (
   season integer NOT NULL, kind text NOT NULL, metadata jsonb NOT NULL, predictions jsonb NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(season,kind)
 );
+
+-- Append-only forecast ledger: deliberately not deleted during snapshot ingestion.
+CREATE TABLE IF NOT EXISTS nba_prediction_history (
+  season integer NOT NULL, game_id text NOT NULL, model_version text NOT NULL,
+  forecast_day date NOT NULL, created_at timestamptz NOT NULL,
+  data_cutoff date NOT NULL, home_win double precision NOT NULL CHECK(home_win BETWEEN 0 AND 1),
+  explanation jsonb NOT NULL,
+  PRIMARY KEY(season,game_id,model_version,forecast_day)
+);
+CREATE INDEX IF NOT EXISTS nba_prediction_history_date_idx ON nba_prediction_history(season,game_id,created_at);

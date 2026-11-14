@@ -176,6 +176,9 @@ def run(engine, season, history=10, shot_history=3, runs=10_000):
         )
         save_model(connection, season, "shots", shot_report, [])
     print("Shot model held-out:", json.dumps(shot_report["test"]), flush=True)
+    from .lab import publish
+
+    publish(engine, season, game_model=model)
     return {"games": report, "shots": shot_report}
 
 

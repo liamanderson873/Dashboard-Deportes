@@ -1,0 +1,79 @@
+{
+  "season": 2026,
+  "created": "2026-11-14T00:03:18.473300+00:00",
+  "cutoff": "2026-11-12",
+  "modelVersion": "c79d03a805aaf1accf52",
+  "engineSha256": "8b467333c85b2639c905dd4a219569e7e3f23d3f27ce0277dd19bf6f8086c613",
+  "publisherSha256": "2674da4766e85130b15970ec394169e14f475ec5572ac62142a9beec4c6cc2c5",
+  "sourceSha256": "eaccc85f342a487fede184c656fb4ad31101d1fa125c2556272fe68946445d1f",
+  "libraries": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1"
+  },
+  "marginReport": {
+    "n": 1236,
+    "mae": 11.589877183338574,
+    "rmse": 14.763732714023387,
+    "alpha": 100,
+    "method": "Ridge alpha=100; pregame features; test untouched before production refit",
+    "features": [
+      "off_est_diff",
+      "def_est_diff",
+      "pace_est_diff",
+      "efg_diff",
+      "tov_rate_diff",
+      "oreb_rate_diff",
+      "ft_rate_diff",
+      "win_diff",
+      "recent_off_diff",
+      "recent_def_diff",
+      "rest_diff",
+      "home_advantage",
+      "playoffs"
+    ],
+    "test_season": 2026,
+    "baseline_mae": 13.252897349254727,
+    "train_seasons": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ]
+  },
+  "marginSD": 13.689311107325024,
+  "overtimeRate": 0.05237277552294724,
+  "season_basis": "end-year for margin historical seasons; route year is start-year",
+  "base_published_games": 1200,
+  "cup_group_games": 60,
+  "history": {
+    "versions": 3051,
+    "games": 1017,
+    "resolved": 0
+  },
+  "simulation_runs": 2000,
+  "seed": 42,
+  "completion": "Thirty hypothetical fixtures per run, never inserted into nba_games. 82 games/team. The Cup championship is excluded from regular season.",
+  "rules_sources": [
+    "https://www.nba.com/news/nba-cup-101",
+    "https://www.nba.com/standings?Season=2026-27"
+  ],
+  "observed_simulation_probability_totals": {
+    "champion": 1.0,
+    "final": 2.0,
+    "conferenceFinal": 4.0,
+    "round2": 8.0,
+    "playoffs": 16.0,
+    "cupQualify": 8.0,
+    "cupSemifinal": 4.0,
+    "cupFinal": 2.0,
+    "cupChampion": 1.0
+  },
+  "observed_hypothetical_fixtures": 30,
+  "observed_games_per_team": 82
+}

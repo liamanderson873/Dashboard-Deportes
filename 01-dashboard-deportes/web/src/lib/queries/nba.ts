@@ -40,7 +40,7 @@ export async function getNbaData(sql: Sql, season: number): Promise<NbaData> {
     sql`SELECT t.*,s.metrics FROM nba_teams t JOIN nba_team_stats s ON s.team_id=t.id WHERE s.season=${season} ORDER BY t.name`,
     sql`SELECT * FROM nba_players WHERE season=${season} ORDER BY name`,
     sql`SELECT * FROM nba_games WHERE season=${season} ORDER BY game_date,id`,
-    sql`SELECT kind,metadata,predictions FROM nba_models WHERE season=${season}`,
+    sql`SELECT kind,metadata,predictions FROM nba_models WHERE season=${season} AND kind<>'laboratory'`,
     sql`SELECT dataset,metadata FROM nba_sources WHERE season=${season}`,
     sql`SELECT count(*) AS n,(SELECT count(DISTINCT game_id) FROM nba_player_games WHERE season=${season}) AS individual_games FROM nba_shots WHERE season=${season}`,
   ]);
@@ -133,4 +133,21 @@ export async function getNbaShots(
       probability: r.probability == null ? null : Number(r.probability),
     })),
   };
+}
+
+export async function getNbaTeamTrendLines(
+  sql: Sql,
+  season: number,
+  id: number,
+): Promise<import("@/lib/nba-trends").TrendLine[]> {
+  const rows =
+    await sql`SELECT t.game_id,t.game_date,t.metrics,o.metrics AS opponent FROM nba_team_games t
+ JOIN nba_team_games o ON o.season=t.season AND o.game_id=t.game_id AND o.team_id<>t.team_id
+ WHERE t.season=${season} AND t.team_id=${id} ORDER BY t.game_date DESC,t.game_id DESC`;
+  return rows.map((r) => ({
+    gameId: String(r.game_id),
+    date: date(r.game_date),
+    metrics: metrics(r.metrics),
+    opponent: metrics(r.opponent),
+  }));
 }

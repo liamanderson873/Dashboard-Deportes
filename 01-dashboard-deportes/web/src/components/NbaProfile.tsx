@@ -1,14 +1,21 @@
 import Link from "next/link";
+import { NbaTrends } from "./NbaTrends";
+import { NbaExplanation } from "./NbaExplanation";
+import { getPredictionExplanation } from "@/lib/queries/nba-lab";
 import { notFound } from "next/navigation";
 import { getSql } from "@/lib/db";
-import { getNbaData, getNbaGameLines, getNbaShots } from "@/lib/queries/nba";
+import {
+  getNbaData,
+  getNbaGameLines,
+  getNbaShots,
+  getNbaTeamTrendLines,
+} from "@/lib/queries/nba";
 import {
   nbaDate,
   nbaLabel,
   nbaSeasonParam,
   nbaValue,
   type NbaMetrics,
-  type NbaGameLine,
 } from "@/lib/nba";
 import { NbaCoverage, NbaHeader } from "./NbaHeader";
 import { NbaGameCards, NbaPlayersTable, NbaStar } from "./NbaWorkbench";
@@ -27,56 +34,6 @@ function StatTiles({ metrics, keys }: { metrics: NbaMetrics; keys: string[] }) {
           <p className="score mt-3 text-3xl">{nbaValue(metrics, key)}</p>
         </div>
       ))}
-    </div>
-  );
-}
-function PointsTrend({ lines }: { lines: NbaGameLine[] }) {
-  const points = lines
-    .filter((l) => l.metrics.pts !== null)
-    .toSorted(
-      (a, b) =>
-        a.date.localeCompare(b.date) || a.gameId.localeCompare(b.gameId),
-    )
-    .slice(-20);
-  if (points.length < 2) return null;
-  const max = Math.max(...points.map((p) => p.metrics.pts ?? 0), 1);
-  return (
-    <div className="my-6 rounded-panel border border-border bg-card p-5">
-      <h2 className="display mb-3 text-xl font-bold">
-        Puntos en tus últimos {points.length} partidos registrados
-      </h2>
-      <svg
-        viewBox="0 0 600 130"
-        role="img"
-        aria-label={`Evolución de puntos. ${points.map((p) => `${nbaDate(p.date)}: ${p.metrics.pts}`).join("; ")}. También disponibles en la tabla.`}
-        className="h-40 w-full"
-      >
-        <path d="M10 115h580" stroke="var(--border)" />
-        <polyline
-          fill="none"
-          stroke="var(--accent)"
-          strokeWidth="3"
-          points={points
-            .map(
-              (p, i) =>
-                `${10 + (i / (points.length - 1)) * 580},${115 - ((p.metrics.pts ?? 0) / max) * 95}`,
-            )
-            .join(" ")}
-        />
-        {points.map((p, i) => (
-          <circle
-            key={p.gameId}
-            cx={10 + (i / (points.length - 1)) * 580}
-            cy={115 - ((p.metrics.pts ?? 0) / max) * 95}
-            r="4"
-            fill="var(--accent)"
-          >
-            <title>
-              {nbaDate(p.date)} · {p.metrics.pts} puntos
-            </title>
-          </circle>
-        ))}
-      </svg>
     </div>
   );
 }
@@ -106,9 +63,15 @@ export async function NbaProfile({
     (kind === "game" && !game)
   )
     notFound();
-  const [lines, shotData] = await Promise.all([
+  const [lines, shotData, teamTrends, prediction] = await Promise.all([
     getNbaGameLines(sql, season, kind, id),
     getNbaShots(sql, season, kind, id),
+    kind === "team"
+      ? getNbaTeamTrendLines(sql, season, Number(id))
+      : Promise.resolve([]),
+    kind === "game"
+      ? getPredictionExplanation(sql, season, id)
+      : Promise.resolve(null),
   ]);
   const base = `/nba/${season}`;
   const name = (teamId: number) =>
@@ -183,7 +146,7 @@ export async function NbaProfile({
             Los ratings del jugador describen la eficiencia de su equipo
             mientras está en pista.
           </p>
-          <PointsTrend lines={lines} />
+          <NbaTrends lines={lines} kind="player" />
           <h2 className="display mb-3 mt-6 text-2xl font-bold">
             Registro de partidos
           </h2>
@@ -250,6 +213,10 @@ export async function NbaProfile({
             </table>
           </div>
         </>
+      )}
+      {kind === "team" && <NbaTrends lines={teamTrends} kind="team" />}
+      {kind === "game" && prediction && game && (
+        <NbaExplanation {...prediction} homeName={name(game.homeId)} />
       )}
       {kind === "team" && team && (
         <>
@@ -407,7 +374,13 @@ export async function NbaProfile({
           )}
         </>
       )}
-      <NbaShotMap shots={shotData.shots} total={shotData.total} />
+      <NbaShotMap
+        shots={shotData.shots}
+        total={shotData.total}
+        recentGameIds={
+          kind === "game" ? undefined : [...new Set(lines.map((l) => l.gameId))]
+        }
+      />
     </>
   );
 }

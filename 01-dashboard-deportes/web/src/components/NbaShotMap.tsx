@@ -1,20 +1,35 @@
 "use client";
 
+import { shotZone, shotZoneLabels, zoneSummary } from "@/lib/nba-trends";
 import { useState } from "react";
 import { type NbaShot, nbaFormat } from "@/lib/nba";
 
 export function NbaShotMap({
   shots,
   total,
+  recentGameIds,
 }: {
   shots: NbaShot[];
   total: number;
+  recentGameIds?: string[];
 }) {
   const [mode, setMode] = useState<"outcome" | "quality">("outcome");
   const [fullCourt, setFullCourt] = useState(false);
   const [value, setValue] = useState(""),
     [limit, setLimit] = useState(50);
-  const filtered = shots.filter((s) => !value || s.value === Number(value));
+  const [zone, setZone] = useState(""),
+    [period, setPeriod] = useState("all");
+  const allowed =
+    recentGameIds && period !== "all"
+      ? new Set(recentGameIds.slice(0, Number(period)))
+      : null;
+  const base = shots.filter(
+    (s) =>
+      (!value || s.value === Number(value)) &&
+      (!allowed || allowed.has(s.gameId)),
+  );
+  const filtered = base.filter((s) => !zone || shotZone(s) === zone);
+  const zones = zoneSummary(base);
   const drawn = filtered.filter((s) => fullCourt || s.y <= 41.75);
   const observed = filtered.reduce((sum, s) => sum + s.made, 0);
   const predicted = filtered.filter((s) => s.probability !== null);
@@ -34,6 +49,41 @@ export function NbaShotMap({
         Mapa de tiro y probabilidad de acierto
       </h2>
       <div className="mb-4 flex flex-wrap items-end gap-3">
+        {recentGameIds && (
+          <label className="flex min-w-0 flex-col gap-2">
+            <span className="eyebrow">Periodo de tiros</span>
+            <select
+              className="min-h-11 max-w-full rounded-control border border-border-strong bg-card px-3 text-base sm:text-sm"
+              value={period}
+              onChange={(e) => {
+                setPeriod(e.target.value);
+                setLimit(50);
+              }}
+            >
+              <option value="all">Toda la muestra disponible</option>
+              <option value="5">Últimos 5 partidos registrados</option>
+              <option value="10">Últimos 10 partidos registrados</option>
+            </select>
+          </label>
+        )}
+        <label className="flex min-w-0 flex-col gap-2">
+          <span className="eyebrow">Zona de cancha</span>
+          <select
+            className="min-h-11 max-w-full rounded-control border border-border-strong bg-card px-3 text-base sm:text-sm"
+            value={zone}
+            onChange={(e) => {
+              setZone(e.target.value);
+              setLimit(50);
+            }}
+          >
+            <option value="">Todas las zonas</option>
+            {Object.entries(shotZoneLabels).map(([id, label]) => (
+              <option key={id} value={id}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow">Representación</span>
           <select
@@ -140,7 +190,9 @@ export function NbaShotMap({
               ["Tiros mostrados", nbaFormat(filtered.length, 0)],
               [
                 "Acierto real",
-                `${nbaFormat(filtered.length ? (observed / filtered.length) * 100 : 0)}%`,
+                filtered.length
+                  ? `${nbaFormat((observed / filtered.length) * 100)}%`
+                  : "—",
               ],
               [
                 "Acierto esperado",
@@ -180,6 +232,60 @@ export function NbaShotMap({
             medias de temporada publicadas por el proveedor.
           </p>
         </div>
+      </div>
+      <div className="mt-5 overflow-x-auto rounded-panel border border-border bg-card">
+        <table className="w-full text-left text-sm">
+          <caption className="p-4 text-left font-semibold">
+            Rendimiento por zonas · periodo y valor seleccionados
+          </caption>
+          <thead className="bg-surface-2">
+            <tr>
+              {[
+                "Zona",
+                "Tiros",
+                "Aciertos",
+                "FG% real",
+                "FG% esperado",
+                "Diferencia (pp)",
+              ].map((h) => (
+                <th key={h} className="whitespace-nowrap p-3">
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {zones.map((z) => (
+              <tr
+                key={z.zone}
+                className={`border-t border-border ${zone === z.zone ? "bg-accent-soft" : ""}`}
+              >
+                <th scope="row" className="min-w-44 p-3 font-medium">
+                  {shotZoneLabels[z.zone]}
+                </th>
+                <td className="num p-3">{z.n}</td>
+                <td className="num p-3">{z.made}</td>
+                <td className="num p-3">
+                  {z.n ? nbaFormat((100 * z.made) / z.n) : "—"}
+                </td>
+                <td className="num p-3">
+                  {z.expected !== null ? nbaFormat(100 * z.expected) : "—"}
+                </td>
+                <td className="num p-3">
+                  {z.n && z.expected !== null && z.predicted === z.n
+                    ? nbaFormat(100 * (z.made / z.n - z.expected))
+                    : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="p-4 text-xs text-subtle">
+          Zonas geométricas propias, no etiquetas oficiales. La diferencia entre
+          acierto real y esperado no demuestra habilidad estable, especialmente
+          con pocos intentos. Los últimos partidos se toman del registro
+          disponible; puede faltar cobertura de tiros.
+        </p>
       </div>
       <details className="mt-5 rounded-panel border border-border bg-card">
         <summary className="cursor-pointer p-4 font-semibold">

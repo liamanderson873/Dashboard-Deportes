@@ -28,7 +28,7 @@ Abre `/nba/2026`. El año de la ruta y del CLI es el **inicio** de temporada; lo
 
 La caché está en `data/external/nba/`, excluida de Git. Las descargas tienen un límite de 80 MiB, tiempos de espera y un registro de URL, fecha y SHA-256. Se valida el esquema y la temporada antes de sustituir la caché. Una caché con firma incorrecta se rechaza. `--refresh` en la ingesta vuelve a descargar los archivos; las respuestas fallidas no sustituyen una copia válida. No se reintenta indefinidamente una restricción del proveedor.
 
-La importación sustituye una instantánea NBA de temporada en una transacción, sin modificar las tablas de fútbol. Concilia los resultados del calendario con registros terminados más recientes mediante IDs exactos de partido y equipos. Descarta del calendario las plazas con equipos aún sin asignar y conserva su recuento en los metadatos. Una nueva ingesta invalida los modelos de esa temporada para evitar mezclar instantáneas: ejecuta de nuevo el entrenamiento para publicarlos.
+La importación sustituye una instantánea NBA de temporada en una transacción, sin modificar las tablas de fútbol. El historial prospectivo `nba_prediction_history` se conserva durante nuevas importaciones. Concilia los resultados del calendario con registros terminados más recientes mediante IDs exactos de partido y equipos. Descarta del calendario las plazas con equipos aún sin asignar y conserva su recuento en los metadatos. Una nueva ingesta invalida los modelos de esa temporada para evitar mezclar instantáneas: ejecuta de nuevo el entrenamiento para publicarlos.
 
 `--history 10` conserva diez temporadas completas para el modelo de partidos. `--shot-history 3` usa las tres últimas completas para el modelo de tiros; admite de tres a diez. Entrenamiento y simulación se ejecutan en CPU, con cuatro hilos como límite del proceso de entrenamiento. La web consulta exclusivamente PostgreSQL.
 
@@ -46,15 +46,15 @@ La validación es cronológica: periodos antiguos para entrenamiento, 2024-25 co
 
 Tras congelar la evaluación se reajusta un modelo de producción con las diez temporadas completas. Las métricas publicadas pertenecen al modelo evaluado antes de ese reajuste; no son una evaluación futura del modelo de producción.
 
-## Simulador de clasificación, rondas y título
+## Simulador de clasificación, NBA Cup, rondas y título
 
-Se ejecutan **10.000 simulaciones**, semilla 42: resultados conocidos, encuentros pendientes del calendario publicado, play-in de las posiciones 7–10 y series al mejor de siete con distribución de localía 2-2-1-1-1. La final NBA utiliza el porcentaje de victorias y el enfrentamiento directo para la ventaja de campo, con sorteo reproducible si persiste el empate. El play-in utiliza el indicador de fase correspondiente, separado del de playoffs.
+El [laboratorio NBA](nba-laboratory.md) sustituye la tabla inicial de calendario parcial con un motor integrado de **2.000 simulaciones**, semilla 42. Conserva los 1.200 partidos publicados y completa treinta emparejamientos hipotéticos dependientes de NBA Cup, con 82 encuentros por equipo. Estos emparejamientos nunca se escriben como partidos oficiales. Las probabilidades originales y los escenarios de usuario permanecen separados.
 
-Se muestran probabilidades de acceso a playoffs, segunda ronda, final de conferencia, final NBA y título, además de victorias esperadas y su intervalo central del 90% entre simulaciones. Los valores próximos a cero y uno se presentan sin sugerir certeza por redondeo.
+Las tablas muestran clasificación directa, play-in, rondas y título, además de victorias esperadas y un intervalo central del 90%. Los cuadros representan una ejecución concreta, no cruces oficiales ni una combinación de favoritos. La fuerza de los equipos sigue fija; los encuentros no fechados usan un día libre por equipo.
 
-**La instantánea actual solo asigna 1.200 de los 1.230 encuentros de temporada regular.** Hay treinta partidos pendientes de definición, relacionados con el calendario de NBA Cup; seis plazas sin equipos ya aparecen en el archivo y otras no están listadas todavía. La simulación es un escenario **condicionado al calendario conocido**, con ochenta encuentros por equipo. No debe interpretarse como una proyección definitiva sobre 82 partidos.
+El motor incorpora criterios de división, enfrentamientos directos, conferencia, rivales elegibles y diferencia de puntos, reiniciando los criterios al separarse parcialmente un empate. Los márgenes y puntos simulados proceden de un modelo auxiliar y contienen incertidumbre. Los desempates persistentes utilizan un sorteo reproducible. Los parciales de prórroga ausentes se identifican y limitan la exactitud de los desempates de Copa.
 
-Los desempates de conferencia son aproximados: porcentaje de victorias, enfrentamientos directos, porcentaje de victorias de conferencia y sorteo. No reproducen todos los criterios oficiales de división y rivales elegibles. La fuerza de cada equipo permanece fija; no se simulan lesiones ni traspasos futuros. El descanso se recorre según las fechas conocidas; para la postemporada todavía sin fechas se supone un día libre por equipo. El error Monte Carlo de cada probabilidad no recoge la incertidumbre del modelo. Esta versión simula una postemporada futura; no es un seguidor de eliminatorias ya iniciadas.
+El informe `nba-evaluation-2026.json` conserva la evaluación original y el pronóstico inicial de calendario parcial. El informe `nba-laboratory-evaluation.json` documenta la nueva capa de simulación, su modelo auxiliar y sus invariantes. Ninguno es una garantía de calibración futura.
 
 ## Modelo de acierto y calidad contextual del tiro
 

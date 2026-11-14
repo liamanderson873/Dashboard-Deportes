@@ -13,7 +13,7 @@ const sections = [
   ["liga", "Liga", "", "liga"],
   ["partidos", "Partidos", "/partidos", "partidos"],
   ["jugadores", "Jugadores", "/jugadores", "jugadores"],
-  ["modelos", "Modelos", "/modelos", "modelos"],
+  ["modelos", "Simulador", "/modelos", "modelos"],
   ["personal", "Mi NBA", "/seguimiento", "seguimiento"],
 ] as const;
 export function NbaHeader({
