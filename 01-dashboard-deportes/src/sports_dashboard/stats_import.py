@@ -6,9 +6,9 @@ import io
 import re
 import sys
 import unicodedata
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
 
 import pandas as pd
 from sqlalchemy import Engine, text

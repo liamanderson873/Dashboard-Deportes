@@ -163,7 +163,7 @@ def run(engine, season, history=10, shot_history=3, runs=10_000):
     current_shots = shot_features(normalize_shots(raw, season))
     probability = shot_model.predict_proba(current_shots[SHOT_FEATURES])[:, 1]
     updates = [
-        {"id": int(i), "p": float(p)} for i, p in zip(current_shots.id, probability)
+        {"id": int(i), "p": float(p)} for i, p in zip(current_shots.id, probability, strict=True)
     ]
     shot_report["source"] = provenance
     joblib.dump(shot_model, CACHE / f"shots_{season}.joblib")

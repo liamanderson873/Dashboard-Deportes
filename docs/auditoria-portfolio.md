@@ -13,7 +13,7 @@ Revisión del 14 de noviembre de 2026, completada con la publicación. **88/100:
 | Errores | Pruebas para ocultar detalles privados de conexión, distinguir historial vacío de indisponibilidad y liberar la exclusión de simulación después de un fallo. La interfaz permite reintentar sin mostrar comandos técnicos al visitante. |
 | Copia de demo | Dump privado de 7,36 MiB. Restauración real en otra base PostgreSQL 16 con 24 recuentos verificados. Conserva 528 jugadores NBA, 29.857 tiros, cuatro registros de modelos y 3.051 versiones del historial. Sin consultas a proveedores. |
 | Restauración | Otro destino vacío, SHA-256 coincidente y transacción única, sin borrado ni `--clean`. Pruebas de rechazo de origen, destino ocupado y archivo modificado. Credenciales por entorno, fuera de argumentos y errores publicados. |
-| Calidad | 137 pruebas Python y 201 web en local; Ruff, ESLint, TypeScript y build de producción correctos. Las suites usan sports_test, separada del origen y la demo restaurada. |
+| Calidad | 137 pruebas Python y 206 web en local; Ruff (reglas fijadas en `pyproject.toml` y ejecutado en la CI), ESLint, TypeScript y build de producción correctos. Las suites usan sports_test, separada del origen y la demo restaurada. |
 | Presentación | Página `/acerca`, pie con documentación/código, fechas visibles, README, guía de despliegue y CV, y MP4 de 90 segundos con diez escenas reales y rótulos. |
 
 La revisión visual observa una muestra concreta; no certifica todos los navegadores ni accesibilidad completa. La migración a Neon y el despliegue público están comprobados; no se ha realizado una prueba de carga ni medido tráfico sostenido.

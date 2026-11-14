@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import {
   useEffect,
   useId,
@@ -8,7 +7,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
-import { type NbaData, nbaFormat } from "@/lib/nba";
+import { type NbaData } from "@/lib/nba";
 import {
   scatterMetrics,
   isScatterMetric,
@@ -21,13 +20,18 @@ import {
   type ScatterPoint,
 } from "@/lib/nba-scatter";
 import { numericAxis } from "@/lib/nba-visuals";
-import { PlayerPicker } from "./PlayerPicker";
-import { NbaTeamLogo } from "./TeamCrest";
 import { usePlotWidth } from "./usePlotWidth";
-const control =
-  "min-h-11 min-w-0 max-w-full rounded-control border border-border-strong bg-card px-3 py-2 text-base text-fg sm:text-sm";
-const button =
-  "inline-flex min-h-11 items-center justify-center rounded-control border border-border-strong bg-card px-3 py-2 text-sm font-semibold transition-colors hover:bg-surface-2 disabled:opacity-50";
+import {
+  button,
+  control,
+  formatMetric,
+  metricOptions,
+  ScatterDetail,
+  ScatterLeaders,
+  ScatterRuleBuilder,
+  ScatterTable,
+} from "./NbaScatterParts";
+import { ScatterChart } from "./NbaScatterChart";
 const clamp = (value: string, max: number, fallback: number) =>
   value.trim() !== "" && Number.isFinite(Number(value))
     ? Math.max(0, Math.min(max, Number(value)))
@@ -58,9 +62,6 @@ export function NbaScatter({
   const [rules, setRules] = useState<ScatterRule[]>(() =>
     parseScatterRules(initial.rules ?? ""),
   );
-  const [ruleMetric, setRuleMetric] = useState<ScatterMetric>("pts"),
-    [operator, setOperator] = useState<"gte" | "lte">("gte"),
-    [ruleValue, setRuleValue] = useState("");
   const [selected, setSelected] = useState(initial.selected ?? ""),
     [hovered, setHovered] = useState<number | null>(null),
     [scale, setScale] = useState(initial.scale === "fit" ? "fit" : "zero"),
@@ -114,13 +115,8 @@ export function NbaScatter({
       ? points.reduce((n, p) => n + p.y, 0) / points.length
       : null;
   const leaderX = sortScatter(points, "x", x)[0],
-    leaderY = sortScatter(points, "y", y)[0],
-    metricOptions = Object.entries(scatterMetrics) as [
-      ScatterMetric,
-      (typeof scatterMetrics)[ScatterMetric],
-    ][];
-  const format = (value: number, metric: ScatterMetric) =>
-    `${nbaFormat(value, 1)}${scatterMetrics[metric].percent ? "%" : ""}`;
+    leaderY = sortScatter(points, "y", y)[0];
+  const format = formatMetric;
   useEffect(() => {
     if (!active) return;
     const query = new URLSearchParams({
@@ -339,101 +335,14 @@ export function NbaScatter({
           </label>
         </div>
       </div>
-      <details className="mb-5 rounded-panel border border-border bg-card p-4">
-        <summary className="min-h-11 font-semibold">
-          Añadir condiciones estadísticas · {rules.length}/6
-        </summary>
-        <p className="mb-4 text-sm text-muted">
-          Ejemplo: PTS ≥ 20 y TS% ≥ 60. Los porcentajes se introducen de 0 a
-          100. Todas las condiciones deben cumplirse a la vez.
-        </p>
-        <div className="grid items-end gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_auto]">
-          <label className="flex min-w-0 flex-col gap-2">
-            <span className="eyebrow">Estadística de la condición</span>
-            <select
-              className={control}
-              value={ruleMetric}
-              onChange={(e) => setRuleMetric(e.target.value as ScatterMetric)}
-            >
-              {metricOptions.map(([key, m]) => (
-                <option key={key} value={key}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex min-w-0 flex-col gap-2">
-            <span className="eyebrow">Comparación</span>
-            <select
-              className={control}
-              value={operator}
-              onChange={(e) => setOperator(e.target.value as "gte" | "lte")}
-            >
-              <option value="gte">Mayor o igual · ≥</option>
-              <option value="lte">Menor o igual · ≤</option>
-            </select>
-          </label>
-          <label className="flex min-w-0 flex-col gap-2">
-            <span className="eyebrow">
-              Valor · {scatterMetrics[ruleMetric].unit}
-            </span>
-            <input
-              className={control}
-              type="number"
-              min="-10000"
-              max="10000"
-              step="any"
-              value={ruleValue}
-              onChange={(e) => setRuleValue(e.target.value)}
-            />
-          </label>
-          <button
-            type="button"
-            className={button}
-            disabled={
-              rules.length >= 6 ||
-              ruleValue.trim() === "" ||
-              !Number.isFinite(Number(ruleValue)) ||
-              Math.abs(Number(ruleValue)) > 10000
-            }
-            onClick={() => {
-              setRules([
-                ...rules,
-                { metric: ruleMetric, operator, value: Number(ruleValue) },
-              ]);
-              setRuleValue("");
-              setLimit(50);
-            }}
-          >
-            Añadir condición
-          </button>
-        </div>
-      </details>
-      {!!rules.length && (
-        <ul className="mb-4 flex flex-wrap gap-2">
-          {rules.map((r, i) => (
-            <li
-              key={i}
-              className="flex items-center gap-3 rounded-control border border-accent bg-accent-soft pl-3 text-sm text-accent"
-            >
-              <span>
-                {scatterMetrics[r.metric].short}{" "}
-                {r.operator === "gte" ? "≥" : "≤"} {format(r.value, r.metric)}
-              </span>
-              <button
-                type="button"
-                className="min-h-11 min-w-11 px-2 font-semibold"
-                aria-label={`Quitar condición ${scatterMetrics[r.metric].short} ${r.operator === "gte" ? "mayor o igual" : "menor o igual"} ${r.value}`}
-                onClick={() =>
-                  setRules(rules.filter((_, index) => index !== i))
-                }
-              >
-                ×
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ScatterRuleBuilder
+        rules={rules}
+        onAdd={(rule) => {
+          setRules([...rules, rule]);
+          setLimit(50);
+        }}
+        onRemove={(index) => setRules(rules.filter((_, i) => i !== index))}
+      />
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <p role="status" className="text-sm text-muted">
           <strong>{points.length}</strong> jugadores representados de{" "}
@@ -465,196 +374,37 @@ export function NbaScatter({
           comparar dos dimensiones distintas.
         </p>
       )}
-      <div className="mb-5 grid gap-3 sm:grid-cols-3">
-        {[
-          [
-            `${scatterMetrics[x].higher ? "Mayor" : "Menor"} ${scatterMetrics[x].short}`,
-            leaderX,
-            x,
-          ],
-          [
-            `${scatterMetrics[y].higher ? "Mayor" : "Menor"} ${scatterMetrics[y].short}`,
-            leaderY,
-            y,
-          ],
-        ].map(([label, point, key], i) => {
-          const p = point as ScatterPoint | undefined;
-          return (
-            <div className="stat-card bg-card p-4" key={i}>
-              <p className="eyebrow">{String(label)} · muestra filtrada</p>
-              <p className="display mt-3 text-xl font-bold">
-                {p?.player.name ?? "—"}
-              </p>
-              <p className="num mt-2 text-accent">
-                {p ? format(key === x ? p.x : p.y, key as ScatterMetric) : "—"}
-              </p>
-            </div>
-          );
-        })}
-        <div className="stat-card bg-card p-4">
-          <p className="eyebrow">Cómo leer la comparación</p>
-          <p className="mt-3 text-sm leading-relaxed">
-            {scatterMetrics[x].short} aumenta hacia la derecha;{" "}
-            {scatterMetrics[y].short} aumenta hacia arriba. En{" "}
-            {!scatterMetrics[x].higher || !scatterMetrics[y].higher
-              ? [
-                  ...new Set([
-                    !scatterMetrics[x].higher ? scatterMetrics[x].short : "",
-                    !scatterMetrics[y].higher ? scatterMetrics[y].short : "",
-                  ]),
-                ]
-                  .filter(Boolean)
-                  .join(" y ")
-              : "estas cifras"}{" "}
-            {!scatterMetrics[x].higher || !scatterMetrics[y].higher
-              ? "una cifra menor suele ser preferible."
-              : "las cifras mayores muestran más volumen o eficiencia."}
-          </p>
-        </div>
-      </div>
+      <ScatterLeaders x={x} y={y} leaderX={leaderX} leaderY={leaderY} />
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 rounded-panel border border-border bg-card p-3 sm:p-4">
           <div ref={ref} className="min-w-0">
             {!!points.length ? (
-              <svg
-                viewBox={`0 0 ${width} ${height}`}
-                width="100%"
+              <ScatterChart
+                points={points}
+                x={x}
+                y={y}
+                id={id}
+                selected={selected}
+                activePoint={activePoint}
+                width={width}
                 height={height}
-                role="listbox"
-                tabIndex={0}
-                aria-label={`Mapa de ${points.length} jugadores: ${scatterMetrics[x].label} frente a ${scatterMetrics[y].label}. Usa las flechas para recorrer jugadores y Enter para seleccionar.`}
-                aria-activedescendant={
-                  activePoint ? `${id}-${activePoint.player.id}` : undefined
-                }
-                onKeyDown={onKeys}
-                onFocus={() => {
-                  if (!activePoint && points[0])
-                    setHovered(points[0].player.id);
-                }}
-                onPointerMove={(event) =>
-                  setHovered(nearest(event)?.player.id ?? null)
-                }
-                onPointerLeave={() => setHovered(null)}
-                onClick={(event) => {
-                  const p = nearest(event);
-                  if (p) setSelected(String(p.player.id));
-                }}
-                style={{ touchAction: "pan-y" }}
-              >
-                <g aria-hidden="true">
-                  {xAxis.ticks.map((v) => (
-                    <g key={`x${v}`}>
-                      <path
-                        d={`M${sx(v)} ${top}V${height - bottom}`}
-                        stroke="var(--border)"
-                        strokeDasharray="2 4"
-                      />
-                      <text
-                        x={sx(v)}
-                        y={height - bottom + 23}
-                        textAnchor="middle"
-                        fontSize="12"
-                        fill="var(--muted)"
-                        className="num"
-                      >
-                        {nbaFormat(v, xAxis.step < 1 ? 2 : 0)}
-                      </text>
-                    </g>
-                  ))}
-                  {yAxis.ticks.map((v) => (
-                    <g key={`y${v}`}>
-                      <path
-                        d={`M${left} ${sy(v)}H${width - right}`}
-                        stroke="var(--border)"
-                        strokeDasharray="2 4"
-                      />
-                      <text
-                        x={left - 10}
-                        y={sy(v) + 4}
-                        textAnchor="end"
-                        fontSize="12"
-                        fill="var(--muted)"
-                        className="num"
-                      >
-                        {nbaFormat(v, yAxis.step < 1 ? 2 : 0)}
-                      </text>
-                    </g>
-                  ))}
-                  <path
-                    d={`M${left} ${top}V${height - bottom}H${width - right}`}
-                    fill="none"
-                    stroke="var(--border-strong)"
-                  />
-                  {meanX !== null && (
-                    <path
-                      d={`M${sx(meanX)} ${top}V${height - bottom}`}
-                      stroke="var(--subtle)"
-                      strokeDasharray="6 5"
-                    />
-                  )}
-                  {meanY !== null && (
-                    <path
-                      d={`M${left} ${sy(meanY)}H${width - right}`}
-                      stroke="var(--subtle)"
-                      strokeDasharray="6 5"
-                    />
-                  )}
-                  <text
-                    x={left}
-                    y="15"
-                    fontSize="12"
-                    fontWeight="600"
-                    fill="var(--fg)"
-                  >
-                    {scatterMetrics[y].short} · {scatterMetrics[y].unit}
-                  </text>
-                  <text
-                    x={left + pw / 2}
-                    y={height - 10}
-                    textAnchor="middle"
-                    fontSize="12"
-                    fontWeight="600"
-                    fill="var(--fg)"
-                  >
-                    {scatterMetrics[x].short} · {scatterMetrics[x].unit}
-                  </text>
-                </g>
-                {points.map((p) => (
-                  <g
-                    key={p.player.id}
-                    id={`${id}-${p.player.id}`}
-                    role="option"
-                    aria-selected={String(p.player.id) === selected}
-                    aria-label={`${p.player.name}, ${scatterMetrics[x].short}: ${format(p.x, x)}, ${scatterMetrics[y].short}: ${format(p.y, y)}`}
-                  >
-                    <circle
-                      cx={sx(p.x)}
-                      cy={sy(p.y)}
-                      r={4.5}
-                      fill="var(--accent)"
-                      fillOpacity=".62"
-                      stroke="var(--accent)"
-                      strokeWidth=".5"
-                    >
-                      <title>
-                        {p.player.name} · {format(p.x, x)} / {format(p.y, y)}
-                      </title>
-                    </circle>
-                  </g>
-                ))}
-                {activePoint && (
-                  <circle
-                    aria-hidden="true"
-                    cx={sx(activePoint.x)}
-                    cy={sy(activePoint.y)}
-                    r="7"
-                    fill="var(--ink)"
-                    stroke="var(--card)"
-                    strokeWidth="2.5"
-                    pointerEvents="none"
-                  />
-                )}
-              </svg>
+                top={top}
+                bottom={bottom}
+                left={left}
+                right={right}
+                pw={pw}
+                xAxis={xAxis}
+                yAxis={yAxis}
+                sx={sx}
+                sy={sy}
+                meanX={meanX}
+                meanY={meanY}
+                format={format}
+                onKeys={onKeys}
+                nearest={nearest}
+                setHovered={setHovered}
+                setSelected={setSelected}
+              />
             ) : (
               <div className="flex min-h-80 items-center justify-center p-5 text-center text-muted">
                 Ningún jugador cumple estas condiciones con datos en ambos ejes.
@@ -676,75 +426,18 @@ export function NbaScatter({
             flechas y Enter.
           </p>
         </div>
-        <aside className="min-w-0 rounded-panel border border-border bg-card p-4">
-          <PlayerPicker
-            label="Seleccionar jugador en el gráfico"
-            value={selected}
-            onChange={(value) => {
-              setSelected(value);
-              setHovered(null);
-            }}
-            formatPosition={(p) => p ?? "Sin posición"}
-            players={points.map(({ player: p }) => ({
-              id: p.id,
-              name: p.name,
-              position: p.position,
-              birth: null,
-              nationality: null,
-              teamIds: [p.teamId],
-            }))}
-            teams={data.teams.map((t) => ({
-              id: t.id,
-              name: t.name,
-              localId: null,
-            }))}
-          />
-          {detail ? (
-            <div className="mt-5">
-              <div className="flex items-center gap-3">
-                <NbaTeamLogo id={detail.player.teamId} size={44} />
-                <div className="min-w-0">
-                  <h3 className="display text-xl font-bold">
-                    {detail.player.name}
-                  </h3>
-                  <p className="mt-1 text-xs text-subtle">
-                    {data.teams.find((t) => t.id === detail.player.teamId)
-                      ?.name ?? "Varios equipos"}
-                  </p>
-                </div>
-              </div>
-              <dl className="mt-4 space-y-3">
-                {[
-                  [scatterMetrics[x].label, format(detail.x, x)],
-                  [scatterMetrics[y].label, format(detail.y, y)],
-                  [
-                    "Partidos / minutos por partido",
-                    `${nbaFormat(detail.player.metrics.gp, 0)} / ${nbaFormat(detail.player.metrics.min)}`,
-                  ],
-                ].map(([label, value], index) => (
-                  <div key={index} className="border-t border-border pt-3">
-                    <dt className="text-xs text-subtle">{label}</dt>
-                    <dd className="num mt-1 font-semibold">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              <Link
-                className={`${button} mt-5 w-full text-accent`}
-                href={`/nba/${data.season}/jugador/${detail.player.id}`}
-              >
-                Abrir ficha del jugador
-              </Link>
-            </div>
-          ) : (
-            <p className="mt-5 text-sm leading-relaxed text-muted">
-              Elige un punto o busca un jugador para ver sus cifras y abrir su
-              ficha.
-              {selected
-                ? " El jugador seleccionado ya no cumple los filtros actuales."
-                : ""}
-            </p>
-          )}
-        </aside>
+        <ScatterDetail
+          data={data}
+          points={points}
+          x={x}
+          y={y}
+          selected={selected}
+          detail={detail}
+          onSelect={(value) => {
+            setSelected(value);
+            setHovered(null);
+          }}
+        />
       </div>
       <p className="my-5 max-w-4xl text-xs leading-relaxed text-subtle">
         Las medias por partido proceden de la temporada importada. TS% y eFG%
@@ -754,91 +447,22 @@ export function NbaScatter({
         absoluto; los mínimos de partidos y minutos ayudan a evitar conclusiones
         con muestras pequeñas.
       </p>
-      <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
-        <h3 className="display text-xl font-bold">
-          Clasificación de la muestra
-        </h3>
-        <label className="flex min-w-0 flex-col gap-2">
-          <span className="eyebrow">Ordenar tabla por</span>
-          <select
-            className={control}
-            value={order}
-            onChange={(e) => setOrder(e.target.value as "x" | "y")}
-          >
-            <option value="x">Eje X · {scatterMetrics[x].short}</option>
-            <option value="y">Eje Y · {scatterMetrics[y].short}</option>
-          </select>
-        </label>
-      </div>
-      <div className="relative overflow-x-auto rounded-panel border border-border bg-card">
-        <table className="w-full text-left text-sm">
-          <caption className="sr-only">
-            Jugadores representados y sus estadísticas exactas
-          </caption>
-          <thead className="bg-surface-2">
-            <tr>
-              {[
-                "Jugador",
-                scatterMetrics[x].short,
-                scatterMetrics[y].short,
-                "PJ",
-                "MIN/PJ",
-                "Gráfico",
-              ].map((h, i) => (
-                <th key={i} scope="col" className="whitespace-nowrap p-3">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.slice(0, limit).map((p) => (
-              <tr
-                key={p.player.id}
-                className={`border-t border-border ${String(p.player.id) === selected ? "bg-accent-soft" : "hover:bg-surface-2/50"}`}
-              >
-                <th scope="row" className="min-w-52 p-3">
-                  <Link
-                    href={`/nba/${data.season}/jugador/${p.player.id}`}
-                    className="flex min-h-11 items-center gap-3 font-semibold hover:text-accent"
-                  >
-                    <NbaTeamLogo id={p.player.teamId} size={28} />
-                    {p.player.name}
-                  </Link>
-                </th>
-                <td className="num p-3">{format(p.x, x)}</td>
-                <td className="num p-3">{format(p.y, y)}</td>
-                <td className="num p-3">{nbaFormat(p.player.metrics.gp, 0)}</td>
-                <td className="num p-3">{nbaFormat(p.player.metrics.min)}</td>
-                <td className="p-3">
-                  <button
-                    type="button"
-                    className={button}
-                    aria-label={`Destacar ${p.player.name} en el gráfico`}
-                    aria-pressed={selected === String(p.player.id)}
-                    onClick={() => {
-                      setSelected(String(p.player.id));
-                      setHovered(null);
-                      ref.current?.scrollIntoView({ block: "center" });
-                    }}
-                  >
-                    Destacar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {rows.length > limit && (
-          <button
-            type="button"
-            className={`${button} m-3`}
-            onClick={() => setLimit((n) => n + 50)}
-          >
-            Mostrar más · {rows.length - limit} restantes
-          </button>
-        )}
-      </div>
+      <ScatterTable
+        data={data}
+        rows={rows}
+        x={x}
+        y={y}
+        selected={selected}
+        order={order}
+        onOrder={setOrder}
+        limit={limit}
+        onMore={() => setLimit((n) => n + 50)}
+        onHighlight={(playerId) => {
+          setSelected(String(playerId));
+          setHovered(null);
+          ref.current?.scrollIntoView({ block: "center" });
+        }}
+      />
     </section>
   );
 }

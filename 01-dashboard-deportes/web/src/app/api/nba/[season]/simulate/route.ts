@@ -2,10 +2,15 @@ import { getSql } from "@/lib/db";
 import { nbaSeasonParam } from "@/lib/nba";
 import { getSimulationConfig } from "@/lib/queries/nba-lab";
 import { simulateNba, type SimResult } from "@/lib/nba-simulator";
+import { clientKey, createRateLimiter } from "@/lib/rate-limit";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
+// Recent results, reused when someone asks for the same scenario again.
 const cache = new Map<string, SimResult>();
+const CACHE_SIZE = 32;
+// New (uncached) simulations per visitor; each one costs a few seconds of CPU.
+const limiter = createRateLimiter({ limit: 8, windowMs: 60_000 });
 let busy = false;
 export async function POST(
   request: Request,
@@ -73,16 +78,34 @@ export async function POST(
         { status: 503 },
       );
     loaded = true;
-    const baseline = Object.keys(forced).length === 0,
-      key = `${season}:${config.modelVersion}`;
-    let result = baseline ? cache.get(key) : undefined;
-    if (!result) {
+    // Same season, model and forced results always give the same answer (fixed seed).
+    const scenario = Object.entries(forced).sort(([a], [b]) =>
+        a.localeCompare(b),
+      ),
+      key = `${season}:${config.modelVersion}:${JSON.stringify(scenario)}`;
+    let result = cache.get(key);
+    if (result) {
+      // Mark as recently used.
+      cache.delete(key);
+    } else {
+      const allowed = limiter.take(clientKey(request));
+      if (!allowed.ok)
+        return Response.json(
+          {
+            error: `Has calculado muchos escenarios seguidos. Espera ${allowed.retryAfter} s y vuelve a intentarlo.`,
+          },
+          {
+            status: 429,
+            headers: {
+              "Retry-After": String(allowed.retryAfter),
+              "Cache-Control": "no-store",
+            },
+          },
+        );
       result = simulateNba(config, forced, 2000, 42);
-      if (baseline) {
-        if (cache.size >= 4) cache.clear();
-        cache.set(key, result);
-      }
     }
+    cache.set(key, result);
+    while (cache.size > CACHE_SIZE) cache.delete(cache.keys().next().value!);
     return Response.json(result, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return Response.json(

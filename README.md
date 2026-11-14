@@ -152,7 +152,7 @@ npm run typecheck
 npm run build
 ```
 
-Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **137 pruebas Python y 201 pruebas web**, además de lint, tipos y compilación.
+Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **137 pruebas Python y 206 pruebas web**, además de Ruff, ESLint, tipos y compilación. Ruff tiene sus reglas fijadas en `pyproject.toml` y también se ejecuta en la CI.
 
 ## Estructura y documentación
 
