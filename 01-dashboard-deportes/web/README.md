@@ -62,3 +62,7 @@ Fútbol combina verde profundo y superficies claras; NBA utiliza azul noche, cob
 El destino Simulador (`/nba/{año}/modelos`) incorpora cuadros de playoffs y NBA Cup, condiciones de resultados y un historial prospectivo. Las rutas `/api/nba/{año}/simulate` y `/api/nba/{año}/history` consultan PostgreSQL; la primera calcula escenarios acotados de 2.000 recorridos y la segunda solo lee predicciones anteriores al encuentro. No se escriben escenarios en el historial.
 
 Las fichas muestran tendencias de cinco/diez partidos, zonas de tiro y contribuciones exactas de la regresión logística. Consulta el [contrato y los límites del laboratorio](../../docs/nba-laboratory.md).
+
+## Comparaciones visuales de jugadores
+
+La pestaña Mapa de jugadores de `/nba/{año}/jugadores?tab=chart` ofrece un gráfico de puntos con dos métricas elegibles, muestra filtrable, hasta seis condiciones, selección por nombre/teclado y tabla alternativa. Sus parámetros quedan en la URL. SVG se ajusta al ancho real para conservar etiquetas legibles en móvil; no requiere nuevas dependencias. La dificultad del tiro utiliza una escala visual inversa a P(acierto), con leyenda explícita. Las tendencias conservan cero, unidades, fechas y huecos para registros desconocidos.

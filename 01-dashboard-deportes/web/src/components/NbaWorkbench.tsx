@@ -29,6 +29,7 @@ import {
   type NbaPersonal,
 } from "@/lib/nba-personal";
 import { NbaTeamLogo } from "./TeamCrest";
+import { NbaScatter } from "./NbaScatter";
 import { PlayerPicker } from "./PlayerPicker";
 import { NavIcon } from "./NavIcon";
 
@@ -563,8 +564,13 @@ export function NbaPlayers({
   initial?: Record<string, string>;
 }) {
   const [tab, setTab] = useState(
-    initial.tab === "compare" ? "compare" : "explore",
+    initial.tab === "compare"
+      ? "compare"
+      : initial.tab === "chart"
+        ? "chart"
+        : "explore",
   );
+  const [chartVisited, setChartVisited] = useState(initial.tab === "chart");
   const [q, setQ] = useState(initial.q ?? ""),
     [team, setTeam] = useState(initial.team ?? ""),
     [position, setPosition] = useState(initial.pos ?? ""),
@@ -572,6 +578,7 @@ export function NbaPlayers({
   const [a, setA] = useState(initial.a ?? ""),
     [b, setB] = useState(initial.b ?? "");
   useEffect(() => {
+    if (tab === "chart") return;
     const query = new URLSearchParams({
       tab,
       q,
@@ -604,24 +611,33 @@ export function NbaPlayers({
   return (
     <>
       <div
-        className="mb-5 flex gap-2"
+        className="mb-5 flex flex-wrap gap-2"
         role="group"
         aria-label="Análisis de jugadores NBA"
       >
         {[
           ["explore", "Explorar"],
           ["compare", "Comparar jugadores"],
+          ["chart", "Mapa de jugadores"],
         ].map(([id, label]) => (
           <button
             key={id}
             type="button"
             aria-pressed={tab === id}
-            onClick={() => setTab(id)}
+            onClick={() => {
+              setTab(id);
+              if (id === "chart") setChartVisited(true);
+            }}
             className={`${button} ${tab === id ? "!border-accent !bg-accent-soft !text-accent" : ""}`}
           >
             {label}
           </button>
         ))}
+      </div>
+      <div hidden={tab !== "chart"}>
+        {chartVisited && (
+          <NbaScatter data={data} initial={initial} active={tab === "chart"} />
+        )}
       </div>
       {tab === "explore" ? (
         <>
@@ -695,7 +711,7 @@ export function NbaPlayers({
           </p>
           <NbaPlayersTable data={data} players={players} />
         </>
-      ) : (
+      ) : tab === "compare" ? (
         <>
           <div className="mb-6 grid gap-4 md:grid-cols-2">
             <Picker
@@ -779,7 +795,7 @@ export function NbaPlayers({
             </div>
           )}
         </>
-      )}
+      ) : null}
     </>
   );
 }

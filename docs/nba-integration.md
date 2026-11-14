@@ -114,3 +114,7 @@ npm run build
 ```
 
 Las suites Python y web no se ejecutan a la vez sobre la misma base de prueba. Los datos de ejemplo están limitados a las pruebas; la base de producción contiene los archivos importados de la fuente indicada. Se comprueban ausencia de información futura, particiones temporales, caché, coordenadas, probabilidades, simulación reproducible, anidamiento de rondas, estado personal, consultas y convivencia con fútbol. La revisión visual cubre 390, 768 y 1440 píxeles, búsqueda con teclado y persistencia tras recarga.
+
+## Lectura de gráficos y unidades
+
+El mapa de jugadores permite comparativas con dos ejes y condiciones estadísticas. La dificultad de tiro tiene una leyenda propia y las tendencias incluyen escalas numéricas. La normalización de agregados prioriza Base para las cifras por partido, evitando sobrescrituras de totales de Usage/Scoring. Consulta la [guía visual y la reparación de instalaciones existentes](nba-visual-analysis.md).

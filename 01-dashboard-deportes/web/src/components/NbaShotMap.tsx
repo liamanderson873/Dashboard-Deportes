@@ -1,5 +1,6 @@
 "use client";
 
+import { shotDifficulty } from "@/lib/nba-visuals";
 import { shotZone, shotZoneLabels, zoneSummary } from "@/lib/nba-trends";
 import { useState } from "react";
 import { type NbaShot, nbaFormat } from "@/lib/nba";
@@ -40,13 +41,15 @@ export function NbaShotMap({
   if (!shots.length)
     return (
       <p className="rounded-panel border border-border bg-card p-6 text-muted">
-        Todavía no hay tiros disponibles para esta selección.
+        Todavía no hay tiros disponibles para esta selección. El mapa se
+        mostrará cuando la fuente publique los lanzamientos y se importen sus
+        datos; no se actualiza en directo.
       </p>
     );
   return (
     <section aria-label="Mapa y calidad de tiro NBA" className="mt-8">
       <h2 className="display mb-4 scroll-mt-28 text-2xl font-bold">
-        Mapa de tiro y probabilidad de acierto
+        Mapa de tiro: resultado y dificultad estimada
       </h2>
       <div className="mb-4 flex flex-wrap items-end gap-3">
         {recentGameIds && (
@@ -92,7 +95,7 @@ export function NbaShotMap({
             onChange={(e) => setMode(e.target.value as "outcome" | "quality")}
           >
             <option value="outcome">Aciertos y fallos</option>
-            <option value="quality">Probabilidad del modelo</option>
+            <option value="quality">Dificultad del tiro · modelo</option>
           </select>
         </label>
         <button
@@ -119,12 +122,66 @@ export function NbaShotMap({
           </select>
         </label>
       </div>
+      {mode === "quality" && (
+        <div
+          className="mb-5 rounded-panel border border-accent bg-accent-soft p-4"
+          role="note"
+          aria-label="Cómo leer la dificultad del tiro"
+        >
+          <h3 className="display text-xl font-bold text-accent">
+            ¿Qué tan difícil era anotar ese tiro?
+          </h3>
+          <p className="mt-2 max-w-4xl text-sm leading-relaxed">
+            Cada punto representa un lanzamiento ya realizado.{" "}
+            <strong>
+              Más grande y oscuro = más difícil, con menor probabilidad de
+              acierto.
+            </strong>{" "}
+            La dificultad visual es 1 − P(acierto), estimada por ubicación y
+            contexto del lanzamiento.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+            {[
+              [0.2, "Más difícil"],
+              [0.5, "Intermedio"],
+              [0.8, "Menos difícil"],
+            ].map(([value, label]) => {
+              const p = Number(value),
+                difficulty = 1 - p;
+              return (
+                <span
+                  key={p}
+                  className="inline-flex min-h-8 items-center gap-2"
+                >
+                  <svg aria-hidden="true" width="24" height="24">
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r={3 + difficulty * 9}
+                      fill="var(--accent)"
+                      fillOpacity={0.25 + difficulty * 0.7}
+                    />
+                  </svg>
+                  <span>
+                    {label} · {Math.round(p * 100)}% de acierto
+                  </span>
+                </span>
+              );
+            })}
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-muted">
+            Un tiro difícil puede entrar y uno sencillo puede fallar. El modelo
+            no utiliza el resultado del tiro como entrada y no incluye habilidad
+            del jugador, distancia al defensor ni reloj de posesión.
+          </p>
+        </div>
+      )}
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(260px,1fr)]">
         <div className="rounded-panel border border-border bg-card p-4">
           <svg
             viewBox={fullCourt ? "-27 -7 54 103" : "-27 -7 54 53"}
             role="img"
-            aria-label={`${drawn.length} tiros representados de ${filtered.length} seleccionados. Círculos para aciertos y cruces para fallos; tabla disponible debajo.`}
+            aria-label={`${drawn.length} tiros de ${filtered.length} seleccionados. ${mode === "quality" ? "Tamaño y oscuridad indican dificultad: menor probabilidad de acierto implica mayor dificultad." : "Círculos para aciertos y cruces para fallos."} Tabla disponible debajo.`}
             className={`mx-auto w-full rounded-control bg-surface-2 ${fullCourt ? "h-[470px] max-w-sm" : "h-[380px] max-w-lg"}`}
           >
             <g fill="none" stroke="var(--border-strong)" strokeWidth="0.25">
@@ -135,20 +192,22 @@ export function NbaShotMap({
               <circle cx="0" cy="41.75" r="6" />
             </g>
             {drawn.map((s) => {
+              const difficulty = shotDifficulty(s.probability);
               const title = `${s.value} puntos · ${s.distance} pies · ${s.made ? "Acierto" : "Fallo"} · P(acierto): ${s.probability == null ? "no disponible" : nbaFormat(s.probability * 100) + "%"}`;
               return mode === "quality" ? (
                 <circle
                   key={s.id}
                   cx={s.x}
                   cy={s.y}
-                  r={s.probability == null ? 0.3 : 0.25 + s.probability * 0.65}
+                  r={difficulty === null ? 0.3 : 0.25 + difficulty * 0.65}
                   fill={
                     s.probability == null ? "var(--subtle)" : "var(--accent)"
                   }
                   stroke="var(--accent)"
                   strokeWidth="0.15"
+                  strokeDasharray={difficulty === null ? ".3 .3" : undefined}
                   fillOpacity={
-                    s.probability == null ? 0.3 : 0.25 + s.probability * 0.7
+                    difficulty === null ? 0 : 0.25 + difficulty * 0.7
                   }
                 >
                   <title>{title}</title>
@@ -195,7 +254,7 @@ export function NbaShotMap({
                   : "—",
               ],
               [
-                "Acierto esperado",
+                "Prob. media de acierto · modelo",
                 predicted.length
                   ? `${nbaFormat((predicted.reduce((sum, s) => sum + s.probability!, 0) / predicted.length) * 100)}%`
                   : "—",
@@ -213,8 +272,8 @@ export function NbaShotMap({
           </div>
           <p className="mt-5 text-sm leading-relaxed text-muted">
             {mode === "outcome"
-              ? "Círculo verde: acierto. Cruz roja: fallo."
-              : "Un punto más grande y oscuro representa una probabilidad mayor. Los puntos sin estimación aparecen en gris."}{" "}
+              ? "Círculo: acierto. Cruz: fallo."
+              : "Un círculo más grande y oscuro representa mayor dificultad estimada y menor probabilidad de acierto. Los círculos vacíos y discontinuos no tienen estimación."}{" "}
             Las coordenadas están en pies respecto a la canasta; también se
             representan los lanzamientos lejanos.
           </p>

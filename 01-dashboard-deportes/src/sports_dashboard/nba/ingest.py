@@ -82,21 +82,117 @@ def records(frame):
     return json.loads(frame.to_json(orient="records", date_format="iso"))
 
 
+# "pergame" does not make overlapping fields interchangeable: Usage MIN and
+# Scoring FGM/FGA can still be totals. Conventional box-score rates come only
+# from Base; absent Base values remain unknown rather than mixing units.
+BASE_RATE_FIELDS = {
+    "min",
+    "pts",
+    "reb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "fgm",
+    "fga",
+    "fg_pct",
+    "fg3m",
+    "fg3a",
+    "fg3_pct",
+    "ftm",
+    "fta",
+    "ft_pct",
+    "oreb",
+    "dreb",
+    "pf",
+}
+
+
 def stats_snapshot(frame, key):
     selected = frame[
         (frame["season_type"] == "regular-season") & (frame["per_mode"] == "pergame")
-    ]
+    ].copy()
+    has_measure = "measure_type" in selected
+    if has_measure:
+        selected["_priority"] = selected.measure_type.map(
+            {"base": 0, "advanced": 1}
+        ).fillna(2)
+        selected = selected.sort_values("_priority", kind="stable")
     output = {}
-    # Base and advanced values overlap (e.g. gp). Keep a single non-null value per entity.
     for row in records(selected):
         target = output.setdefault(int(row[key]), {})
         for name in STAT_FIELDS:
-            if row.get(name) is not None:
+            if (
+                has_measure
+                and name in BASE_RATE_FIELDS
+                and row.get("measure_type") != "base"
+            ):
+                continue
+            if name not in target and row.get(name) is not None:
                 target[name] = row[name]
         for name in ["player_name", "team_name", "team_id", "team_abbreviation"]:
-            if row.get(name) is not None:
+            if name not in target and row.get(name) is not None:
                 target[name] = row[name]
     return output
+
+
+def refresh_display_stats(engine, season):
+    """Repair only display aggregates from the exact already imported archives.
+
+    Reject newer source files rather than mixing snapshots with existing models.
+    Models, the prediction ledger, games, shots and roster-only profiles survive.
+    """
+    init_schema(engine)
+    datasets = {}
+    for dataset in ["player_season_stats", "team_season_stats"]:
+        frame, metadata = load_frame(dataset, season)
+        with engine.connect() as connection:
+            expected = connection.execute(
+                text(
+                    "SELECT metadata FROM nba_sources WHERE season=:season AND dataset=:dataset"
+                ),
+                {"season": season, "dataset": dataset},
+            ).scalar()
+        if (
+            not expected
+            or not expected.get("sha256")
+            or metadata.get("sha256") != expected["sha256"]
+        ):
+            raise ValueError(
+                "Display-only repair requires the same imported archive checksum; use the normal full ingestion/training workflow for a newer snapshot"
+            )
+        datasets[dataset] = frame
+    counts = {}
+    with engine.begin() as connection:
+        for dataset, table, key, id_column in [
+            ("player_season_stats", "nba_players", "player_id", "id"),
+            ("team_season_stats", "nba_team_stats", "team_id", "team_id"),
+        ]:
+            count = 0
+            for entity, values in stats_snapshot(datasets[dataset], key).items():
+                metrics = {k: v for k, v in values.items() if k in STAT_FIELDS}
+                count += connection.execute(
+                    text(
+                        f"UPDATE {table} SET metrics=CAST(:metrics AS jsonb) WHERE season=:season AND {id_column}=:entity"
+                    ),
+                    {
+                        "metrics": json.dumps(metrics, allow_nan=False),
+                        "season": season,
+                        "entity": entity,
+                    },
+                ).rowcount
+            counts[table] = count
+            connection.execute(
+                text(
+                    "UPDATE nba_sources SET metadata=metadata || CAST(:patch AS jsonb) WHERE season=:season AND dataset=:dataset"
+                ),
+                {
+                    "patch": json.dumps({"display_normalization": "base-rates-v2"}),
+                    "season": season,
+                    "dataset": dataset,
+                },
+            )
+    return counts
 
 
 def regular(frame):
@@ -378,8 +474,21 @@ def main(argv=None):
     parser.add_argument("--season", type=int, default=datetime.now(UTC).year)
     parser.add_argument("--history", type=int, default=0, choices=range(11))
     parser.add_argument("--refresh", action="store_true")
+    parser.add_argument(
+        "--display-stats-only",
+        action="store_true",
+        help="Repair display aggregates from the identical imported source snapshot, preserving models and history",
+    )
     args = parser.parse_args(argv)
     engine = get_engine(load_database_url())
+    if args.display_stats_only:
+        if args.refresh or args.history:
+            parser.error(
+                "--display-stats-only cannot be combined with --refresh or --history"
+            )
+        print(json.dumps(refresh_display_stats(engine, args.season)))
+        engine.dispose()
+        return
     print(json.dumps(ingest_season(engine, args.season, args.refresh)))
     # Training history only needs immutable cached files; do not populate historical UI with incomplete datasets.
     for year in range(args.season - args.history, args.season):

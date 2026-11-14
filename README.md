@@ -44,6 +44,11 @@ La muestra actual contiene **30 equipos, 528 perfiles de jugadores, 174 encuentr
 
 **Límites visibles:** el calendario publicado asigna 1.200 encuentros. El laboratorio completa los treinta restantes con emparejamientos hipotéticos dependientes de NBA Cup, sin escribirlos en el calendario real. Los marcadores auxiliares y los desempates por puntos siguen siendo aproximados. El modelo de tiro no incluye distancia al defensor ni reloj de posesión individual. El historial guarda pronósticos antes del partido; las fichas incorporan tendencias de cinco/diez encuentros, análisis por zonas y explicaciones de la regresión. Consulta [el laboratorio NBA](docs/nba-laboratory.md) y [la metodología y reproducción de NBA](docs/nba-integration.md) y [los resultados completos](docs/nba-evaluation-2026.json).
 
+
+**Mapa de jugadores:** en Jugadores puedes cruzar dos de 21 estadísticas, por ejemplo PTS y TS%, destacar a un jugador y añadir hasta seis condiciones simultáneas. Incluye filtros de equipo, posición, partidos y minutos por partido, escalas numéricas, tabla ordenable y enlaces compartibles con la selección. Los datos ausentes se excluyen del gráfico. Las fichas de forma reciente tienen ejes desde cero, fechas y valores por encuentro.
+
+**Dificultad del tiro:** la representación del modelo utiliza círculos más grandes y oscuros para los tiros más difíciles, con una leyenda de probabilidades de acierto. La estimación describe los tiros registrados según su ubicación y contexto, diferenciada de sus aciertos o fallos reales. Consulta la [guía de lectura de gráficos NBA](docs/nba-visual-analysis.md).
+
 ## Datos y temporada actual
 
 **LaLiga, Premier League, Serie A, Bundesliga y Ligue 1.** El año de la ruta identifica el comienzo de la temporada: `/pd/2026` corresponde a **2026-27**. La clasificación y las vistas de equipos admiten también temporadas anteriores cargadas; la ampliación individual se ha verificado con 2026-27.
@@ -143,7 +148,7 @@ npm run typecheck
 npm run build
 ```
 
-Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **130 pruebas Python y 190 pruebas web**, además de lint, tipos y compilación.
+Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **133 pruebas Python y 197 pruebas web**, además de lint, tipos y compilación.
 
 ## Estructura y documentación
 
