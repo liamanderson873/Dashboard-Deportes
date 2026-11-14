@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, Inter, JetBrains_Mono } from "next/font/google";
 import { es } from "@/lib/es";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,6 +45,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {es.skipLink}
         </a>
         <main className="shell min-h-dvh">{children}</main>
+        <footer className="border-t border-border bg-card px-4 py-6 text-sm text-muted sm:px-6">
+          <div className="mx-auto flex max-w-[1200px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p>Marcador · Proyecto personal · Datos importados, sin directo</p>
+            <nav aria-label="Información del proyecto" className="flex flex-wrap gap-x-6 gap-y-2">
+              <Link className="inline-flex min-h-11 items-center font-semibold text-accent" href="/acerca">Sobre el proyecto</Link>
+              <a className="inline-flex min-h-11 items-center font-semibold text-accent" href="https://github.com/liamanderson873/Dashboard-Deportes">Código en GitHub</a>
+            </nav>
+          </div>
+        </footer>
       </body>
     </html>
   );

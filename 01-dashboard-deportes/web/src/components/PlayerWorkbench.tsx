@@ -204,6 +204,7 @@ export function Coverage({ data }: { data: PlayerData }) {
         <span className="font-semibold text-accent">Bzzoiro Sports Data</span> ·{" "}
         {covered}/{finished} partidos con registros individuales{" "}
         <span className="ml-2 text-xs">Ver cobertura</span>
+        {data.imported && <span className="mt-1 block text-xs">Importación individual: {new Date(data.imported).toLocaleDateString("es-ES", { timeZone: "Europe/Madrid" })} · Sin directo</span>}
       </summary>
       <p className="mt-3 max-w-3xl leading-relaxed text-muted">{pe.coverage}</p>
       {data.imported && (

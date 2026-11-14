@@ -290,18 +290,18 @@ export const es = {
     noFinishedMatches: "Todavía no hay partidos terminados en esta temporada",
     noData: "Todavía no hay datos cargados",
     noDataHint:
-      "Carga datos con el comando: python -m sports_dashboard.ingest --competitions PD --seasons 2024",
+      "Esta instalación aún no tiene una temporada disponible. Vuelve más tarde o consulta la información del proyecto.",
     noFinishedMatchesHint:
       "La clasificación aparecerá cuando se juegue el primer partido. Mientras tanto puedes consultar el calendario.",
     seeResults: "Ver el calendario de partidos",
   },
 
   error: {
-    title: "No se pudo leer la base de datos",
-    stepsIntro: "Comprueba lo siguiente:",
+    title: "No se pudieron cargar los datos",
+    stepsIntro: "El servicio no está disponible en este momento. Puedes:",
     steps: [
-      "Arranca la base de datos con docker compose up -d",
-      "Comprueba que existe web/.env.local con la variable DATABASE_URL",
+      "Reintentar la carga dentro de unos instantes.",
+      "Consultar la información del proyecto desde el pie de página.",
     ],
     retry: "Reintentar",
     missingDatabaseUrl:

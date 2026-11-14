@@ -1,7 +1,9 @@
-# Marcador · web de análisis de fútbol
+# Marcador · web de análisis de fútbol y NBA
 
-Aplicación Next.js que lee la base de datos PostgreSQL local del proyecto y
-muestra las clasificaciones de fútbol en español.
+Aplicación Next.js que consulta PostgreSQL para explorar fútbol y NBA en español,
+con estadísticas individuales, comparación visual y modelos predictivos evaluados.
+
+Incluye `/acerca` con el contexto del proyecto y `/api/health` para comprobar disponibilidad. Los estados de error no muestran detalles privados de conexión. Para servir una copia precargada sin claves de proveedores, consulta [la guía de despliegue](../../docs/despliegue-demo.md). La demo pública aún necesita las cuentas de alojamiento y su comprobación final.
 
 ## Cómo arrancar
 

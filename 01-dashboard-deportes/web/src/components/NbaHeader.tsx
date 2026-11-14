@@ -130,6 +130,7 @@ export function NbaCoverage({ data }: { data: NbaData }) {
         <strong className="text-accent">NBA Stats · SportsDataverse</strong> ·{" "}
         {nbaFormat(finished, 0)} partidos terminados ·{" "}
         {nbaFormat(data.shotCount, 0)} tiros
+        {source && <span className="mt-1 block text-xs sm:ml-2 sm:mt-0 sm:inline">Calendario descargado el {new Date(source.fetched).toLocaleDateString("es-ES", { timeZone: "Europe/Madrid" })} · Sin directo</span>}
       </summary>
       <p className="mt-3 leading-relaxed">
         Datos descargados y normalizados de un archivo público de NBA Stats.

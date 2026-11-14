@@ -60,6 +60,7 @@ export async function POST(
       { status: 429, headers: { "Retry-After": "2" } },
     );
   busy = true;
+  let loaded = false;
   try {
     const config = await getSimulationConfig(getSql(), season);
     if (!config)
@@ -70,6 +71,7 @@ export async function POST(
         },
         { status: 503 },
       );
+    loaded = true;
     const baseline = Object.keys(forced).length === 0,
       key = `${season}:${config.modelVersion}`;
     let result = baseline ? cache.get(key) : undefined;
@@ -81,15 +83,14 @@ export async function POST(
       }
     }
     return Response.json(result, { headers: { "Cache-Control": "no-store" } });
-  } catch (error) {
+  } catch {
     return Response.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : "No se pudo completar la simulación.",
+        error: loaded
+          ? "No se pudo calcular este escenario. Comprueba las condiciones y vuelve a intentarlo."
+          : "El simulador no está disponible en este momento. Vuelve a intentarlo.",
       },
-      { status: 422 },
+      { status: loaded ? 422 : 503, headers: { "Cache-Control": "no-store" } },
     );
   } finally {
     busy = false;

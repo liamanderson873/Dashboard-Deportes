@@ -9,8 +9,15 @@ export async function GET(
   const season = nbaSeasonParam((await params).season);
   if (season === null)
     return Response.json({ error: "Temporada inválida." }, { status: 400 });
-  return Response.json(
-    { records: await getPredictionHistory(getSql(), season) },
-    { headers: { "Cache-Control": "no-store" } },
-  );
+  try {
+    return Response.json(
+      { records: await getPredictionHistory(getSql(), season) },
+      { headers: { "Cache-Control": "no-store" } },
+    );
+  } catch {
+    return Response.json(
+      { error: "El historial no está disponible en este momento. Vuelve a intentarlo." },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
+  }
 }

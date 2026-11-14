@@ -6,6 +6,10 @@ Cinco grandes ligas europeas y la NBA, estadísticas de equipos y jugadores, fav
 
 Proyecto personal de portfolio para prácticas. Se ejecuta en local; el repositorio contiene el código, las pruebas y las instrucciones para reproducirlo.
 
+**Para explorar el proyecto:** [recorrido visual de 90 segundos](docs/media/marcador-90s.mp4) · [explicación para CV y entrevistas](docs/portfolio-cv.md) · [preparar la demo pública](docs/despliegue-demo.md).
+
+El recorrido utiliza capturas reales con rótulos, sin audio. La aplicación incluye una página **Sobre el proyecto** con fuentes, metodología y un recorrido recomendado. La demo pública está preparada para Vercel y Neon, pero todavía no se ha publicado: requiere crear las cuentas y verificar su URL. La copia privada de datos ya se ha restaurado y comprobado en una base independiente, sin consultar las APIs.
+
 ![Centro de partidos de Marcador](01-dashboard-deportes/docs/img/matches-2026.png)
 
 ## Fútbol · explora, compara y guarda
@@ -148,7 +152,7 @@ npm run typecheck
 npm run build
 ```
 
-Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **133 pruebas Python y 197 pruebas web**, además de lint, tipos y compilación.
+Las pruebas de integración requieren PostgreSQL y utilizan exclusivamente **sports_test**. No ejecutes simultáneamente las suites de Python y web contra esa misma base. GitHub Actions ejecuta ambos trabajos con bases independientes. La verificación local de esta versión incluye **137 pruebas Python y 201 pruebas web**, además de lint, tipos y compilación.
 
 ## Estructura y documentación
 
@@ -170,5 +174,8 @@ docs/                     Guías y decisiones del proyecto
 - [Guía explicada del proyecto](docs/guia-explicada.md).
 - [Criterios de interfaz](docs/diseno-marcador.md).
 - [NBA: datos, modelos, evaluación y límites](docs/nba-integration.md).
+- [Revisión final y estado de publicación](docs/auditoria-portfolio.md).
+- [Demo precargada, despliegue y recuperación](docs/despliegue-demo.md).
+- [CV y preparación de entrevistas](docs/portfolio-cv.md).
 
 Los siguientes pasos son ampliar el backtesting por temporadas, mejorar la calibración en extremos y completar el calendario NBA cuando se publiquen los encuentros pendientes. El uso de cada fuente está sujeto a sus condiciones; revisa las de [Bzzoiro](https://sports.bzzoiro.com/docs/api-license/) y las condiciones de uso particular de los CSV antes de reutilizar los datos.

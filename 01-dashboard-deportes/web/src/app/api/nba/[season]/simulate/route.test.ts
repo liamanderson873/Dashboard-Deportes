@@ -4,6 +4,7 @@ vi.mock("@/lib/queries/nba-lab", () => ({
   getSimulationConfig: vi.fn(async () => null),
 }));
 import { POST } from "./route";
+import { getSimulationConfig } from "@/lib/queries/nba-lab";
 const context = { params: Promise.resolve({ season: "2026" }) };
 it("rejects malformed, oversized and cross-origin simulation requests", async () => {
   const request = (body: string, headers: Record<string, string> = {}) =>
@@ -41,4 +42,13 @@ it("returns a clear unavailable state instead of an invented simulation", async 
   );
   expect(r.status).toBe(503);
   expect((await r.json()).error).toMatch(/publicado/);
+});
+
+it("hides database connection errors and releases the busy flag after failure", async () => {
+  vi.mocked(getSimulationConfig).mockRejectedValueOnce(new Error("postgresql://user:secret@private-host/db"));
+  const request = () => new Request("http://localhost/api/nba/2026/simulate", { method: "POST", body: "{}" });
+  const failed = await POST(request(), context);
+  expect(failed.status).toBe(503);
+  expect(await failed.text()).not.toMatch(/secret|private-host|postgresql/);
+  expect((await POST(request(), context)).status).toBe(503);
 });
