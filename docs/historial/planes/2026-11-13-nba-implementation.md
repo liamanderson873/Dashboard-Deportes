@@ -11,7 +11,7 @@
 ---
 
 ## Task 1: Source audit and importer contracts
-Files: `src/sports_dashboard/nba/source.py`, `tests/test_nba_source.py`, `docs/nba-integration.md`, `requirements.txt` (under `01-dashboard-deportes`).
+Files: `src/sports_dashboard/nba/source.py`, `tests/test_nba_source.py`, `docs/nba/metodologia.md`, `requirements.txt` (under `01-dashboard-deportes`).
 1. Inspect a current and a historical source file for schedule, team logs, player stats and shots. Record source timestamps and actual coverage, including missing schedule slots.
 2. Write tests for year naming (2027=2026-27), safe fixed hosts, timeouts, bounded downloads, cache invalidation and explicit failure. Reject malformed parquet rather than caching an error page.
 3. Implement `load_frame(dataset: str, season: int, refresh: bool=False) -> DataFrame` with a fixed dataset registry and local cache outside Git. Preserve provenance and checksums.
@@ -66,7 +66,7 @@ Files: `web/src/components/NbaWorkbench.tsx`, `web/src/lib/nba-personal.ts`, rel
 4. Browser-check 390/768/1440, keyboard search, persistence, future-first games and zero document horizontal overflow.
 
 ## Task 9: End-to-end delivery
-Files: root README, project/web READMEs, `docs/nba-integration.md`, screenshots and CI optional model dependency installation.
+Files: root README, project/web READMEs, `docs/nba/metodologia.md`, screenshots and CI optional model dependency installation.
 1. Run source/feature/model tests and the complete Python suite sequentially before web DB tests; then lint, typecheck, Vitest and build.
 2. Run real ingestion/training only on verified data and audit actual coverage/counts/metrics. Explicitly report anything unavailable; mock test data must never populate production.
 3. Scan changed files for configured credentials; publish code, docs and small summary artifacts without raw external datasets/models.
@@ -74,4 +74,4 @@ Files: root README, project/web READMEs, `docs/nba-integration.md`, screenshots 
 
 ## Delivery record
 
-Implemented and exercised on real archived 2026-27 data. The importer, temporal team and shot models, conditional simulator, NBA routes, profiles, comparison, shot charts, favourites and five-player lineup are present. Source/API limitations and approximate tiebreakers are explicit in `docs/nba-integration.md`. Local verification currently passes 127 Python and 174 web tests; final visual checks and publication are tracked in the delivery summary.
+Implemented and exercised on real archived 2026-27 data. The importer, temporal team and shot models, conditional simulator, NBA routes, profiles, comparison, shot charts, favourites and five-player lineup are present. Source/API limitations and approximate tiebreakers are explicit in `docs/nba/metodologia.md`. Local verification currently passes 127 Python and 174 web tests; final visual checks and publication are tracked in the delivery summary.

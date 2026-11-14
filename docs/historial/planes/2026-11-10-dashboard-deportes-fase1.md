@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.12, pandas, SQLAlchemy 2 + psycopg 3, PostgreSQL 16 en Docker Compose, Streamlit, pytest, requests, GitHub Actions.
 
-**Spec:** `docs/superpowers/specs/2026-11-10-dashboard-deportes-design.md`
+**Spec:** `docs/historial/especificaciones/2026-11-10-dashboard-deportes-design.md`
 
 ## Global Constraints
 

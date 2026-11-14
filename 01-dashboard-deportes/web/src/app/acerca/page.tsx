@@ -31,14 +31,14 @@ export default function AboutPage() {
         <h2 id="data" className="display text-2xl font-bold">Datos reales, importaciones periódicas</h2>
         <p className="mt-4 text-sm leading-relaxed text-muted">Fútbol utiliza football-data.org, football-data.co.uk y Bzzoiro. NBA utiliza archivos públicos de SportsDataverse derivados de NBA Stats. Las fichas muestran la cobertura disponible y las fechas de descarga o importación cuando se conocen.</p>
         <p className="mt-3 text-sm leading-relaxed text-muted">La web lee una instantánea almacenada: no sigue los partidos en directo ni descarga datos al navegar. Un partido en curso puede conservar su estado anterior hasta la siguiente importación. La ausencia de datos se muestra con —; no se inventan ceros ni tiros.</p>
-        <a className="mt-3 inline-flex min-h-11 items-center font-semibold text-accent" href={`${repo}/blob/main/docs/bsd-integration.md`}>Fuentes y cobertura de fútbol</a>
+        <a className="mt-3 inline-flex min-h-11 items-center font-semibold text-accent" href={`${repo}/blob/main/docs/futbol/datos-de-jugadores.md`}>Fuentes y cobertura de fútbol</a>
       </section>
       <section className="rounded-panel border border-border bg-card p-6" aria-labelledby="models">
         <h2 id="models" className="display text-2xl font-bold">Qué estima cada modelo</h2>
         <p className="mt-4 text-sm leading-relaxed text-muted">La regresión logística de partidos utiliza diez temporadas completas y características anteriores a cada encuentro. Las simulaciones convierten esas probabilidades en recorridos posibles de temporada, NBA Cup y playoffs; los cruces simulados no son cuadros oficiales.</p>
         <p className="mt-3 text-sm leading-relaxed text-muted">El gradient boosting de tiros utiliza tres temporadas completas. Estima el acierto por ubicación y contexto disponible; los puntos más grandes y oscuros representan mayor dificultad. No incluye habilidad individual del tirador, distancia al defensor ni reloj de posesión.</p>
         <p className="mt-3 text-sm leading-relaxed text-muted">La evaluación reserva periodos posteriores al entrenamiento. Sus métricas describen esa prueba histórica, sin garantizar resultados futuros. AUC no equivale a porcentaje de aciertos. El simulador detalla sus aproximaciones de calendario y desempates.</p>
-        <a className="mt-3 inline-flex min-h-11 items-center font-semibold text-accent" href={`${repo}/blob/main/docs/nba-integration.md`}>Metodología y resultados medidos</a>
+        <a className="mt-3 inline-flex min-h-11 items-center font-semibold text-accent" href={`${repo}/blob/main/docs/nba/metodologia.md`}>Metodología y resultados medidos</a>
       </section>
       <section className="rounded-panel border border-border bg-card p-6" aria-labelledby="personal">
         <h2 id="personal" className="display text-2xl font-bold">Tu espacio y el código</h2>

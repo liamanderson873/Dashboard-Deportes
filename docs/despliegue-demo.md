@@ -66,7 +66,7 @@ El entrenamiento permanece fuera de la petición web, en CPU local. No se ejecut
 - `GET /api/health` debe devolver `200 {"status":"ok"}`: comprueba conectividad y presencia de tablas esenciales, no certifica actualidad ni exactitud de los datos. Un fallo devuelve 503 sin detalles de conexión.
 - Abre fútbol, NBA, una ficha, el mapa de jugadores y el simulador. Comprueba que las fechas de importación siguen visibles y que no hay claves en respuestas ni en el navegador.
 - Confirma que se carga el historial, que la simulación termina y que un escenario no modifica la base. Verifica `/acerca`, un enlace inexistente y móvil.
-- Añade la URL real al README y al CV solo después de esa comprobación. Usa una ventana privada para confirmar que el visitante no necesita cuenta.
+- Añade la URL real al README solo después de esa comprobación. Usa una ventana privada para confirmar que el visitante no necesita cuenta.
 
 ## Recuperación
 

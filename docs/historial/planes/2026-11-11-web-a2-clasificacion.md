@@ -2,13 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Una aplicación Next.js en español, con la dirección visual A (clara y limpia), que lee de PostgreSQL y muestra la Clasificación de cada liga y temporada, con el aspecto de la maqueta `docs/design/maquetas/clasificacion.html` (pestaña A).
+**Goal:** Una aplicación Next.js en español, con la dirección visual A (clara y limpia), que lee de PostgreSQL y muestra la Clasificación de cada liga y temporada, con el aspecto de la maqueta `docs/diseno/maquetas/clasificacion.html` (pestaña A).
 
 **Architecture:** Aplicación Next.js (App Router, TypeScript estricto) en `01-dashboard-deportes/web/`. Los componentes de servidor consultan PostgreSQL directamente con SQL (`postgres.js`); no hay API intermedia ni llamadas a APIs externas. La lógica pura (resumen, zonas, formatos) está separada de las consultas y de los componentes para probarla sin base de datos. Las ligas y temporadas se eligen con enlaces, sin JavaScript de cliente.
 
 **Tech Stack:** Next.js (última versión estable, App Router), React, TypeScript, Tailwind CSS, `postgres` (postgres.js), Vitest, npm, Node 24.
 
-**Spec:** `docs/superpowers/specs/2026-11-11-dashboard-web-nextjs-design.md` (secciones "Arquitectura" y "Dirección visual"). Referencia visual: `docs/design/maquetas/clasificacion.html`.
+**Spec:** `docs/historial/especificaciones/2026-11-11-dashboard-web-nextjs-design.md` (secciones "Arquitectura" y "Dirección visual"). Referencia visual: `docs/diseno/maquetas/clasificacion.html`.
 
 ## Global Constraints
 

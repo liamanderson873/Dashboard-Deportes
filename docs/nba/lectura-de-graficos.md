@@ -53,10 +53,10 @@ En la instalación revisada se repararon 464 agregados oficiales de jugadores y 
 
 ### Capturas
 
-![Comparación de jugadores con PTS ≥ 20 y TS% ≥ 60](../01-dashboard-deportes/docs/img/nba-player-map.png)
+![Comparación de jugadores con PTS ≥ 20 y TS% ≥ 60](../../01-dashboard-deportes/docs/img/nba-player-map.png)
 
-![Forma reciente con ejes numéricos](../01-dashboard-deportes/docs/img/nba-trends.png)
+![Forma reciente con ejes numéricos](../../01-dashboard-deportes/docs/img/nba-trends.png)
 
-![Dificultad estimada de los lanzamientos](../01-dashboard-deportes/docs/img/nba-shots.png)
+![Dificultad estimada de los lanzamientos](../../01-dashboard-deportes/docs/img/nba-shots.png)
 
 Pruebas de escalas, valores negativos, datos vacíos, inversión visual de dificultad, conversión de porcentajes, filtros simultáneos, orden de métricas y condiciones compartibles. Pruebas de regresión para los campos Base, conservación de modelos/historial y rechazo atómico de archivos con otra firma. Revisión de navegador con selección por teclado, PTS ≥ 20 junto con TS% ≥ 60, recarga de URL y anchos móvil, tablet y escritorio.
