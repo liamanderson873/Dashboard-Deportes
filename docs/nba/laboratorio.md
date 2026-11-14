@@ -58,6 +58,6 @@ Pruebas de identidad de la descomposición logística, registro previo inmutable
 
 | Cuadro de un recorrido | Grupos de NBA Cup |
 |---|---|
-| ![Cuadro de playoffs simulado](../01-dashboard-deportes/docs/img/nba-playoff-bracket.png) | ![Grupos actuales y probabilidades de NBA Cup](../01-dashboard-deportes/docs/img/nba-cup.png) |
+| ![Cuadro de playoffs simulado](../../01-dashboard-deportes/docs/img/nba-playoff-bracket.png) | ![Grupos actuales y probabilidades de NBA Cup](../../01-dashboard-deportes/docs/img/nba-cup.png) |
 | **Forma reciente** | **Contribuciones del modelo** |
-| ![Tendencias de jugador](../01-dashboard-deportes/docs/img/nba-trends.png) | ![Explicación del pronóstico](../01-dashboard-deportes/docs/img/nba-explanation.png) |
+| ![Tendencias de jugador](../../01-dashboard-deportes/docs/img/nba-trends.png) | ![Explicación del pronóstico](../../01-dashboard-deportes/docs/img/nba-explanation.png) |

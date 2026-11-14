@@ -21,7 +21,7 @@ La base de datos contiene:
 
 ## Ampliación individual y navegación
 
-La web separa **Liga**, **Partidos**, **Jugadores**, **Seguimiento** y **Mi once**. Bzzoiro Sports Data aporta actuaciones individuales, alineaciones, eventos y tiros en tablas `bsd_*`. Las vistas consultan PostgreSQL, sin peticiones externas al navegar. La importación de 2026-27, las correspondencias entre equipos, los cálculos por 90 y los límites conocidos están en la [guía de integración](../docs/bsd-integration.md).
+La web separa **Liga**, **Partidos**, **Jugadores**, **Seguimiento** y **Mi once**. Bzzoiro Sports Data aporta actuaciones individuales, alineaciones, eventos y tiros en tablas `bsd_*`. Las vistas consultan PostgreSQL, sin peticiones externas al navegar. La importación de 2026-27, las correspondencias entre equipos, los cálculos por 90 y los límites conocidos están en la [guía de integración](../docs/futbol/datos-de-jugadores.md).
 
 ```powershell
 # Después de cargar los datos base y configurar BZZOIRO_API_KEY en .env
@@ -31,7 +31,7 @@ La web separa **Liga**, **Partidos**, **Jugadores**, **Seguimiento** y **Mi once
 
 ## NBA y modelos predictivos
 
-NBA tiene ingesta propia, tablas `nba_*`, estadísticas avanzadas y entrenamiento offline de regresión logística y gradient boosting. Los partidos y tiros proceden del archivo público de NBA Stats de SportsDataverse, con atribución. No se utilizan datos futuros para construir las características de un encuentro. Configuración, comandos, evaluación y límites están en la [guía NBA](../docs/nba-integration.md).
+NBA tiene ingesta propia, tablas `nba_*`, estadísticas avanzadas y entrenamiento offline de regresión logística y gradient boosting. Los partidos y tiros proceden del archivo público de NBA Stats de SportsDataverse, con atribución. No se utilizan datos futuros para construir las características de un encuentro. Configuración, comandos, evaluación y límites están en la [guía NBA](../docs/nba/metodologia.md).
 
 ```powershell
 .venv/Scripts/python.exe -m sports_dashboard.nba.ingest --season 2026 --history 10

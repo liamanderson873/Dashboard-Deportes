@@ -66,7 +66,7 @@ El entrenamiento permanece fuera de la petición web, en CPU local. No se ejecut
 - `GET /api/health` debe devolver `200 {"status":"ok"}`: comprueba conectividad y presencia de tablas esenciales, no certifica actualidad ni exactitud de los datos. Un fallo devuelve 503 sin detalles de conexión.
 - Abre fútbol, NBA, una ficha, el mapa de jugadores y el simulador. Comprueba que las fechas de importación siguen visibles y que no hay claves en respuestas ni en el navegador.
 - Confirma que se carga el historial, que la simulación termina y que un escenario no modifica la base. Verifica `/acerca`, un enlace inexistente y móvil.
-- Añade la URL real al README y al CV solo después de esa comprobación. Usa una ventana privada para confirmar que el visitante no necesita cuenta.
+- Añade la URL real al README solo después de esa comprobación. Usa una ventana privada para confirmar que el visitante no necesita cuenta.
 
 ## Recuperación
 
@@ -86,4 +86,25 @@ vercel link --project marcador --scope liamandersonrod-6787 --yes
 vercel deploy --prod --yes --verify
 ```
 
-`web/vercel.json` conserva framework, región y comandos de instalación/compilación. Si se conecta el repositorio desde el panel de Vercel, configura Root Directory como `01-dashboard-deportes/web`. Las ingestas locales no actualizan automáticamente la demo: la conexión local y la copia de Neon permanecen separadas.
+`web/vercel.json` conserva framework, región y comandos de instalación/compilación. Las ingestas locales no actualizan automáticamente la demo: la conexión local y la copia de Neon permanecen separadas.
+
+### Activar el despliegue automático desde GitHub
+
+Es un paso de la cuenta de Vercel; no requiere cambios en el código. Tras activarlo, cada push a `main` publica la demo y cada pull request recibe una URL de vista previa.
+
+1. En el panel de Vercel, abre el proyecto `marcador` → **Settings** → **Git** → **Connect Git Repository** y elige `liamanderson873/Dashboard-Deportes`.
+2. En **Settings** → **Build and Deployment**, comprueba **Root Directory: `01-dashboard-deportes/web`** y Node.js 24.
+3. Comprueba en **Settings** → **Environment Variables** que `DATABASE_URL` (conexión pooled de lectura) existe en **Production**. Para que las vistas previas funcionen, añádela también en **Preview** con el mismo rol de lectura.
+4. Haz un push pequeño a `main` y confirma que el despliegue termina y que `/api/health` devuelve 200.
+
+La CI de GitHub sigue siendo la que valida pruebas, lint, tipos y build; Vercel solo compila y publica.
+
+## Protección del simulador
+
+`POST /api/nba/[season]/simulate` es público y cada escenario nuevo ocupa unos segundos de CPU. Para que un uso repetido no agote la cuota gratuita:
+
+- Los últimos 32 escenarios calculados se reutilizan: repetir uno no vuelve a simular.
+- Cada visitante puede calcular hasta **8 escenarios nuevos por minuto**; el siguiente recibe 429 con `Retry-After` y un mensaje en español.
+- Solo se ejecuta una simulación a la vez por instancia.
+
+Los contadores viven en la memoria de cada instancia de Vercel: frenan el abuso casual pero no son un límite global. Para un límite global haría falta un almacén compartido (por ejemplo Redis), innecesario para esta demo.

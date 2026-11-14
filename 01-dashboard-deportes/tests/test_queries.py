@@ -9,6 +9,7 @@ from sports_dashboard.queries import (
     team_results,
 )
 
+
 def test_standings_points_and_order(seeded):
     table = standings(seeded, "PD", 2024)
 

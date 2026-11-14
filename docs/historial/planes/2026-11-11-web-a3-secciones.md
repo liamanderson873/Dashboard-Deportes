@@ -8,7 +8,7 @@
 
 **Tech Stack:** Next.js 16.4 (App Router, `params` y `searchParams` son `Promise`), React 19, TypeScript estricto, Tailwind 4, postgres.js 4, Vitest 5. Sin dependencias nuevas.
 
-**Spec:** `docs/superpowers/specs/2026-11-11-dashboard-web-nextjs-design.md`
+**Spec:** `docs/historial/especificaciones/2026-11-11-dashboard-web-nextjs-design.md`
 
 ## Global Constraints
 

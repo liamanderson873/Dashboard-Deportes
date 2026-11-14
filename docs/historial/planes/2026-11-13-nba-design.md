@@ -1,6 +1,6 @@
 # Marcador NBA · propuesta para revisión
 
-> Estado de entrega: este documento conserva el diseño inicial. La implementación y los resultados medidos se describen en [la guía NBA](../nba-integration.md).
+> Estado de entrega: este documento conserva el diseño inicial. La implementación y los resultados medidos se describen en [la guía NBA](../../nba/metodologia.md).
 
 13 de noviembre de 2026. Alcance solicitado: reproducir la experiencia de fútbol para NBA, añadir estadísticas avanzadas y dos modelos predictivos. La aplicación actual queda preservada; no se han añadido modelos ni cambiado el repositorio durante esta revisión.
 

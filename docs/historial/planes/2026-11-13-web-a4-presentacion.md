@@ -8,7 +8,7 @@
 
 **Tech Stack:** GitHub Actions, Node 24, npm, PostgreSQL 16, Playwright (`playwright-core`, canal `msedge`), Python 3 + Pillow.
 
-**Spec:** `docs/superpowers/specs/2026-11-11-dashboard-web-nextjs-design.md` (fase A4 y "Streamlit: se conserva hasta que la web tenga las mismas secciones; después se elimina en un commit propio").
+**Spec:** `docs/historial/especificaciones/2026-11-11-dashboard-web-nextjs-design.md` (fase A4 y "Streamlit: se conserva hasta que la web tenga las mismas secciones; después se elimina en un commit propio").
 
 ## Global Constraints
 

@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from conftest import TEST_DATABASE_URL
 from sqlalchemy import text
 
-from conftest import TEST_DATABASE_URL
 from sports_dashboard.db import init_schema
 from sports_dashboard.stats_import import (
     AliasFileError,

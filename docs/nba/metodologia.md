@@ -48,7 +48,7 @@ Tras congelar la evaluación se reajusta un modelo de producción con las diez t
 
 ## Simulador de clasificación, NBA Cup, rondas y título
 
-El [laboratorio NBA](nba-laboratory.md) sustituye la tabla inicial de calendario parcial con un motor integrado de **2.000 simulaciones**, semilla 42. Conserva los 1.200 partidos publicados y completa treinta emparejamientos hipotéticos dependientes de NBA Cup, con 82 encuentros por equipo. Estos emparejamientos nunca se escriben como partidos oficiales. Las probabilidades originales y los escenarios de usuario permanecen separados.
+El [laboratorio NBA](laboratorio.md) sustituye la tabla inicial de calendario parcial con un motor integrado de **2.000 simulaciones**, semilla 42. Conserva los 1.200 partidos publicados y completa treinta emparejamientos hipotéticos dependientes de NBA Cup, con 82 encuentros por equipo. Estos emparejamientos nunca se escriben como partidos oficiales. Las probabilidades originales y los escenarios de usuario permanecen separados.
 
 Las tablas muestran clasificación directa, play-in, rondas y título, además de victorias esperadas y un intervalo central del 90%. Los cuadros representan una ejecución concreta, no cruces oficiales ni una combinación de favoritos. La fuerza de los equipos sigue fija; los encuentros no fechados usan un día libre por equipo.
 
@@ -93,7 +93,7 @@ Importación y evaluación del **13 de noviembre de 2026**:
 | Gradient boosting de tiros | 0,6486 | 0,2286 | 0,6512 |
 | Regresión logística de tiros | 0,6605 | 0,2339 | 0,6429 |
 
-Son resultados de una prueba temporal concreta, no garantías de rendimiento futuro. AUC no es porcentaje de predicciones acertadas. Los resultados completos, las particiones, las huellas de código y fuentes y las versiones de bibliotecas están en [el informe JSON](nba-evaluation-2026.json). Las huellas del código normalizan los saltos de línea para poder compararse en Windows y Linux.
+Son resultados de una prueba temporal concreta, no garantías de rendimiento futuro. AUC no es porcentaje de predicciones acertadas. Los resultados completos, las particiones, las huellas de código y fuentes y las versiones de bibliotecas están en [el informe JSON](evaluacion-2026.json). Las huellas del código normalizan los saltos de línea para poder compararse en Windows y Linux.
 
 ## Rutas y almacenamiento personal
 
@@ -117,4 +117,4 @@ Las suites Python y web no se ejecutan a la vez sobre la misma base de prueba. L
 
 ## Lectura de gráficos y unidades
 
-El mapa de jugadores permite comparativas con dos ejes y condiciones estadísticas. La dificultad de tiro tiene una leyenda propia y las tendencias incluyen escalas numéricas. La normalización de agregados prioriza Base para las cifras por partido, evitando sobrescrituras de totales de Usage/Scoring. Consulta la [guía visual y la reparación de instalaciones existentes](nba-visual-analysis.md).
+El mapa de jugadores permite comparativas con dos ejes y condiciones estadísticas. La dificultad de tiro tiene una leyenda propia y las tendencias incluyen escalas numéricas. La normalización de agregados prioriza Base para las cifras por partido, evitando sobrescrituras de totales de Usage/Scoring. Consulta la [guía visual y la reparación de instalaciones existentes](lectura-de-graficos.md).

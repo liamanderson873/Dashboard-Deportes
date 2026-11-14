@@ -2,17 +2,17 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
 import json
-from pathlib import Path
 import re
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import UTC, datetime
+from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 
-from dotenv import dotenv_values
 import requests
+from dotenv import dotenv_values
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -134,7 +134,8 @@ def select_season(leagues, code, year):
     season = league.get("current_season") or {}
     if season.get("year") != year:
         raise BsdError(f"{code}: la temporada actual del proveedor no corresponde a {year}.")
-    valid_id(league.get("id")); valid_id(season.get("id"))
+    valid_id(league.get("id"))
+    valid_id(season.get("id"))
     return league, season
 
 
@@ -258,7 +259,7 @@ def import_competition(engine, client, leagues, code, year, limit=None, refresh=
         done = set(conn.execute(text("""SELECT id FROM bsd_matches m WHERE competition=:code AND season=:year
           AND imported_at >= utc_date + interval '48 hours'
           AND EXISTS(SELECT 1 FROM bsd_player_matches pm WHERE pm.match_id=m.id)"""), {"code": code, "year": year}).scalars())
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     pending = [e for e in events if e["status"] == "finished" and datetime.fromisoformat(e["event_date"].replace("Z", "+00:00")) <= now and (refresh or e["id"] not in done)]
     pending.sort(key=lambda e: e["event_date"], reverse=True)
     if limit is not None:
@@ -273,7 +274,7 @@ def import_competition(engine, client, leagues, code, year, limit=None, refresh=
                     future.result()
                 except BsdAccessError:
                     raise
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001 - un partido fallido no detiene el resto
                     # Report a safe error kind, never a DB URL or token-bearing request.
                     message = str(exc) if isinstance(exc, BsdError) else type(exc).__name__
                     failures.append(futures[future])

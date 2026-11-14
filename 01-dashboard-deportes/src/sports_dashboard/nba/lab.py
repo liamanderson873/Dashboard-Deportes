@@ -94,7 +94,7 @@ def linear_terms(model, values):
         "intercept": float(classifier.intercept_[0]),
         "terms": [
             {"feature": name, "value": float(value), "contribution": float(term)}
-            for name, value, term in zip(FEATURES, values, terms)
+            for name, value, term in zip(FEATURES, values, terms, strict=True)
         ],
     }
     result["logit"] = result["intercept"] + sum(

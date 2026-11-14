@@ -17,4 +17,4 @@
 | 01:12 | NBA Cup |
 | 01:21 | Evaluación histórica y referencias |
 
-Capturado el 14 de noviembre de 2026. Los datos y probabilidades pertenecen a la instantánea mostrada, sin actualización en directo. Ver [fuentes y metodología](../nba-integration.md).
+Capturado el 14 de noviembre de 2026. Los datos y probabilidades pertenecen a la instantánea mostrada, sin actualización en directo. Ver [fuentes y metodología](../nba/metodologia.md).

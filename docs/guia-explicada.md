@@ -115,7 +115,7 @@ donde se guarda el repositorio.
 **CI (integración continua)** es un robot de GitHub que, cada vez que subes código, lo ejecuta en un ordenador
 limpio y corre los tests. Si falla ves una ✘ roja. Nos cazó un fallo real: un test funcionaba en tu equipo y no
 allí porque dependía de una variable que el CI define distinto.
-**Por qué.** Es el estándar del sector, y un reclutador ve en el repositorio el historial y el check verde.
+**Por qué.** Es el estándar del sector, y cualquiera que visite el repositorio ve el historial de pruebas y el check verde.
 
 ## 9. pytest y TDD: el examen antes de la respuesta
 
@@ -227,7 +227,7 @@ un gris demasiado claro, el test suspende.
 
 ## 15. El diseño "Marcador"
 
-El rediseño visual está descrito en `docs/superpowers/specs/2026-11-13-rediseno-visual.md`. La idea: la web se
+El rediseño visual está descrito en `docs/historial/especificaciones/2026-11-13-rediseno-visual.md`. La idea: la web se
 lee como el marcador de un estadio impreso en papel técnico. Tema claro, fondo tiza, tinta casi negra y un único
 acento verde césped. Tiene **tres ideas visuales**:
 

@@ -71,7 +71,7 @@ def simulate(model, snapshots, teams, games, runs=10_000, seed=42):
         )
     probabilities = model.predict_proba(pd.DataFrame(inputs, columns=FEATURES))[:, 1]
     sample = np.arange(runs)
-    for (home, away), probability in zip(pending, probabilities):
+    for (home, away), probability in zip(pending, probabilities, strict=True):
         home_win = rng.random(runs) < probability
         winner = np.where(home_win, home, away)
         loser = np.where(home_win, away, home)
