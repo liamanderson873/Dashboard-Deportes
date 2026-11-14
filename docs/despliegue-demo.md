@@ -1,6 +1,6 @@
 # Publicar una demo reproducible de Marcador
 
-La aplicación completa necesita un servidor Next.js y PostgreSQL. La propuesta para este proyecto personal es **Vercel Hobby + Neon Free**, con una copia precargada. No necesita las claves deportivas al navegar. Las cuentas todavía no se han creado y no hay URL pública de la aplicación verificada.
+La aplicación completa necesita un servidor Next.js y PostgreSQL. La demo está publicada en **[marcador-xi.vercel.app](https://marcador-xi.vercel.app)** con **Vercel Hobby + Neon Free**, una copia precargada y región Frankfurt. No necesita las claves deportivas al navegar. El acceso sin cuenta, la base de solo lectura y los servicios públicos se verificaron el 14 de noviembre de 2026.
 
 - [Vercel Hobby: uso personal y límites](https://vercel.com/docs/plans/hobby).
 - [Neon en Vercel Marketplace](https://vercel.com/integrations/neon).
@@ -37,7 +37,7 @@ Restaura únicamente un dump creado por ti y de confianza:
 
 El script rechaza la misma base de origen, cualquier destino con tablas en `public` y archivos cuyo SHA-256 no coincide con el manifiesto. Ejecuta la restauración en una sola transacción y verifica los recuentos. No utiliza `DROP`, `--clean` ni sobrescribe una base existente. Si el destino ya contiene datos, crea otra base o rama vacía para la nueva versión.
 
-Se ha ensayado el ciclo completo en una base local independiente PostgreSQL 16, con clientes PostgreSQL 17: **24 tablas verificadas**, incluidos los modelos y el historial. El script omite únicamente el ajuste de sesión `transaction_timeout=0` que emite pg_dump 17 y no reconoce PostgreSQL 16. Una migración a Neon aún necesita su comprobación real.
+Se ha ensayado el ciclo completo en una base local independiente PostgreSQL 16 y después en Neon PostgreSQL 17: **24 tablas verificadas**, incluidos los modelos y el historial. El script omite únicamente el ajuste de sesión `transaction_timeout=0` que emite pg_dump 17 y no reconoce PostgreSQL 16. La conexión pública utiliza un rol separado con SELECT y sin INSERT, UPDATE ni DELETE en las tablas.
 
 ## 3. Cuenta de lectura para la web
 
@@ -74,4 +74,16 @@ Para un fallo de interfaz, vuelve al despliegue anterior desde Vercel. Para un c
 
 ## Estado actual
 
-Código, pruebas, snapshot privado y ensayo local de restauración preparados. **Pendiente: crear las cuentas, restaurar en Neon, desplegar en Vercel y verificar la URL pública.**
+**Demo publicada y comprobada:** https://marcador-xi.vercel.app. El proyecto `marcador` está en Vercel Hobby; Neon está en Free, PostgreSQL 17 y Frankfurt. Las funciones usan `fra1`, Node 24 y la conexión pooled de lectura guardada como secreto de producción. La restauración utilizó la conexión directa de administración; esa conexión no se ha enviado a Vercel.
+
+El manifiesto de subida se revisó antes de desplegar: excluye archivos `.env`, estado `.vercel`, pruebas, cachés y dumps. El simulador tiene un límite de ejecución de 60 segundos. En la prueba pública, los dos escenarios devolvieron 200 y ejecutaron 2.000 simulaciones; los tiempos observados fueron 3,88 y 2,34 segundos, sin garantía de latencia futura. El historial devolvió 1.017 pronósticos distintos.
+
+El despliegue actual se hizo mediante CLI desde `01-dashboard-deportes/web`; todavía no hay conexión automática entre los pushes de GitHub y Vercel. Para próximas publicaciones, desde ese directorio, inicia sesión y enlaza el proyecto si es necesario, y ejecuta:
+
+```powershell
+vercel login
+vercel link --project marcador --scope liamandersonrod-6787 --yes
+vercel deploy --prod --yes --verify
+```
+
+`web/vercel.json` conserva framework, región y comandos de instalación/compilación. Si se conecta el repositorio desde el panel de Vercel, configura Root Directory como `01-dashboard-deportes/web`. Las ingestas locales no actualizan automáticamente la demo: la conexión local y la copia de Neon permanecen separadas.

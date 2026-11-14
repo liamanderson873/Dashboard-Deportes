@@ -1,6 +1,6 @@
 # Revisión final de Marcador para portfolio
 
-Revisión del 14 de noviembre de 2026. **82/100: preparado para presentar el código y la demo local; publicación completa pendiente de cuentas y comprobación del alojamiento.** Es una prioridad de trabajo orientativa, no una medida estadística de calidad.
+Revisión del 14 de noviembre de 2026, completada con la publicación. **88/100: demo pública operativa y preparada para presentar en el CV.** Es una prioridad de trabajo orientativa, no una medida estadística de calidad.
 
 ## Evidencia comprobada
 
@@ -16,7 +16,7 @@ Revisión del 14 de noviembre de 2026. **82/100: preparado para presentar el có
 | Calidad | 137 pruebas Python y 201 web en local; Ruff, ESLint, TypeScript y build de producción correctos. Las suites usan sports_test, separada del origen y la demo restaurada. |
 | Presentación | Página `/acerca`, pie con documentación/código, fechas visibles, README, guía de despliegue y CV, y MP4 de 90 segundos con diez escenas reales y rótulos. |
 
-La revisión visual observa una muestra concreta; no certifica todos los navegadores, accesibilidad completa ni rendimiento remoto. No se ha probado la migración a Neon ni un despliegue público con tráfico real.
+La revisión visual observa una muestra concreta; no certifica todos los navegadores ni accesibilidad completa. La migración a Neon y el despliegue público están comprobados; no se ha realizado una prueba de carga ni medido tráfico sostenido.
 
 ## Correcciones aplicadas
 
@@ -27,11 +27,15 @@ La revisión visual observa una muestra concreta; no certifica todos los navegad
 - Margen de desplazamiento para evitar que la cabecera fija oculte controles al navegar por teclado o anclas.
 - Exportación/restauración de la demo, incluyendo el ajuste de sesión incompatible entre clientes PostgreSQL 17 y servidor 16.
 
-## Único bloqueo de publicación
+## Publicación completada
 
-El usuario todavía no tiene cuentas de Vercel y Neon/Supabase. No se ha registrado ninguna cuenta, activado un plan de pago ni publicado una URL ficticia. Para continuar: crear las cuentas gratuitas, restaurar en una base vacía, configurar una conexión web de lectura y verificar la URL desde una ventana privada. Pasos en [despliegue-demo.md](despliegue-demo.md).
+**[marcador-xi.vercel.app](https://marcador-xi.vercel.app)** está publicada en Vercel Hobby y Neon Free. Se restauraron las 24 tablas y se verificó un rol de lectura con acceso SELECT y sin INSERT/UPDATE/DELETE. La conexión de administración permanece local; Vercel recibe exclusivamente la conexión pooled de lectura como secreto de producción. Las funciones están en Frankfurt, cerca de la base.
 
-El código, las capturas y el [recorrido visual](media/marcador-90s.mp4) ya se pueden enlazar desde el CV. La URL pública de la aplicación se añadirá tras comprobarla.
+Se comprobaron nueve lecturas HTTP sin cookies de autenticación: salud, información del proyecto, fútbol, jugadores, NBA, ficha de Curry, mapa, modelos e historial. Todas devolvieron 200. El navegador mostró el mapa interactivo con 266 jugadores iniciales. El historial contiene 1.017 pronósticos distintos. El simulador devolvió 200 tanto en el escenario base como al condicionar un resultado, con 2.000 simulaciones por petición (3,88 y 2,34 segundos en esta observación).
+
+El manifiesto de 275 archivos de subida se revisó para excluir credenciales, archivos `.env`, estado de Vercel, cachés, pruebas y dumps. No se activó ningún plan de pago. La publicación se hizo por CLI; la CI de GitHub sigue validando el repositorio y todavía no hay despliegue automático por cada push. Pasos de mantenimiento y recuperación en [despliegue-demo.md](despliegue-demo.md).
+
+El código, la demo pública y el [recorrido visual](media/marcador-90s.mp4) ya se pueden enlazar desde el CV.
 
 ## Material para presentar
 

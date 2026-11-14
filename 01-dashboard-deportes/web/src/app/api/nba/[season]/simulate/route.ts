@@ -3,6 +3,7 @@ import { nbaSeasonParam } from "@/lib/nba";
 import { getSimulationConfig } from "@/lib/queries/nba-lab";
 import { simulateNba, type SimResult } from "@/lib/nba-simulator";
 export const runtime = "nodejs";
+export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 const cache = new Map<string, SimResult>();
 let busy = false;

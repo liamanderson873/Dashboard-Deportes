@@ -11,7 +11,7 @@ Python · PostgreSQL · Next.js · TypeScript · scikit-learn · GitHub Actions
 - Regresión logística de partidos y gradient boosting de tiros, evaluados con separación temporal y modelos de referencia.
 - Pruebas automatizadas de datos, modelos y web, con CI en GitHub y documentación reproducible.
 
-Enlace: [repositorio y capturas](https://github.com/liamanderson873/Dashboard-Deportes). Añade la demo cuando exista una URL pública comprobada; localhost no es accesible para quien lea el CV.
+Enlaces para el CV: [demo pública](https://marcador-xi.vercel.app) · [repositorio y capturas](https://github.com/liamanderson873/Dashboard-Deportes). La demo usa datos precargados y no requiere registro.
 
 ## Presentación de 60–90 segundos
 
@@ -42,4 +42,4 @@ Adapta la primera persona a lo que puedas explicar y reproducir. Si te preguntan
 
 ## Antes de enviarlo
 
-Abre el repositorio sin iniciar sesión, comprueba enlaces y capturas, ensaya el recorrido y explica una consulta, una prueba de regresión y la partición temporal. El despliegue público es el único paso que requiere las cuentas externas del usuario; sigue [la guía de demo](despliegue-demo.md).
+Abre la demo y el repositorio sin iniciar sesión, comprueba enlaces y capturas, ensaya el recorrido y explica una consulta, una prueba de regresión y la partición temporal. Para mantener la publicación, sigue [la guía de demo](despliegue-demo.md).

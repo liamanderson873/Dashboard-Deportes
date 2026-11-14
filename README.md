@@ -4,11 +4,11 @@
 
 Cinco grandes ligas europeas y la NBA, estadísticas de equipos y jugadores, favoritos, alineaciones y modelos predictivos evaluados con datos históricos. Una aplicación en español que transforma datos reales con **Python**, los almacena en **PostgreSQL** y los presenta con **Next.js**.
 
-Proyecto personal de portfolio para prácticas. Se ejecuta en local; el repositorio contiene el código, las pruebas y las instrucciones para reproducirlo.
+Proyecto personal de portfolio para prácticas. **[Abrir la demo pública de Marcador](https://marcador-xi.vercel.app)**. También se puede ejecutar en local; el repositorio contiene el código, las pruebas y las instrucciones para reproducirlo.
 
 **Para explorar el proyecto:** [recorrido visual de 90 segundos](docs/media/marcador-90s.mp4) · [explicación para CV y entrevistas](docs/portfolio-cv.md) · [preparar la demo pública](docs/despliegue-demo.md).
 
-El recorrido utiliza capturas reales con rótulos, sin audio. La aplicación incluye una página **Sobre el proyecto** con fuentes, metodología y un recorrido recomendado. La demo pública está preparada para Vercel y Neon, pero todavía no se ha publicado: requiere crear las cuentas y verificar su URL. La copia privada de datos ya se ha restaurado y comprobado en una base independiente, sin consultar las APIs.
+El recorrido utiliza capturas reales con rótulos, sin audio. La aplicación incluye una página **Sobre el proyecto** con fuentes, metodología y un recorrido recomendado. La demo está publicada en **Vercel Hobby + Neon Free**, con datos precargados, funciones en Frankfurt y una conexión PostgreSQL de solo lectura. No requiere registro para explorarla. Se han comprobado el acceso público, el historial y simulaciones de 2.000 recorridos con y sin resultados condicionados; los datos no se actualizan en directo.
 
 ![Centro de partidos de Marcador](01-dashboard-deportes/docs/img/matches-2026.png)
 
