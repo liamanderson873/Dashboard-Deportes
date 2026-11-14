@@ -62,30 +62,9 @@ empates a puntos se deshacen por diferencia de goles y después por goles a favo
 reglas oficiales de enfrentamiento directo, así que dos equipos empatados pueden salir en
 otro orden que en la tabla oficial.
 
-## Arrancarlo en local
-
-Necesitas Python 3.12+, Docker y una clave gratuita de
-[football-data.org](https://www.football-data.org/client/register).
-
-```bash
-cd 01-dashboard-deportes
-python -m venv .venv
-.venv\Scripts\activate          # Linux/macOS: source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e .                # permite importar `sports_dashboard`
-
-cp .env.example .env            # pon tu clave en FOOTBALL_API_KEY
-docker compose up -d            # PostgreSQL en localhost:5433
-
-python -m sports_dashboard.ingest --competitions PD --seasons 2024
-```
-
-PostgreSQL se publica en el puerto **5433** del ordenador para no chocar con una instalación
-local de PostgreSQL que use el puerto por defecto, 5432.
-
 ## Web (Next.js)
 
-Funciona en local; no hay despliegue público.
+**[Demo pública de Marcador](https://marcador-xi.vercel.app)**.
 
 `web/` contiene una web en español (diseño claro) que lee la misma base de datos
 directamente con componentes de servidor. Para cada liga y temporada de la base muestra la
@@ -95,16 +74,9 @@ gráfico de evolución de puntos por temporada, estadísticas por partido como x
 plantilla de la temporada y partidos) y un comparador de dos equipos con sus enfrentamientos
 directos. Los gráficos son SVG generados en el servidor, con una tabla como alternativa.
 
-```bash
-cd web
-cp .env.example .env.local      # solo DATABASE_URL; nunca se sube a git
-npm install
-npm run dev                     # http://localhost:3000
-```
-
 Rutas: `/{liga}/{año}` (clasificación), `/{liga}/{año}/resultados/{jornada}`,
 `/{liga}/{año}/goleadores`, `/{liga}/{año}/equipo/{id}` y
-`/{liga}/{año}/comparar?a={id}&b={id}`. Ligas: `pd`, `pl`, `sa`, `bl1`, `fl1`. Los scripts
+`/{liga}/{año}/comparar?a={id}&b={id}`. Ligas: `pd`, `pl`, `sa`, `bl1`, `fl1`. Los controles de calidad
 y los tests están en [`web/README.md`](web/README.md). La web nunca llama a la API.
 
 ## Cargar datos

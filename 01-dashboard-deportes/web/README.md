@@ -5,17 +5,8 @@ con estadísticas individuales, comparación visual y modelos predictivos evalua
 
 Incluye `/acerca` con el contexto del proyecto y `/api/health` para comprobar disponibilidad. Los estados de error no muestran detalles privados de conexión. **[Demo pública](https://marcador-xi.vercel.app)** con Vercel Hobby, Neon Free y conexión de solo lectura. Para reproducir y mantener esa copia precargada sin claves de proveedores, consulta [la guía de despliegue](../../docs/despliegue-demo.md).
 
-## Cómo arrancar
+## Calidad y capturas
 
-1. Levanta la base de datos del proyecto (puerto 5433).
-2. Copia `.env.example` a `.env.local` (no se sube a git).
-3. `npm install`
-4. `npm run dev` y abre http://localhost:3000
-
-## Scripts
-
-- `npm run dev`: servidor de desarrollo.
-- `npm run build` y `npm start`: compilar y servir en modo producción.
 - `npm run lint`: ESLint.
 - `npm run typecheck`: TypeScript sin emitir código.
 - `npm test`: tests con Vitest.
@@ -37,7 +28,7 @@ Incluye `/acerca` con el contexto del proyecto y `/api/health` para comprobar di
 - `/{liga}/{año}/seguimiento`: equipos y jugadores favoritos, con sus próximos encuentros.
 - `/{liga}/{año}/mi-once`: campo visual 4-3-3, selección por nombre y guardado local.
 - Los antiguos enlaces `/jugadores?tab=partidos|favoritos|once` redirigen a las nuevas secciones.
-- Si la base de datos no responde se muestra una pantalla de error con los pasos para arrancarla.
+- Si la base de datos no responde se muestra un estado de error recuperable.
 
 ## Notas
 
