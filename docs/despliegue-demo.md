@@ -78,13 +78,7 @@ Para un fallo de interfaz, vuelve al despliegue anterior desde Vercel. Para un c
 
 El manifiesto de subida se revisó antes de desplegar: excluye archivos `.env`, estado `.vercel`, pruebas, cachés y dumps. El simulador tiene un límite de ejecución de 60 segundos. En la prueba pública, los dos escenarios devolvieron 200 y ejecutaron 2.000 simulaciones; los tiempos observados fueron 3,88 y 2,34 segundos, sin garantía de latencia futura. El historial devolvió 1.017 pronósticos distintos.
 
-El despliegue actual se hizo mediante CLI desde `01-dashboard-deportes/web`; todavía no hay conexión automática entre los pushes de GitHub y Vercel. Para próximas publicaciones, desde ese directorio, inicia sesión y enlaza el proyecto si es necesario, y ejecuta:
-
-```powershell
-vercel login
-vercel link --project marcador --scope liamandersonrod-6787 --yes
-vercel deploy --prod --yes --verify
-```
+El repositorio está conectado al proyecto `marcador`, con `main` como rama de producción y los despliegues automáticos activados. Vercel compila desde `01-dashboard-deportes/web`, con Next.js y Node.js 24. Cada push a `main` inicia una publicación; comprueba que termina en READY y que `/api/health` responde 200. La CI de GitHub valida pruebas, lint, tipos y compilación por separado.
 
 `web/vercel.json` conserva framework, región y comandos de instalación/compilación. Las ingestas locales no actualizan automáticamente la demo: la conexión local y la copia de Neon permanecen separadas.
 

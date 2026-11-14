@@ -15,5 +15,5 @@ export default async function PlayersPage({params,searchParams}:{params:Promise<
  const initial=Object.fromEntries(Object.entries(search).filter((entry):entry is [string,string]=>typeof entry[1]==='string'));
  const destination=({partidos:'partidos',favoritos:'seguimiento',once:'mi-once'} as Record<string,string>)[initial.tab];
  if(destination)redirect(`/${context.competition.slug}/${context.season}/${destination}`);
- return <><LeagueHeader context={context} section="jugadores" title={pe.title} subtitle={`${context.competition.name} · ${context.season}-${String(context.season+1).slice(-2)}`}/><PlayerWorkbench data={data} base={`/${context.competition.slug}/${context.season}`} today={new Date().toISOString().slice(0,10)} now={new Date().toISOString()} initial={initial}/></>;
+ return <><LeagueHeader context={context} section="jugadores" title={pe.title} subtitle={`${context.competition.name} · ${context.season}-${String(context.season+1).slice(-2)}`}/><PlayerWorkbench key={JSON.stringify(initial)} data={data} base={`/${context.competition.slug}/${context.season}`} today={new Date().toISOString().slice(0,10)} now={new Date().toISOString()} initial={initial}/></>;
 }

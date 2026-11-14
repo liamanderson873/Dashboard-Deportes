@@ -172,7 +172,7 @@ npm test
 npm run build
 ```
 
-Hay **137 tests de Python y 206 de la web**. Los tests de integración usan una base de datos aparte, `sports_test`, para no tocar tus datos; no ejecutes las dos suites a la vez contra ella. GitHub Actions ejecuta todo esto en cada cambio, cada parte con su propia base de datos.
+Hay **137 tests de Python y 211 de la web**. Los tests de integración usan una base de datos aparte, `sports_test`, para no tocar tus datos; no ejecutes las dos suites a la vez contra ella. GitHub Actions ejecuta todo esto en cada cambio, cada parte con su propia base de datos.
 
 ## Cómo está organizado el repositorio
 
@@ -194,6 +194,10 @@ docs/                        Documentación (ver la tabla siguiente)
     src/components/          Piezas de la interfaz y gráficos
     src/lib/                 Consultas a la base de datos y cálculos
 ```
+
+## Orientarse en la web
+
+El botón **Explorar**, disponible en la cabecera de ambos deportes, reúne las herramientas de la liga y temporada actuales y permite buscarlas por nombre. Las migas de pan muestran la ruta de las páginas; las fichas añaden un índice de secciones y enlaces al equipo, al comparador y a otras vistas relacionadas. El panel usa [UI SDK de Vercel](https://github.com/vercel-labs/ui) para gestionar teclado, foco y cierre con Escape.
 
 ## Documentación
 

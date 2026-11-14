@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ProfileNav } from "./ProfileNav";
 import { NbaTrends } from "./NbaTrends";
 import { NbaExplanation } from "./NbaExplanation";
 import { getPredictionExplanation } from "@/lib/queries/nba-lab";
@@ -24,7 +25,10 @@ import { NbaShotMap } from "./NbaShotMap";
 
 function StatTiles({ metrics, keys }: { metrics: NbaMetrics; keys: string[] }) {
   return (
-    <div className="my-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div
+      id="ficha-estadisticas"
+      className="my-5 grid grid-cols-2 gap-3 sm:grid-cols-4"
+    >
       {keys.map((key) => (
         <div
           key={key}
@@ -113,6 +117,58 @@ export async function NbaProfile({
             ? "Clasificación"
             : "Partidos"}
       </Link>
+      <ProfileNav
+        sections={
+          kind === "player"
+            ? [
+                { label: "Estadísticas", href: "#ficha-estadisticas" },
+                { label: "Forma reciente", href: "#ficha-forma" },
+                { label: "Partidos", href: "#ficha-partidos" },
+                { label: "Mapa de tiro", href: "#ficha-tiros" },
+              ]
+            : kind === "team"
+              ? [
+                  { label: "Forma reciente", href: "#ficha-forma" },
+                  { label: "Estadísticas", href: "#ficha-estadisticas" },
+                  { label: "Plantilla", href: "#ficha-plantilla" },
+                  { label: "Partidos", href: "#ficha-partidos" },
+                  { label: "Mapa de tiro", href: "#ficha-tiros" },
+                ]
+              : [
+                  { label: "Partido y jugadores", href: "#ficha-partido" },
+                  { label: "Mapa de tiro", href: "#ficha-tiros" },
+                ]
+        }
+        links={
+          kind === "player" && player
+            ? [
+                {
+                  label: "Ver su equipo",
+                  href: `${base}/equipo/${player.teamId}`,
+                },
+                {
+                  label: "Comparar este jugador",
+                  href: `${base}/jugadores?tab=compare&a=${player.id}`,
+                },
+                {
+                  label: "Mapa de jugadores",
+                  href: `${base}/jugadores?tab=chart`,
+                },
+              ]
+            : kind === "team" && team
+              ? [
+                  {
+                    label: "Comparar su plantilla",
+                    href: `${base}/jugadores?team=${team.id}`,
+                  },
+                  { label: "Simulador de playoffs", href: `${base}/modelos` },
+                ]
+              : [
+                  { label: "Calendario NBA", href: `${base}/partidos` },
+                  { label: "Simulador de playoffs", href: `${base}/modelos` },
+                ]
+        }
+      />
       <NbaCoverage data={data} />
       {kind === "player" && player && (
         <>
@@ -146,8 +202,13 @@ export async function NbaProfile({
             Los ratings del jugador describen la eficiencia de su equipo
             mientras está en pista.
           </p>
-          <NbaTrends lines={lines} kind="player" />
-          <h2 className="display mb-3 mt-6 text-2xl font-bold">
+          <div id="ficha-forma">
+            <NbaTrends lines={lines} kind="player" />
+          </div>
+          <h2
+            id="ficha-partidos"
+            className="display mb-3 mt-6 text-2xl font-bold"
+          >
             Registro de partidos
           </h2>
           <p className="mb-3 text-xs text-subtle">
@@ -214,7 +275,11 @@ export async function NbaProfile({
           </div>
         </>
       )}
-      {kind === "team" && <NbaTrends lines={teamTrends} kind="team" />}
+      {kind === "team" && (
+        <div id="ficha-forma">
+          <NbaTrends lines={teamTrends} kind="team" />
+        </div>
+      )}
       {kind === "game" && prediction && game && (
         <NbaExplanation {...prediction} homeName={name(game.homeId)} />
       )}
@@ -240,7 +305,10 @@ export async function NbaProfile({
               "efg_pct",
             ]}
           />
-          <h2 className="display mb-4 mt-8 text-2xl font-bold">
+          <h2
+            id="ficha-plantilla"
+            className="display mb-4 mt-8 text-2xl font-bold"
+          >
             Jugadores con estadísticas
           </h2>
           <NbaPlayersTable
@@ -249,7 +317,10 @@ export async function NbaProfile({
               (a, b) => (b.metrics.pts ?? 0) - (a.metrics.pts ?? 0),
             )}
           />
-          <h2 className="display mb-4 mt-8 text-2xl font-bold">
+          <h2
+            id="ficha-partidos"
+            className="display mb-4 mt-8 text-2xl font-bold"
+          >
             Partidos del equipo
           </h2>
           <NbaGameCards data={data} teamIds={[team.id]} />
@@ -257,7 +328,10 @@ export async function NbaProfile({
       )}
       {kind === "game" && game && (
         <>
-          <section className="rounded-panel bg-ink p-5 text-on-ink sm:p-8">
+          <section
+            id="ficha-partido"
+            className="rounded-panel bg-ink p-5 text-on-ink sm:p-8"
+          >
             <p className="mono mb-6 text-xs text-on-ink-muted">
               {nbaDate(game.date)} ·{" "}
               {game.status === "finished"
@@ -374,13 +448,17 @@ export async function NbaProfile({
           )}
         </>
       )}
-      <NbaShotMap
-        shots={shotData.shots}
-        total={shotData.total}
-        recentGameIds={
-          kind === "game" ? undefined : [...new Set(lines.map((l) => l.gameId))]
-        }
-      />
+      <div id="ficha-tiros">
+        <NbaShotMap
+          shots={shotData.shots}
+          total={shotData.total}
+          recentGameIds={
+            kind === "game"
+              ? undefined
+              : [...new Set(lines.map((l) => l.gameId))]
+          }
+        />
+      </div>
     </>
   );
 }

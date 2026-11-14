@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { es } from "@/lib/es";
+import { ExploreNav } from "./ExploreNav";
 import { SportNav } from "./SportNav";
 
 /** Centre circle of a pitch: the app mark. Decorative. */
@@ -50,7 +51,7 @@ export function SiteBand({
       className="site-band on-ink full-bleed sticky top-0 z-30 bg-ink px-4 text-on-ink shadow-[0_1px_0_var(--border)] sm:px-6 lg:px-8"
     >
       <div className="mx-auto flex max-w-[1200px] flex-col md:flex-row md:items-center md:justify-between md:gap-6">
-        <div className="flex min-h-14 items-center justify-between gap-5 md:justify-start">
+        <div className="flex min-h-14 flex-wrap items-center justify-between gap-2 py-2 md:flex-nowrap md:justify-start">
           <Link
             href="/"
             aria-label={es.brandHome}
@@ -61,7 +62,10 @@ export function SiteBand({
               {es.appTitle}
             </span>
           </Link>
-          <SportNav active={sport} />
+          <div className="flex items-center gap-2">
+            <SportNav active={sport} />
+            <ExploreNav sport={sport} />
+          </div>
         </div>
         {children ? (
           <div className="-mx-4 min-w-0 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0">

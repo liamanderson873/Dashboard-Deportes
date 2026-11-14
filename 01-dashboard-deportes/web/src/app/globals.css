@@ -1,3 +1,4 @@
+@layer ui-sdk;
 @import "tailwindcss";
 
 /* Marcador: two sport identities, shared semantic roles. Contrast is verified
@@ -368,3 +369,22 @@ summary {
     right: -150px;
   }
 }
+
+.explore-dialog {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  width: min(44rem, calc(100vw - 2rem));
+  max-height: min(48rem, calc(100dvh - 2rem));
+  padding: 1.25rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-panel, 1rem);
+  background: var(--card);
+  color: var(--fg);
+  box-shadow: 0 24px 80px #0004;
+}
+.explore-dialog[data-open] { display: flex; flex-direction: column; }
+.explore-dialog::backdrop { background: #071b20b3; }
+[id^="ficha-"] { scroll-margin-top: 13rem; }
+@media (min-width: 640px) { .explore-dialog { padding: 1.5rem; } }

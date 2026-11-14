@@ -5,6 +5,7 @@ import { SportScene } from "./SportScene";
 import { NbaTeamLogo } from "./TeamCrest";
 import type { NbaTeam } from "@/lib/nba";
 import { SiteBand } from "./SiteBand";
+import { PageTrail } from "./PageTrail";
 import { NavIcon } from "./NavIcon";
 
 export type NbaSection =
@@ -80,6 +81,14 @@ export function NbaHeader({
           ))}
         </nav>
       </header>
+      <PageTrail
+        base={base}
+        sport="NBA"
+        league={`NBA · ${nbaSeason(data.season)}`}
+        title={title}
+        section={sections.find((s) => s[0] === active)![1]}
+        sectionPath={sections.find((s) => s[0] === active)![2]}
+      />
       <nav
         aria-label="Secciones NBA"
         className="sport-primary-nav mb-6 rounded-panel border border-border bg-card p-1.5 shadow-sm"
@@ -130,7 +139,15 @@ export function NbaCoverage({ data }: { data: NbaData }) {
         <strong className="text-accent">NBA Stats · SportsDataverse</strong> ·{" "}
         {nbaFormat(finished, 0)} partidos terminados ·{" "}
         {nbaFormat(data.shotCount, 0)} tiros
-        {source && <span className="mt-1 block text-xs sm:ml-2 sm:mt-0 sm:inline">Calendario descargado el {new Date(source.fetched).toLocaleDateString("es-ES", { timeZone: "Europe/Madrid" })} · Sin directo</span>}
+        {source && (
+          <span className="mt-1 block text-xs sm:ml-2 sm:mt-0 sm:inline">
+            Calendario descargado el{" "}
+            {new Date(source.fetched).toLocaleDateString("es-ES", {
+              timeZone: "Europe/Madrid",
+            })}{" "}
+            · Sin directo
+          </span>
+        )}
       </summary>
       <p className="mt-3 leading-relaxed">
         Datos descargados y normalizados de un archivo público de NBA Stats.

@@ -4,6 +4,9 @@ import { LeagueNav } from "./LeagueNav";
 import { SeasonNav } from "./SeasonNav";
 import { SectionNav } from "./SectionNav";
 import { SportScene } from "./SportScene";
+import { PageTrail } from "./PageTrail";
+import { sectionHref } from "@/lib/sections";
+import { es } from "@/lib/es";
 import { SiteBand } from "./SiteBand";
 
 /**
@@ -63,6 +66,18 @@ export function LeagueHeader({
         </div>
       </header>
       <div className="mb-6">
+        <PageTrail
+          base={`/${competition.slug}/${season}`}
+          sport="Fútbol"
+          league={`${competition.name} · ${season}-${String(season + 1).slice(-2)}`}
+          title={title ?? competition.name}
+          section={es.sections[navSection]}
+          sectionPath={sectionHref(
+            competition.slug,
+            season,
+            navSection,
+          ).replace(`/${competition.slug}/${season}`, "")}
+        />
         <SectionNav slug={competition.slug} season={season} active={section} />
       </div>
     </>

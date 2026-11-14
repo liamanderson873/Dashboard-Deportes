@@ -203,9 +203,7 @@ export function NbaTrends({
                     r="4.5"
                     fill="var(--accent)"
                   >
-                    <title>
-                      {nbaDate(p.date)} · {nbaFormat(p.value)}
-                    </title>
+                    <title>{`${nbaDate(p.date)} · ${nbaFormat(p.value)}`}</title>
                   </circle>
                   {series.length <= 10 &&
                     (width - left - right) / Math.max(1, series.length - 1) >

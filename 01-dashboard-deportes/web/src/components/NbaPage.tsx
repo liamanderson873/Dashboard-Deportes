@@ -48,7 +48,7 @@ export async function NbaPage({
           ) : section === "partidos" ? (
             <NbaGameCards data={data} />
           ) : section === "jugadores" ? (
-            <NbaPlayers data={data} initial={initial} />
+            <NbaPlayers key={JSON.stringify(initial)} data={data} initial={initial} />
           ) : section === "modelos" ? (
             <NbaModels data={data} />
           ) : lineup ? (

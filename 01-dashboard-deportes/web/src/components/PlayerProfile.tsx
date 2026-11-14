@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProfileNav } from "./ProfileNav";
 import { useMemo, useState } from "react";
 import {
   aggregatePlayers,
@@ -126,6 +127,29 @@ export function PlayerProfile({
         </p>
         <PlayerStar id={id} />
       </div>
+      <ProfileNav
+        sections={[
+          { label: "Estadísticas", href: "#ficha-estadisticas" },
+          ...(points.length > 1 && allGcaKnown
+            ? [{ label: "Evolución", href: "#ficha-evolucion" }]
+            : []),
+          { label: "Jugadores similares", href: "#ficha-similares" },
+          { label: "Últimos partidos", href: "#ficha-partidos" },
+        ]}
+        links={[
+          ...row.teamIds.flatMap((teamId) => {
+            const team = data.teams.find((team) => team.id === teamId);
+            return team?.localId
+              ? [{ label: team.name, href: `${base}/equipo/${team.localId}` }]
+              : [];
+          }),
+          {
+            label: "Comparar este jugador",
+            href: `${base}/jugadores?tab=comparar&a=${id}`,
+          },
+          { label: "Todos los jugadores", href: `${base}/jugadores` },
+        ]}
+      />
       <Coverage data={data} />
       <div className="mb-5 flex flex-wrap gap-3">
         <Field label={pe.period}>
@@ -161,7 +185,10 @@ export function PlayerProfile({
           .map((id) => data.teams.find((t) => t.id === id)?.name)
           .join(" · ")}
       </p>
-      <div className="mb-8 grid grid-cols-2 gap-px overflow-hidden rounded-panel border border-border bg-border sm:grid-cols-3 lg:grid-cols-5">
+      <div
+        id="ficha-estadisticas"
+        className="mb-8 grid grid-cols-2 gap-px overflow-hidden rounded-panel border border-border bg-border sm:grid-cols-3 lg:grid-cols-5"
+      >
         {metricKeys.map((k) => (
           <div key={k} className="bg-card p-4">
             <p className="eyebrow">{pe.metrics[k]}</p>
@@ -176,7 +203,7 @@ export function PlayerProfile({
       </div>
       <p className="mb-8 text-xs text-subtle">{pe.formula}</p>
       {points.length > 1 && allGcaKnown && (
-        <section className="mb-8">
+        <section id="ficha-evolucion" className="mb-8">
           <h2 className="display mb-3 text-2xl font-bold">{pe.evolution}</h2>
           <svg
             role="img"
@@ -218,7 +245,7 @@ export function PlayerProfile({
           </p>
         </section>
       )}
-      <section className="mb-8">
+      <section id="ficha-similares" className="mb-8">
         <h2 className="display mb-3 text-2xl font-bold">{pe.similar}</h2>
         <p className="mb-3 text-sm text-muted">{pe.similarity}</p>
         {similar.length ? (
@@ -245,7 +272,9 @@ export function PlayerProfile({
           <p className="p-4 text-muted">{pe.noSimilar}</p>
         )}
       </section>
-      <h2 className="display mb-3 text-2xl font-bold">{pe.recent}</h2>
+      <h2 id="ficha-partidos" className="display mb-3 text-2xl font-bold">
+        {pe.recent}
+      </h2>
       <div className="overflow-x-auto rounded-panel border border-border bg-card">
         <table className="w-full text-left text-sm">
           <thead className="bg-surface-2">
