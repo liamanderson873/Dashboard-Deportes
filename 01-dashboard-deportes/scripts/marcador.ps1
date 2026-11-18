@@ -11,14 +11,15 @@
     3. Solo con -ActualizarDatos: NBA y entrenamiento de sus modelos.
     4. Web Next.js en una ventana aparte, y el navegador (salvo con -SinWeb).
   Si la web ya está en marcha, la reutiliza y solo abre el navegador.
-  En la raíz del repositorio: iniciar-marcador.cmd arranca todo y actualizar-datos.cmd descarga datos.
+  En la raíz del repositorio: iniciar-marcador.cmd arranca todo; actualizar-futbol.cmd y
+  actualizar-nba.cmd descargan los datos de cada deporte.
 
 .EXAMPLE
   .\marcador.ps1                                   # base de datos y web, sin llamar a las API
 .EXAMPLE
-  .\marcador.ps1 -ActualizarDatos -SinWeb          # descargar datos nuevos
+  .\marcador.ps1 -ActualizarDatos -SinWeb -SinNba     # solo fútbol (actualizar-futbol.cmd)
 .EXAMPLE
-  .\marcador.ps1 -ActualizarDatos -SinWeb -SinNba  # descargar solo el fútbol
+  .\marcador.ps1 -ActualizarDatos -SinWeb -SinFutbol  # solo NBA (actualizar-nba.cmd)
 #>
 [CmdletBinding()]
 param(
